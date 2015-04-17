@@ -30,10 +30,9 @@ class MyDaemon(Daemon):
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				#print data[sampleptr]
 				somma = map(sum,zip(*data))
-				[format(avg / samples, '.3f') for avg in somma]
-				do_report(avg)
+				result = [format(avg / samples, '.3f') for avg in somma]
+				do_report(result)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
