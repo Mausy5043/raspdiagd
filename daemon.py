@@ -48,12 +48,13 @@ def do_work():
 
 def do_report(Tc):
 	# Get the time and date in human-readable form...
-	outDate = commands.getoutput("date '+%F %H:%M:%S'")
+	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 	# ... and machine-readable form (UNIX-epoch)
-	outUxDate = commands.getoutput("date +%s")
+	#outUxDate = commands.getoutput("date +%s")
 
 	f = file('/tmp/11-t-cpu.txt', 'a')
-	f.write('{0}, {1}, {2}\n'.format(outDate, outUxDate, float(float(Tc)/1000)) )
+	#f.write('{0}, {1}, {2}\n'.format(outDate, outUxDate, float(float(Tc)/1000)) )
+	f.write('{0}, {1}\n'.format(outDate, float(float(Tc)/1000)) )
 	f.close()
 	return
 
