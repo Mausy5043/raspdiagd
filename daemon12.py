@@ -61,7 +61,7 @@ def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
-	result = ','.join(map(str, result))
+	result = ', '.join(map(str, result))
 	f = file('/tmp/12-load-cpu.txt', 'a')
 	f.write('{0}, {1}, NaN\n'.format(outDate, result) )
 	f.close()
