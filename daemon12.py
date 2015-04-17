@@ -41,14 +41,14 @@ class MyDaemon(Daemon):
 def do_work():
 	outHistLoad = commands.getoutput("cat /proc/loadavg").replace(" ",", ").replace("/",", ")
 
-  outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
-  outCpuUS = outCpu[12]
-  outCpuSY = outCpu[13]
-  outCpuID = outCpu[14]
-  outCpuWA = outCpu[15]
-  outCpuST = "NaN"
+	outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
+	outCpuUS = outCpu[12]
+	outCpuSY = outCpu[13]
+	outCpuID = outCpu[14]
+	outCpuWA = outCpu[15]
+	outCpuST = "NaN"
 
-  outLoad = '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
+	outLoad = '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
 
 	return outLoad
 
