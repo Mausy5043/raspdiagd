@@ -49,35 +49,13 @@ def do_work():
 	return outTemp
 
 def do_report(Tc):
-	# Get the time and date in human-readable form...
+	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-	# ... and machine-readable form (UNIX-epoch)
-	#outUxDate = commands.getoutput("date +%s")
 
 	f = file('/tmp/11-t-cpu.txt', 'a')
-	#f.write('{0}, {1}, {2}\n'.format(outDate, outUxDate, float(float(Tc)/1000)) )
 	f.write('{0}, {1}\n'.format(outDate, float(float(Tc)/1000)) )
 	f.close()
 	return
-
-
-# Function to search for prime numbers
-# within number range
-def find_primes(upper_limit):
-  count = 0
-  candidate = 3
-  while(candidate <= upper_limit):
-    trial_divisor = 2
-    prime = 1 # assume it's prime
-    while(trial_divisor**2 <= candidate and prime):
-      if(candidate%trial_divisor == 0):
-        prime = 0 # it isn't prime
-      trial_divisor+=1
-    if(prime):
-      #print_prime(candidate)
-      count += 1
-    candidate += 2
-  return count
 
 if __name__ == "__main__":
 	daemon = MyDaemon('/tmp/raspdiagd-11.pid')
