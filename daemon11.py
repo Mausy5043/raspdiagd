@@ -13,22 +13,23 @@ from libdaemon import Daemon
 
 class MyDaemon(Daemon):
 	def run(self):
-		Tcpu=range(5)
 		sampleptr = 0
 		sampleTime = 12
 		samples = 5
+		cycleTime = samples * sampleTime
+		data=range(samples)
 		# sync to whole minute
-		waitTime = (60 + sampleTime) - (time.time() % 60)
+		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		while True:
 			startTime=time.time()
 
-			Tcpu[sampleptr] = int(do_work())
+			data[sampleptr] = int(do_work())
 
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(sum(Tcpu[:]) / samples)
+				do_report(sum(data[:]) / samples)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
