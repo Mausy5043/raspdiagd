@@ -9,7 +9,6 @@
 # set the branch
 # $ echo master > ~/bin/raspdiagd.branch
 
-#
 branch=$(cat ~/bin/raspdiagd.branch)
 
 # Synchronise local copy with $branch
