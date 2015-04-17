@@ -4,6 +4,12 @@
 # * It synchronises the local copy of raspdiagd with the current github branch
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
+# To suppress git detecting changes by chmod:
+# $ git config core.fileMode false
+# set the branch
+# $ echo master > ~/bin/raspdiagd.branch
+
+#
 branch=$(cat ~/bin/raspdiagd.branch)
 
 # Synchronise local copy with $branch
