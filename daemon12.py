@@ -17,7 +17,7 @@ class MyDaemon(Daemon):
 		sampleTime = 12
 		samples = 5
 		cycleTime = samples * sampleTime
-		datapoints = 11
+		datapoints = 10
 		data = [[None]*datapoints for _ in range(samples)]
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -25,13 +25,15 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			data[sampleptr] = do_work().split(',')
-			print data[sampleptr]
-
+			result = do_work().split(',')
+			data[sampleptr] = map(float, result)
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(sum(data[:]) / samples)
+				#print data[sampleptr]
+				somma = map(sum,zip(*data))
+				[format(avg / samples, '.3f') for avg in somma]
+				do_report(avg)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -44,24 +46,24 @@ def do_work():
 	# 6 datapoints gathered here
 	outHistLoad = commands.getoutput("cat /proc/loadavg").replace(" ",", ").replace("/",", ")
 
-	# 5 datapoints gathered here
+	# 4 datapoints gathered here
 	outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
 	outCpuUS = outCpu[12]
 	outCpuSY = outCpu[13]
 	outCpuID = outCpu[14]
 	outCpuWA = outCpu[15]
-	outCpuST = "NaN"
+	#outCpuST = "NaN"
 
-	outLoad = '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
+	outLoad = '{0}, {1}, {2}, {3}, {4}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA)
 
 	return outLoad
 
-def do_report(Tc):
+def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	f = file('/tmp/12-load-cpu.txt', 'a')
-	f.write('{0}, {1}\n'.format(outDate, float(float(Tc)/1000)) )
+	f.write('{0}, {1}, NaN\n'.format(outDate, result) )
 	f.close()
 	return
 
