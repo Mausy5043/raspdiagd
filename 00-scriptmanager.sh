@@ -14,11 +14,12 @@ branch=$(cat ~/bin/raspdiagd.branch)
 # Synchronise local copy with $branch
 git fetch origin && \
  # Check which code has changed
- git diff --name-only
- #DIFFdmn=$(git --no-pager diff --name-only master -- ./testdaemon/daemon.py) && \
- #DIFFdmn=$(git --no-pager diff --name-only dev..origin/dev -- ./testdaemon/daemon.py) && \
- #DIFFlib=$(git --no-pager diff --name-only master -- ./testdaemon/libdaemon.py) && \
- #DIFFlib=$(git --no-pager diff --name-only dev..origin/dev -- ./testdaemon/libdaemon.py) && \
+ # git diff --name-only
+ # git log --graph --oneline --date-order --decorate --color --all
+
+ DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
+ DIFFdmn=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon.py)
+
  git reset --hard origin/$branch && \
  git clean -f -d
 
@@ -26,14 +27,14 @@ git fetch origin && \
 # Set permissions
 chmod -R 744 *
 
-#if [[ -n "$DIFFdmn" ]]; then
-#    logger -t 02-update-scripts "daemon has changed"
-#    ./testdaemon/daemon.py restart
-#fi
+if [[ -n "$DIFFdmn" ]]; then
+  logger -t raspdiagd "daemon has changed"
+#  ./daemon.py restart
+fi
 
-#if [[ -n "$DIFFlib" ]]; then
-#    logger -t 02-update-scripts "daemonlib has changed"
+if [[ -n "$DIFFlib" ]]; then
+    logger -t raspdiagd "libdaemon has changed"
 #    ./testdaemon/daemon.py stop
 #    sleep 1
 #    ./testdaemon/daemon.py start
-#fi
+fi
