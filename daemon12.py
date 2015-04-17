@@ -25,7 +25,7 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			data[sampleptr] = do_work().split()
+			data[sampleptr] = do_work().split(',')
 			print data[sampleptr]
 
 			# report sample average
