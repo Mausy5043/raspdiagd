@@ -18,7 +18,7 @@ git fetch origin && \
  # git log --graph --oneline --date-order --decorate --color --all
 
  DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
- DIFFdmn=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon.py)
+ DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon11.py)
 
  git reset --hard origin/$branch && \
  git clean -f -d
@@ -27,14 +27,16 @@ git fetch origin && \
 # Set permissions
 chmod -R 744 *
 
-if [[ -n "$DIFFdmn" ]]; then
-  logger -t raspdiagd "daemon has changed"
-#  ./daemon.py restart
+if [[ -n "$DIFFd11" ]]; then
+  logger -t raspdiagd "daemon11 has changed"
+  ./daemon11.py restart
 fi
 
 if [[ -n "$DIFFlib" ]]; then
     logger -t raspdiagd "libdaemon has changed"
-#    ./testdaemon/daemon.py stop
-#    sleep 1
-#    ./testdaemon/daemon.py start
+    # stop all daemons
+    ./daemon11.py stop
+    sleep 1
+    # start all daemons
+    ./daemon11.py start
 fi
