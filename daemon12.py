@@ -26,6 +26,7 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
+
 			data[sampleptr] = map(float, result)
 			# report sample average
 			sampleptr = sampleptr + 1
@@ -34,7 +35,11 @@ class MyDaemon(Daemon):
 				# not all entries should be float
 				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, NaN
 				result = [format(avg / samples, '.3f') for avg in somma]
-				result[3]=int(data[sampleptr][3])
+				result[3]=int(data[sampleptr-1][3])
+				result[4]=int(data[sampleptr-1][4])
+				result[5]=int(data[sampleptr-1][5])
+				result[6]=int(data[sampleptr-1][6])
+				result[7]=int(data[sampleptr-1][7])
 				do_report(result)
 				sampleptr = 0
 
