@@ -34,6 +34,7 @@ class MyDaemon(Daemon):
 				# not all entries should be float
 				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, NaN
 				result = [format(avg / samples, '.3f') for avg in somma]
+				result[3]=int(data[sampleptr][3])
 				do_report(result)
 				sampleptr = 0
 
