@@ -33,7 +33,7 @@ if [[ -n "$DIFFd11" ]]; then
   ./daemon11.py restart
 fi
 if [[ -n "$DIFFd12" ]]; then
-  logger -t raspdiagd "daemon11 has changed"
+  logger -t raspdiagd "daemon12 has changed"
   ./daemon12.py restart
 fi
 
