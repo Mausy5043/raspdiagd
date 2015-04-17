@@ -31,6 +31,8 @@ class MyDaemon(Daemon):
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
+				# not all entries should be float
+				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, NaN
 				result = [format(avg / samples, '.3f') for avg in somma]
 				do_report(result)
 				sampleptr = 0
