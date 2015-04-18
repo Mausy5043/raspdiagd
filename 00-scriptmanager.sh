@@ -11,7 +11,7 @@
 
 branch=$(cat ~/bin/raspdiagd.branch)
 clnt=$(hostname)
-pushd /home/pi/raspdiagd/
+pushd /home/pi/raspdiagd
 
 # Synchronise local copy with $branch
 git fetch origin && \
