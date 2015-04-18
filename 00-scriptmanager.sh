@@ -11,7 +11,6 @@
 
 branch=$(cat ~/bin/raspdiagd.branch)
 clnt=$(hostname)
-bindir="~/raspdiagd"
 
 # Synchronise local copy with $branch
 git fetch origin && \
@@ -19,12 +18,12 @@ git fetch origin && \
  # git diff --name-only
  # git log --graph --oneline --date-order --decorate --color --all
 
- DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/libdaemon.py)
- DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/daemon11.py)
- DIFFd12=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/daemon12.py)
- DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/daemon13.py)
- DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/daemon14.py)
- DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- $bindir/daemon15.py)
+ DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
+ DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon11.py)
+ DIFFd12=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon12.py)
+ DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
+ DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
+ DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
 
  git reset --hard origin/$branch && \
  git clean -f -d
@@ -37,33 +36,33 @@ chmod -R 744 *
 
 if [[ -n "$DIFFd11" ]]; then
   logger -t raspdiagd "Source daemon11 has changed."
-  $bindir/daemon11.py stop
+  ./daemon11.py stop
 fi
 if [[ -n "$DIFFd12" ]]; then
   logger -t raspdiagd "Source daemon12 has changed."
-  $bindir/daemon12.py stop
+  ./daemon12.py stop
 fi
 if [[ -n "$DIFFd13" ]]; then
   logger -t raspdiagd "Source daemon13 has changed."
-  $bindir/daemon13.py stop
+  ./daemon13.py stop
 fi
 if [[ -n "$DIFFd14" ]]; then
   logger -t raspdiagd "Source daemon14 has changed."
-  $bindir/daemon14.py stop
+  ./daemon14.py stop
 fi
 if [[ -n "$DIFFd15" ]]; then
   logger -t raspdiagd "Source daemon15 has changed."
-  $bindir/daemon15.py stop
+  ./daemon15.py stop
 fi
 
 if [[ -n "$DIFFlib" ]]; then
   logger -t raspdiagd "Source libdaemon has changed."
   # stop all daemons
-  $bindir/daemon11.py stop
-  $bindir/daemon12.py stop
-  $bindir/daemon13.py stop
-  $bindir/daemon14.py stop
-  $bindir/daemon15.py stop
+  ./daemon11.py stop
+  ./daemon12.py stop
+  ./daemon13.py stop
+  ./daemon14.py stop
+  ./daemon15.py stop
 fi
 
 ######## (Re-)start daemons ######
@@ -73,11 +72,11 @@ function destale {
     if ! kill -0 $(cat /tmp/raspdiagd-$1.pid)  > /dev/null 2>&1; then
       logger -t raspdiagd "Stale daemon$1 pid-file found."
       rm /tmp/raspdiagd-$1.pid
-      $bindir/daemon$1.py start
+      ./daemon$1.py start
     fi
   else
     logger -t raspdiagd "Found daemon$1 not running."
-    $bindir/daemon$1.py start
+    ./daemon$1.py start
   fi
 }
 
