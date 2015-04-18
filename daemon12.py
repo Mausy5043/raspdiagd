@@ -15,7 +15,7 @@ class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
 		samples = 5
-		datapoints = 10
+		datapoints = 11
 		data = [[None]*datapoints for _ in range(samples)]
 
 		sampleTime = 12
@@ -34,7 +34,7 @@ class MyDaemon(Daemon):
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
 				# not all entries should be float
-				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, NaN
+				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
 				averages = [format(s / samples, '.3f') for s in somma]
 				averages[3]=int(data[sampleptr-1][3])
 				averages[4]=int(data[sampleptr-1][4])
@@ -52,15 +52,15 @@ def do_work():
 	# 6 datapoints gathered here
 	outHistLoad = commands.getoutput("cat /proc/loadavg").replace(" ",", ").replace("/",", ")
 
-	# 4 datapoints gathered here
+	# 5 datapoints gathered here
 	outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
 	outCpuUS = outCpu[12]
 	outCpuSY = outCpu[13]
 	outCpuID = outCpu[14]
 	outCpuWA = outCpu[15]
-	#outCpuST = "NaN"
+	outCpuST = 0
 
-	outLoad = '{0}, {1}, {2}, {3}, {4}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA)
+	outLoad = '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
 
 	return outLoad
 
@@ -70,7 +70,7 @@ def do_report(result):
 
 	result = ', '.join(map(str, result))
 	f = file('/tmp/12-load-cpu.csv', 'a')
-	f.write('{0}, {1}, NaN\n'.format(outDate, result) )
+	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
 

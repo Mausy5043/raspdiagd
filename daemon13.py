@@ -29,7 +29,6 @@ class MyDaemon(Daemon):
 			result = do_work().split(',')
 
 			data[sampleptr] = map(int, result)
-			print data
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
@@ -49,12 +48,12 @@ class MyDaemon(Daemon):
 def do_work():
 	# 6 datapoints gathered here
 	# Network traffic
-	wlIn = "NaN"
-	wlOut = "NaN"
-	etIn = "NaN"
-	etOut = "NaN"
-	loIn = "NaN"
-	loOut = "NaN"
+	wlIn = 0
+	wlOut = 0
+	etIn = 0
+	etOut = 0
+	loIn = 0
+	loOut = 0
 
 	list = commands.getoutput("cat /proc/net/dev").splitlines()
 	for line in range(2,len(list)):
