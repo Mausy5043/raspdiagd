@@ -53,18 +53,28 @@ if [[ -n "$DIFFd15" ]]; then
 fi
 
 if [[ -n "$DIFFlib" ]]; then
-    logger -t raspdiagd "libdaemon has changed"
-    # stop all daemons
-    ./daemon11.py stop
-    ./daemon12.py stop
-    ./daemon13.py stop
-    ./daemon14.py stop
-    ./daemon15.py stop
-    sleep 1
-    # start all daemons
-    ./daemon11.py start
-    ./daemon12.py start
-    ./daemon13.py start
-    ./daemon14.py start
+  logger -t raspdiagd "libdaemon has changed"
+  # stop all daemons
+  ./daemon11.py stop
+  ./daemon12.py stop
+  ./daemon13.py stop
+  ./daemon14.py stop
+  ./daemon15.py stop
+  sleep 1
+  # start all daemons
+  ./daemon11.py start
+  ./daemon12.py start
+  ./daemon13.py start
+  ./daemon14.py start
+  ./daemon15.py start
+fi
+
+if [ -e /tmp/raspdiagd-15.pid]; then
+  if ! ps h -p $(cat /tmp/raspdiagd-15.pid); then
+    logger -t raspdiagd "Stale daemon15 pid-file"
+    rm /tmp/raspdiagd-15.pid
     ./daemon15.py start
+  fi
+else
+  ./daemon15.py start
 fi
