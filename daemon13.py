@@ -66,17 +66,14 @@ def do_work():
 			wlIn = list[line].split()[1]
 			wlOut = list[line].split()[9]
 
-	#outTraffice = '{0}, {1}, {2}, {3}, {4}, {5}'.format(loIn, loOut, etIn, etOut, wlIn, wlOut)
 	return '{0}, {1}, {2}, {3}, {4}, {5}'.format(loIn, loOut, etIn, etOut, wlIn, wlOut)
-
-	#return outTraffic
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/13-nettraffic.txt', 'a')
+	f = file('/tmp/13-nettraffic.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return

@@ -6,7 +6,8 @@
 
 # Adapted by M.Hendrix [2015]
 
-# daemon12.py measures the CPU load.
+# daemon14.py measures the memory usage.
+# These are all counters, therefore no averaging is needed.
 
 import sys, time, math, commands
 from libdaemon import Daemon
@@ -14,11 +15,10 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5
-		datapoints = 11
-		data = [[None]*datapoints for _ in range(samples)]
+		samples = 1
+		datapoints = 8
 
-		sampleTime = 12
+		sampleTime = 60
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -27,19 +27,11 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
+			data = map(int, result)
 
-			data[sampleptr] = map(float, result)
-			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				somma = map(sum,zip(*data))
-				# not all entries should be float
-				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
-				averages = [format(s / samples, '.3f') for s in somma]
-				averages[3]=int(data[sampleptr-1][3])
-				averages[4]=int(data[sampleptr-1][4])
-				averages[5]=int(data[sampleptr-1][5])
-				do_report(averages)
+				do_report(data)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -49,31 +41,48 @@ class MyDaemon(Daemon):
 			time.sleep(waitTime)
 
 def do_work():
-	# 6 datapoints gathered here
-	outHistLoad = commands.getoutput("cat /proc/loadavg").replace(" ",", ").replace("/",", ")
+	# 8 datapoints gathered here
+	# memory /proc/meminfo
+  # total = MemTotal
+  # free = MemFree - (Buffers + Cached)
+  # inUse = (MemTotal - MemFree) - (Buffers + Cached)
+  # swaptotal = SwapTotal
+  # swapUse = SwapTotal - SwapFree
+  # ref: http://thoughtsbyclayg.blogspot.nl/2008/09/display-free-memory-on-linux-ubuntu.html
+  # ref: http://serverfault.com/questions/85470/meaning-of-the-buffers-cache-line-in-the-output-of-free
+  out = commands.getoutput("cat /proc/meminfo").splitlines()
+  for line in range(0,len(out)-1):
+    mem = out[line].split()
+    if mem[0] == 'MemFree:':
+      outMemFree = int(mem[1])
+    elif mem[0] == 'MemTotal:':
+      outMemTotal = int(mem[1])
+    elif mem[0] == 'Buffers:':
+      outMemBuf = int(mem[1])
+    elif mem[0] == 'Cached:':
+      outMemCache = int(mem[1])
+    elif mem[0] == 'SwapTotal:':
+      outMemSwapTotal = int(mem[1])
+    elif mem[0] == "SwapFree:":
+      outMemSwapFree = int(mem[1])
 
-	# 5 datapoints gathered here
-	outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
-	outCpuUS = outCpu[12]
-	outCpuSY = outCpu[13]
-	outCpuID = outCpu[14]
-	outCpuWA = outCpu[15]
-	outCpuST = 0
+  outMemUsed = outMemTotal - (outMemFree + outMemBuf + outMemCache)
+  outMemSwapUsed = outMemSwapTotal - outMemSwapFree
 
-	return '{0}, {1}, {2}, {3}, {4}, {5}'.format(outHistLoad, outCpuUS, outCpuSY, outCpuID, outCpuWA, outCpuST)
+	return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(outMemTotal, outMemUsed, outMemBuf, outMemCache, outMemFree, outMemSwapTotal, outMemSwapFree, outMemSwapUsed)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/12-load-cpu.csv', 'a')
+	f = file('/tmp/14-memory.txt', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/tmp/raspdiagd-12.pid')
+	daemon = MyDaemon('/tmp/raspdiagd-14.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()
