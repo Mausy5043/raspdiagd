@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon13.py measures the network traffic.
+# These are all counters, therefore no averaging is needed.
 
 import sys, time, math, commands
 from libdaemon import Daemon
@@ -14,11 +15,10 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5
+		samples = 1
 		datapoints = 6
-		data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 12
+		sampleTime = 60
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -27,16 +27,11 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
+			data = map(int, result)
 
-			data[sampleptr] = map(int, result)
-			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				somma = map(sum,zip(*data))
-				print somma
-				averages = [format(s / samples, '.3f') for s in somma]
-				print averages
-				#do_report(averages)
+				do_report(data)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
