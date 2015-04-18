@@ -69,7 +69,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py start
 fi
 
-if [ -e /tmp/raspdiagd-15.pid]; then
+if [ -e /tmp/raspdiagd-15.pid ]; then
   if ! ps h -p $(cat /tmp/raspdiagd-15.pid); then
     logger -t raspdiagd "Stale daemon15 pid-file"
     rm /tmp/raspdiagd-15.pid
