@@ -16,7 +16,7 @@ class MyDaemon(Daemon):
 		sampleptr = 0
 		samples = 5
 		datapoints = 1
-		data=range(samples)
+		data = range(samples)
 
 		sampleTime = 12
 		cycleTime = samples * sampleTime
@@ -26,12 +26,15 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			data[sampleptr] = int(do_work())
+			result = do_work()
+			data[sampleptr] = int(result)
 
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(sum(data[:]) / samples)
+				somma = sum(data[:])
+				averages = somma / samples
+				do_report(averages)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -51,11 +54,11 @@ def do_work():
 
 	return outTemp
 
-def do_report(Tc):
+def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 	f = file('/tmp/11-t-cpu.csv', 'a')
-	f.write('{0}, {1}\n'.format(outDate, float(float(Tc)/1000)) )
+	f.write('{0}, {1}\n'.format(outDate, float(float(result)/1000)) )
 	f.close()
 	return
 

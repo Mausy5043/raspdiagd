@@ -14,11 +14,12 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		sampleTime = 12
 		samples = 5
-		cycleTime = samples * sampleTime
 		datapoints = 10
 		data = [[None]*datapoints for _ in range(samples)]
+
+		sampleTime = 12
+		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
@@ -34,11 +35,11 @@ class MyDaemon(Daemon):
 				somma = map(sum,zip(*data))
 				# not all entries should be float
 				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, NaN
-				result = [format(avg / samples, '.3f') for avg in somma]
-				result[3]=int(data[sampleptr-1][3])
-				result[4]=int(data[sampleptr-1][4])
-				result[5]=int(data[sampleptr-1][5])
-				do_report(result)
+				averages = [format(s / samples, '.3f') for s in somma]
+				averages[3]=int(data[sampleptr-1][3])
+				averages[4]=int(data[sampleptr-1][4])
+				averages[5]=int(data[sampleptr-1][5])
+				do_report(averages)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
