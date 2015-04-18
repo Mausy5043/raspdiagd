@@ -31,43 +31,40 @@ git fetch origin && \
 # Set permissions
 chmod -R 744 *
 
+######## Stop daemons ######
+
 if [[ -n "$DIFFd11" ]]; then
-  logger -t raspdiagd "daemon11 has changed"
-  ./daemon11.py restart
+  logger -t raspdiagd "Source daemon11 has changed."
+  ./daemon11.py stop
 fi
 if [[ -n "$DIFFd12" ]]; then
-  logger -t raspdiagd "daemon12 has changed"
-  ./daemon12.py restart
+  logger -t raspdiagd "Source daemon12 has changed."
+  ./daemon12.py stop
 fi
 if [[ -n "$DIFFd13" ]]; then
-  logger -t raspdiagd "daemon13 has changed"
-  ./daemon13.py restart
+  logger -t raspdiagd "Source daemon13 has changed."
+  ./daemon13.py stop
 fi
 if [[ -n "$DIFFd14" ]]; then
-  logger -t raspdiagd "daemon14 has changed"
-  ./daemon14.py restart
+  logger -t raspdiagd "Source daemon14 has changed."
+  ./daemon14.py stop
 fi
 if [[ -n "$DIFFd15" ]]; then
-  logger -t raspdiagd "daemon15 has changed"
-  ./daemon15.py restart
+  logger -t raspdiagd "Source daemon15 has changed."
+  ./daemon15.py stop
 fi
 
 if [[ -n "$DIFFlib" ]]; then
-  logger -t raspdiagd "libdaemon has changed"
+  logger -t raspdiagd "Source libdaemon has changed."
   # stop all daemons
   ./daemon11.py stop
   ./daemon12.py stop
   ./daemon13.py stop
   ./daemon14.py stop
   ./daemon15.py stop
-  sleep 1
-  # start all daemons
-  ./daemon11.py start
-  ./daemon12.py start
-  ./daemon13.py start
-  ./daemon14.py start
-  ./daemon15.py start
 fi
+
+######## (Re-)start daemons ######
 
 function destale {
   if [ -e /tmp/raspdiagd-$1.pid ]; then
@@ -77,7 +74,7 @@ function destale {
       ./daemon$1.py start
     fi
   else
-    logger -t raspdiagd "daemon$1 not running."
+    logger -t raspdiagd "Found daemon$1 not running."
     ./daemon$1.py start
   fi
 }
