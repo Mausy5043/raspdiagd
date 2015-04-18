@@ -38,10 +38,6 @@ class MyDaemon(Daemon):
 				result[3]=int(data[sampleptr-1][3])
 				result[4]=int(data[sampleptr-1][4])
 				result[5]=int(data[sampleptr-1][5])
-				#result[6]=int(data[sampleptr-1][6])
-				#result[7]=int(data[sampleptr-1][7])
-				#result[8]=int(data[sampleptr-1][8])
-				#result[9]=int(data[sampleptr-1][9])
 				do_report(result)
 				sampleptr = 0
 
