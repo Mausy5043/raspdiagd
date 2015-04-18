@@ -52,8 +52,7 @@ def do_work():
 def do_report(Tc):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-
-	f = file('/tmp/11-t-cpu.txt', 'a')
+	f = file('/tmp/11-t-cpu.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, float(float(Tc)/1000)) )
 	f.close()
 	return
