@@ -20,6 +20,7 @@ git fetch origin && \
  DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
  DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon11.py)
  DIFFd12=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon12.py)
+ DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
 
  git reset --hard origin/$branch && \
  git clean -f -d
@@ -36,13 +37,20 @@ if [[ -n "$DIFFd12" ]]; then
   logger -t raspdiagd "daemon12 has changed"
   ./daemon12.py restart
 fi
+if [[ -n "$DIFFd13" ]]; then
+  logger -t raspdiagd "daemon13 has changed"
+  ./daemon13.py restart
+fi
 
 if [[ -n "$DIFFlib" ]]; then
     logger -t raspdiagd "libdaemon has changed"
     # stop all daemons
     ./daemon11.py stop
+    ./daemon12.py stop
+    ./daemon13.py stop
     sleep 1
     # start all daemons
     ./daemon11.py start
     ./daemon12.py start
+    ./daemon13.py start
 fi
