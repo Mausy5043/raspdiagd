@@ -69,12 +69,21 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py start
 fi
 
-if [ -e /tmp/raspdiagd-15.pid ]; then
-  if ! ps h -p $(cat /tmp/raspdiagd-15.pid); then
-    logger -t raspdiagd "Stale daemon15 pid-file"
-    rm /tmp/raspdiagd-15.pid
-    ./daemon15.py start
+function destale {
+  if [ -e /tmp/raspdiagd-$1.pid ]; then
+    if ! kill -0 $(cat /tmp/raspdiagd-$1.pid)  > /dev/null 2>&1; then
+      logger -t raspdiagd "Stale daemon$1 pid-file found."
+      rm /tmp/raspdiagd-$1.pid
+      ./daemon$1.py start
+    fi
+  else
+    logger -t raspdiagd "daemon$1 not running."
+    ./daemon$1.py start
   fi
-else
-  ./daemon15.py start
-fi
+}
+
+destale 11
+destale 12
+destale 13
+destale 14
+destale 15
