@@ -10,6 +10,7 @@
 # $ echo master > ~/bin/raspdiagd.branch
 
 branch=$(cat ~/bin/raspdiagd.branch)
+clnt=$(hostname)
 
 # Synchronise local copy with $branch
 git fetch origin && \
