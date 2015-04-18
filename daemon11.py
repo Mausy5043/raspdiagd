@@ -14,10 +14,12 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		sampleTime = 12
 		samples = 5
-		cycleTime = samples * sampleTime
+		datapoints = 1
 		data=range(samples)
+
+		sampleTime = 12
+		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
