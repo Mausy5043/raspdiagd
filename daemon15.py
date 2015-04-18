@@ -43,8 +43,8 @@ class MyDaemon(Daemon):
 def do_work():
 	# 3 datapoints gathered here
 	kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
-  messlog = commands.getoutput("wc -l /var/log/messages").split()[0]
-  syslog = commands.getoutput("wc -l /var/log/syslog").split()[0]
+	messlog = commands.getoutput("wc -l /var/log/messages").split()[0]
+	syslog = commands.getoutput("wc -l /var/log/syslog").split()[0]
 
 	return '{0}, {1}, {2}'.format(kernlog, messlog, syslog)
 
@@ -53,7 +53,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/15-cnt-loglines.txt', 'a')
+	f = file('/tmp/15-cnt-loglines.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
