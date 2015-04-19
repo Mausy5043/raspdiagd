@@ -14,10 +14,10 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 1
-		datapoints = 3
+		samples = 6
+		datapoints = 8
 
-		sampleTime = 60
+		sampleTime = 10
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -42,7 +42,7 @@ class MyDaemon(Daemon):
 def do_work():
 
 
-	return '{0}, {1}, {2}'.format(0, 1, 2)
+	return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(0, 1, 2, 3, 4, 5, 6, 7)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
