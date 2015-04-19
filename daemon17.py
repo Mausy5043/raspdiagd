@@ -44,7 +44,6 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			data = do_work().split(',')
-			print data
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
@@ -139,7 +138,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/17-electra.txt', 'a')
+	f = file('/tmp/17-electra.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
