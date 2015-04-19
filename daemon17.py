@@ -43,7 +43,7 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			data = do_work().split(',')
+			data = do_work().split(', ')
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
