@@ -14,6 +14,7 @@ clnt=$(hostname)
 pushd /home/pi/raspdiagd
 
 # Synchronise local copy with $branch
+git checkout $branch
 git fetch origin && \
  # Check which code has changed
  # git diff --name-only
