@@ -11,6 +11,19 @@
 import sys, time, math, commands
 from libdaemon import Daemon
 
+import serial, re
+
+port = serial.Serial()
+port.baudrate = 9600
+port.bytesize = serial.SEVENBITS
+port.parity = serial.PARITY_EVEN
+port.stopbits = serial.STOPBITS_ONE
+port.xonxoff = 1
+port.rtscts = 0
+port.dsrdtr = 0
+port.timeout = 15
+port.port = "/dev/ttyUSB0"
+
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
@@ -22,6 +35,14 @@ class MyDaemon(Daemon):
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
+
+		try:
+	    port.open()
+	    serial.XON
+	  except:
+			print "Serialport open-error"
+			sys.exit(2)
+
 		while True:
 			startTime=time.time()
 
@@ -60,9 +81,9 @@ if __name__ == "__main__":
 		if 'start' == sys.argv[1]:
 			daemon.start()
 		elif 'stop' == sys.argv[1]:
+			serial.XOFF
+			port.close()
 			daemon.stop()
-		elif 'restart' == sys.argv[1]:
-			daemon.restart()
 		elif 'foreground' == sys.argv[1]:
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
@@ -72,5 +93,5 @@ if __name__ == "__main__":
 			sys.exit(2)
 		sys.exit(0)
 	else:
-		print "usage: %s start|stop|restart|foreground" % sys.argv[0]
+		print "usage: %s start|stop|foreground" % sys.argv[0]
 		sys.exit(2)
