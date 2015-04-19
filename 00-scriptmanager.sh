@@ -94,6 +94,24 @@ destale 12
 destale 13
 destale 14
 destale 15
-destale 17
+
+case "$CLNT" in
+  rbups )   echo "UPS monitor"
+            #destale 16
+            ;;
+  rbelec )  echo "Electricity monitor"
+            destale 17
+            ;;
+  rbian )   echo "Raspberry testbench"
+            #./testserial.py
+            ;;
+  rxbmc )   echo "RaspBMC mediacenter"
+            ;;
+  osmc )    echo "OSMC Media Center"
+            ;;
+  * )       echo "!! undefined client !!"
+            ;;
+esac
+
 
 popd
