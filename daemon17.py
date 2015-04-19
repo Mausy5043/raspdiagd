@@ -70,39 +70,39 @@ def do_work():
 	if status == 1:
 		print telegram
 
-  if status == 1:
-    for element in range(0, len(telegram) - 1):
-      line =  re.split( '[\(\*\)]', telegram[element] )
-      #['1-0:1.8.1', '00175.402', 'kWh', '']
-      if (line[0] == '1-0:1.8.1'):
-        electra1in = int(float(line[1]) * 1000)
-      #['1-0:1.8.2', '00136.043', 'kWh', '']
-      if (line[0] == '1-0:1.8.2'):
-        electra2in = int(float(line[1]) * 1000)
-      #['1-0:2.8.1', '00000.000', 'kWh', '']
-      if (line[0] == '1-0:2.8.1'):
-        electra1out = int(float(line[1]) * 1000)
-      #['1-0:2.8.2', '00000.000', 'kWh', '']
-      if (line[0] == '1-0:2.8.2'):
-        electra2out = int(float(line[1]) * 1000)
-      #['0-0:96.14.0', '0002', '']
-      if (line[0] == '0-0:96.14.0'):
-        tarif = int(line[1])
-      #['1-0:1.7.0', '0000.32', 'kW', '']
-      if (line[0] == '1-0:1.7.0'):
-        powerin = int(float(line[1]) * 1000)
-      #['1-0:2.7.0', '0000.00', 'kW', '']
-      if (line[0] == '1-0:2.7.0'):
-        powerout = int(float(line[1]) * 1000)
-      #['0-0:17.0.0', '999', 'A', '']
-         # not recorded
-      #['0-0:96.3.10', '1', '']
-      if (line[0] == '0-0:96.3.10'):
-        swits = int(line[1])
-      #['0-0:96.13.1', '', '']
-         # not recorded
-      #['0-0:96.13.0', '', '']
-         # not recorded
+	if status == 1:
+		for element in range(0, len(telegram) - 1):
+			line =  re.split( '[\(\*\)]', telegram[element] )
+			#['1-0:1.8.1', '00175.402', 'kWh', '']
+			if (line[0] == '1-0:1.8.1'):
+			  electra1in = int(float(line[1]) * 1000)
+			#['1-0:1.8.2', '00136.043', 'kWh', '']
+			if (line[0] == '1-0:1.8.2'):
+			  electra2in = int(float(line[1]) * 1000)
+			#['1-0:2.8.1', '00000.000', 'kWh', '']
+			if (line[0] == '1-0:2.8.1'):
+			  electra1out = int(float(line[1]) * 1000)
+			#['1-0:2.8.2', '00000.000', 'kWh', '']
+			if (line[0] == '1-0:2.8.2'):
+			  electra2out = int(float(line[1]) * 1000)
+			#['0-0:96.14.0', '0002', '']
+			if (line[0] == '0-0:96.14.0'):
+			  tarif = int(line[1])
+			#['1-0:1.7.0', '0000.32', 'kW', '']
+			if (line[0] == '1-0:1.7.0'):
+			  powerin = int(float(line[1]) * 1000)
+			#['1-0:2.7.0', '0000.00', 'kW', '']
+			if (line[0] == '1-0:2.7.0'):
+			  powerout = int(float(line[1]) * 1000)
+			#['0-0:17.0.0', '999', 'A', '']
+			   # not recorded
+			#['0-0:96.3.10', '1', '']
+			if (line[0] == '0-0:96.3.10'):
+			  swits = int(line[1])
+			#['0-0:96.13.1', '', '']
+			   # not recorded
+			#['0-0:96.13.0', '', '']
+			   # not recorded
 
 	return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(electra1in, electra2in, powerin, electra1out, electra2out, powerout, tarif, swits)
 
