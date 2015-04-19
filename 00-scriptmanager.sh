@@ -93,6 +93,6 @@ destale 12
 destale 13
 destale 14
 destale 15
-destale 17
+#destale 17
 
 popd

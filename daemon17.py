@@ -29,6 +29,7 @@ class MyDaemon(Daemon):
 		sampleptr = 0
 		samples = 6
 		datapoints = 8
+		data = [[None]*datapoints for _ in range(samples)]
 
 		sampleTime = 10
 		cycleTime = samples * sampleTime
@@ -42,12 +43,12 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			result = do_work().split(',')
-			data = map(int, result)
+			data[sampleptr] = do_work().split(',')
+			print data
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(data)
+				do_report(data[sampleptr-1])
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -67,8 +68,6 @@ def do_work():
 	powerout = "NaN"
 
 	telegram, status = gettelegram()
-	if status == 1:
-		print telegram
 
 	if status == 1:
 		for element in range(0, len(telegram) - 1):
