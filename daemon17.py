@@ -27,11 +27,11 @@ port.port = "/dev/ttyUSB0"
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 6
+		samples = 1
 		datapoints = 8
-		data = [[None]*datapoints for _ in range(samples)]
+		#data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 10
+		sampleTime = 60
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -43,12 +43,12 @@ class MyDaemon(Daemon):
 		while True:
 			startTime=time.time()
 
-			data[sampleptr] = do_work().split(',')
+			data = do_work().split(',')
 			print data
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(data[sampleptr-1])
+				do_report(data)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
