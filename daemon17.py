@@ -57,6 +57,13 @@ class MyDaemon(Daemon):
 			time.sleep(waitTime)
 
 def do_work():
+	telegram, status = gettelegram()
+	if status == 1:
+		print telegram
+
+	return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(0, 1, 2, 3, 4, 5, 6, 7)
+	
+def gettelegram():
 	# flag used to exit the while-loop
 	abort = 0
 	# countdown counter used to prevent infinite loops
@@ -69,23 +76,21 @@ def do_work():
 	while abort == 0:
 		try:
 			line = "".join(iter(lambda:port.read(1),delim)).strip()
+			if line == "!":
+				abort = 1
+			if line != "":
+				telegram.append(line)
 		except:
 			abort = 2
-		if line == "!":
-			abort = 1
-		if line != "":
-			telegram.append(line)
-
 		loops2go = loops2go - 1
 		if loops2go < 0:
 			abort = 3
 
-  # test for correct start of telegram
+	# test for correct start of telegram
 	if telegram[0][0] != "/":
 		abort = 2
 
-	print telegram
-	return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(0, 1, 2, 3, 4, 5, 6, 7)
+	return telegram, abort
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
