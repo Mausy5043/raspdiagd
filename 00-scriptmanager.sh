@@ -12,6 +12,7 @@
 branch=$(cat ~/bin/raspdiagd.branch)
 clnt=$(hostname)
 pushd /home/pi/raspdiagd
+git config core.fileMode false
 
 # Synchronise local copy with $branch
 git checkout $branch
