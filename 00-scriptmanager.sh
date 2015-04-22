@@ -95,7 +95,7 @@ destale 13
 destale 14
 destale 15
 
-case "$CLNT" in
+case "$clnt" in
   rbups )   echo "UPS monitor"
             #destale 16
             ;;
