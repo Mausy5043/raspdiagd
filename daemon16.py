@@ -31,7 +31,14 @@ class MyDaemon(Daemon):
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
-				do_report(data)
+				somma = map(sum,zip(*data))
+				# not all entries should be float
+				#
+				averages = [format(s / samples, '.3f') for s in somma]
+				#averages[3]=int(data[sampleptr-1][3])
+				#averages[4]=int(data[sampleptr-1][4])
+				#averages[5]=int(data[sampleptr-1][5])
+				do_report(averages)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -44,7 +51,7 @@ def do_work():
 	# 5 datapoints gathered here
 	upsc = commands.getoutput("upsc ups@localhost").splitlines()
 	for element in range(0, len(upsc) - 1)
-		var = upsc[element].split()
+		var = upsc[element].split(': ')
 		if (var[0] == 'input.voltage'):
 			ups0 = float(var[1])
 		if (var[0] == 'battery.voltage'):
@@ -56,8 +63,7 @@ def do_work():
 		if (var[0] == 'battery.runtime'):
 			ups4 = float(var[1])
 
-		print '{0}, {1}, {2}, {3} ,{4}'.format(ups0, ups1, ups2, ups3, ups4)
-		return '{0}, {1}, {2}, {3} ,{4}'.format(230.0, 13.1, 99.9, 17.8, 1701)
+	return '{0}, {1}, {2}, {3} ,{4}'.format(ups0, ups1, ups2, ups3, ups4)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
