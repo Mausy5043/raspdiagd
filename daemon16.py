@@ -18,7 +18,7 @@ class MyDaemon(Daemon):
 		datapoints = 5
 		data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 60
+		sampleTime = 10
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -43,9 +43,21 @@ class MyDaemon(Daemon):
 def do_work():
 	# 5 datapoints gathered here
 	upsc = commands.getoutput("upsc ups@localhost").splitlines()
-  print upsc
+	for element in range(0, len(upsc) - 1)
+		var = upsc[element].split()
+		if (var[0] == 'input.voltage'):
+			ups0 = float(var[1])
+		if (var[0] == 'battery.voltage'):
+			ups1 = float(var[1])
+		if (var[0] == 'battery.charge'):
+			ups2 = float(var[1])
+		if (var[0] == 'ups.load'):
+			ups3 = float(var[1])
+		if (var[0] == 'battery.runtime'):
+			ups4 = float(var[1])
 
-	return '{0}, {1}, {2}, {3} ,{4}'.format(230.0, 13.1, 99.9, 17.8, 1701)
+		print '{0}, {1}, {2}, {3} ,{4}'.format(ups0, ups1, ups2, ups3, ups4)
+		return '{0}, {1}, {2}, {3} ,{4}'.format(230.0, 13.1, 99.9, 17.8, 1701)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
