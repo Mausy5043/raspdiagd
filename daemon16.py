@@ -70,7 +70,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/16-aux-ups.txt', 'a')
+	f = file('/tmp/16-aux-ups.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return

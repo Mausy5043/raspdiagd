@@ -103,7 +103,7 @@ destale 15
 
 case "$clnt" in
   rbups )   echo "UPS monitor"
-            #destale 16
+            destale 16
             ;;
   rbelec )  echo "Electricity monitor"
             destale 17
