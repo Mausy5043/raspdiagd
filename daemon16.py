@@ -14,8 +14,9 @@ from libdaemon import Daemon
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 1
-		datapoints = 3
+		samples = 6
+		datapoints = 5
+		data = [[None]*datapoints for _ in range(samples)]
 
 		sampleTime = 60
 		cycleTime = samples * sampleTime
@@ -26,7 +27,7 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
-			data = map(int, result)
+			data[sampleptr] = map(float, result)
 
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
@@ -40,19 +41,18 @@ class MyDaemon(Daemon):
 			time.sleep(waitTime)
 
 def do_work():
-	# 3 datapoints gathered here
-	kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
-	messlog = commands.getoutput("wc -l /var/log/messages").split()[0]
-	syslog  = commands.getoutput("wc -l /var/log/syslog").split()[0]
+	# 5 datapoints gathered here
+	upsc = commands.getoutput("upsc ups@localhost").splitlines()
+  print upsc
 
-	return '{0}, {1}, {2}'.format(kernlog, messlog, syslog)
+	return '{0}, {1}, {2}, {3} ,{4}'.format(230.0, 13.1, 99.9, 17.8, 1701)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/15-cnt-loglines.csv', 'a')
+	f = file('/tmp/16-aux-ups.txt', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
@@ -77,4 +77,3 @@ if __name__ == "__main__":
 	else:
 		print "usage: %s start|stop|restart|foreground" % sys.argv[0]
 		sys.exit(2)
-
