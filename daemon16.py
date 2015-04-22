@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
 def do_work():
 	# 5 datapoints gathered here
 	upsc = commands.getoutput("upsc ups@localhost").splitlines()
-	for element in range(0, len(upsc) - 1)
+	for element in range(0, len(upsc) - 1):
 		var = upsc[element].split(': ')
 		if (var[0] == 'input.voltage'):
 			ups0 = float(var[1])
