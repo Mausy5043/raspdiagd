@@ -27,6 +27,7 @@ git fetch origin && \
  DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
  DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
  DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
+ DIFFd16=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
 
  git reset --hard origin/$branch && \
@@ -58,6 +59,10 @@ if [[ -n "$DIFFd15" ]]; then
   logger -t raspdiagd "Source daemon15 has changed."
   ./daemon15.py stop
 fi
+if [[ -n "$DIFFd16" ]]; then
+  logger -t raspdiagd "Source daemon16 has changed."
+  ./daemon16.py stop
+fi
 if [[ -n "$DIFFd17" ]]; then
   logger -t raspdiagd "Source daemon17 has changed."
   ./daemon17.py stop
@@ -71,6 +76,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon13.py stop
   ./daemon14.py stop
   ./daemon15.py stop
+  ./daemon16.py stop
   ./daemon17.py stop
 fi
 
