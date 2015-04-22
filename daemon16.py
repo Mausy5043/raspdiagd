@@ -76,7 +76,7 @@ def do_report(result):
 	return
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/tmp/raspdiagd-15.pid')
+	daemon = MyDaemon('/tmp/raspdiagd-16.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()
