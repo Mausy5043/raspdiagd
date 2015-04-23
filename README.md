@@ -11,3 +11,12 @@ The code used to daemonise python code was borrowed from previous work by:
 and modified for my particular use-case. This includes a couple of bash-scripts that keep the daemons running and upload the data to my NAS. 
 
 NO code is provided for further processing of the data. E.g. adding the data to rrdtool-databases and/or graphing the data. This functionality is offered elsewhere.
+
+Following daemons are provided:
+- daemon11 - CPU temperature in degC (Raspberry Pi hardware required)
+- daemon12 - CPU load (by `/proc/loadavg` and `vmstat`)
+- daemon13 - Network interfaces (bytes in/out by `/proc/net/dev`)
+- daemon14 - Memory usage (by `/proc/meminfo`)
+- daemon15 - Size of logfiles (`kern.log`, `messages` and `syslog`)
+- daemon16 - Various UPS variables (by `upsc`)
+- daemon17 - Various variables from the Kamstrup smart electricity meter
