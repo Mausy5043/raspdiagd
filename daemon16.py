@@ -32,12 +32,7 @@ class MyDaemon(Daemon):
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
-				# not all entries should be float
-				#
 				averages = [format(s / samples, '.3f') for s in somma]
-				#averages[2]=int(data[sampleptr-1][2])
-				#averages[3]=int(data[sampleptr-1][3])
-				#averages[4]=int(data[sampleptr-1][4]) Thark Dejah
 				do_report(averages)
 				sampleptr = 0
 
