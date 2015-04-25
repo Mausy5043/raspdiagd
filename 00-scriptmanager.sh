@@ -9,7 +9,7 @@
 # set the branch
 # $ echo master > ~/bin/raspdiagd.branch
 
-branch=$(cat ~/bin/raspdiagd.branch)
+branch=$(cat ~/.raspdiagd.branch)
 clnt=$(hostname)
 pushd /home/pi/raspdiagd
 git config core.fileMode false
