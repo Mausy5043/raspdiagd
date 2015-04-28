@@ -31,17 +31,11 @@ class MyDaemon(Daemon):
 			result = do_work().split(',')
 
 			data[sampleptr] = map(float, result)
-			#print data[sampleptr]
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
-				# not all entries should be float
-				# 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
 				averages = [format(s / samples, '.3f') for s in somma]
-				#averages[3]=int(data[sampleptr-1][3])
-				#averages[4]=int(data[sampleptr-1][4])
-				#averages[5]=int(data[sampleptr-1][5])
 				do_report(averages)
 				sampleptr = 0
 
