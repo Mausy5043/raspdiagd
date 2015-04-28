@@ -29,6 +29,7 @@ git fetch origin && \
  DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
  DIFFd16=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
+ DIFFd18=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon18.py)
 
  git reset --hard origin/$branch && \
  git clean -f -d
@@ -67,6 +68,10 @@ if [[ -n "$DIFFd17" ]]; then
   logger -t raspdiagd "Source daemon17 has changed."
   ./daemon17.py stop
 fi
+if [[ -n "$DIFFd18" ]]; then
+  logger -t raspdiagd "Source daemon18 has changed."
+  ./daemon18.py stop
+fi
 
 if [[ -n "$DIFFlib" ]]; then
   logger -t raspdiagd "Source libdaemon has changed."
@@ -78,6 +83,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py stop
   ./daemon16.py stop
   ./daemon17.py stop
+  ./daemon18.py stop
 fi
 
 ######## (Re-)start daemons ######
@@ -109,7 +115,7 @@ case "$clnt" in
             destale 17
             ;;
   rbian )   echo "Raspberry testbench"
-            #./testserial.py
+            destale 18
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;

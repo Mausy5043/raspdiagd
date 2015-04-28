@@ -102,7 +102,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S'")
 
 	result = ', '.join(map(str, result))
-	f = file('/tmp/18d.txt', 'a')
+	f = file('/tmp/testser.txt', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	return
