@@ -31,7 +31,7 @@ class MyDaemon(Daemon):
 			result = do_work().split(',')
 
 			data[sampleptr] = map(float, result)
-			print data[sampleptr]
+			#print data[sampleptr]
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
@@ -90,7 +90,7 @@ def gettelegram(cmd):
 def do_work():
 	# 12 datapoints gathered here
 	telegram, status = gettelegram("A")
-	print telegram
+	#print telegram
 	if (status != 1):
 		telegram = -1
 
