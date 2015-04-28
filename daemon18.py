@@ -98,7 +98,8 @@ def do_work():
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
-	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+	#outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+	outDate = commands.getoutput("date '+%F %H:%M:%S'")
 
 	result = ', '.join(map(str, result))
 	f = file('/tmp/18d.txt', 'a')
