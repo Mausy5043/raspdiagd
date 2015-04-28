@@ -16,7 +16,7 @@ import serial, re
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5
+		samples = 5*5
 		datapoints = 11
 		data = [[None]*datapoints for _ in range(samples)]
 
