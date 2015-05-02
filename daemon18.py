@@ -121,7 +121,7 @@ def calc_windchill(T,W):
 	# use this data to determine the windchill temperature acc. JAG/TI
 	# ref.: http://knmi.nl/bibliotheek/knmipubTR/TR309.pdf
 
-	JagTi = 13.12 + 0.6215 ∗ T - 11.37 ∗ (W ∗ 3.6)**0.16 + 0.3965 ∗ T ∗ (W ∗ 3.6)**0.16
+	JagTi = 13.12 + 0.6215 * T - 11.37 * (W * 3.6)**0.16 + 0.3965 * T * (W * 3.6)**0.16
 	return JagTi
 
 def do_report(result, ext_result):
