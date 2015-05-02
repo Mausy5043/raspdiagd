@@ -13,6 +13,9 @@ import sys, time, math, commands
 from libdaemon import Daemon
 import serial, re
 
+from urllib2 import Request, urlopen
+from bs4 import BeautifulSoup
+
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
@@ -29,6 +32,9 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
+			if (sampleptr == 5):
+				extern_result = do_extern_work().split(',')
+				extern_data = map(float, extern_result)
 
 			data[sampleptr] = map(float, result)
 			# report sample average
@@ -36,7 +42,8 @@ class MyDaemon(Daemon):
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
 				averages = [format(s / samples, '.3f') for s in somma]
-				do_report(averages)
+				avg_ext = [format(s, '.3f') for s in extern_data]
+				do_report(averages, avg_ext)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -90,14 +97,33 @@ def do_work():
 
 	return telegram
 
-def do_report(result):
+def do_extern_work():
+	req = Request("http://xml.buienradar.nl/")
+	response = urlopen(req)
+	output = response.read()
+	soup = BeautifulSoup(output)
+
+	MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
+	GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
+	datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
+	ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
+	gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
+	dt = datum.replace("<"," ").replace(">"," ").split()
+
+	print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
+	gilzerijen = '{0}, {1}'.format(ms, gr)
+	return gilzerijen
+
+
+def do_report(result, ext_result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	#outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 	outDate = commands.getoutput("date '+%F %H:%M:%S'")
 
 	result = ', '.join(map(str, result))
+	ext_result = ', '.join(map(str, ext_result))
 	f = file('/tmp/testser.txt', 'a')
-	f.write('{0}, {1}\n'.format(outDate, result) )
+	f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
 	f.close()
 	return
 
