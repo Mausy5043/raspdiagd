@@ -43,7 +43,7 @@ class MyDaemon(Daemon):
 				somma = map(sum,zip(*data))
 				averages = [format(s / samples, '.3f') for s in somma]
 
-				extern_data[2] = calc_windchill(averages[1], avg_ext[0])
+				extern_data[2] = calc_windchill(averages[1], extern_data[0])
 
 				avg_ext = [format(s, '.3f') for s in extern_data]
 				do_report(averages, avg_ext)
