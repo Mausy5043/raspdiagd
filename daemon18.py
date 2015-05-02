@@ -42,6 +42,9 @@ class MyDaemon(Daemon):
 			if (sampleptr == samples):
 				somma = map(sum,zip(*data))
 				averages = [format(s / samples, '.3f') for s in somma]
+
+				extern_data[2] = do_calc_windchill(averages[1], avg_ext[0])
+
 				avg_ext = [format(s, '.3f') for s in extern_data]
 				do_report(averages, avg_ext)
 				sampleptr = 0
@@ -114,6 +117,12 @@ def do_extern_work():
 	gilzerijen = '{0}, {1}'.format(ms, gr)
 	return gilzerijen
 
+def calc_windchill(T,W):
+	# use this data to determine the windchill temperature acc. JAG/TI
+	# ref.: http://knmi.nl/bibliotheek/knmipubTR/TR309.pdf
+
+	JagTi = 13.12 + 0.6215 ∗ T − 11,37 ∗ (W ∗ 3,6)^0,16 + 0,3965 ∗ T ∗ (W ∗ 3,6)^0,16
+	return JagTi
 
 def do_report(result, ext_result):
 	# Get the time and date in human-readable form and UN*X-epoch...
