@@ -19,11 +19,11 @@ from bs4 import BeautifulSoup
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5*6
+		samples = 5*5
 		datapoints = 11
 		data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 10
+		sampleTime = 12
 		cycleTime = samples * sampleTime
 		# sync to whole cycleTime
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -32,7 +32,7 @@ class MyDaemon(Daemon):
 			startTime=time.time()
 
 			result = do_work().split(',')
-			if (sampleptr == 15):
+			if (sampleptr == 12):
 				extern_result = do_extern_work().split(',')
 				extern_data = map(float, extern_result)
 
