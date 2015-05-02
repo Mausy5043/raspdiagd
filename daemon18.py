@@ -110,7 +110,7 @@ def do_extern_work():
 	gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 	dt = datum.replace("<"," ").replace(">"," ").split()
 
-	print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
+	#print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
 	gilzerijen = '{0}, {1}'.format(ms, gr)
 	return gilzerijen
 
