@@ -50,10 +50,10 @@ class MyDaemon(Daemon):
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-			while waitTime <= 0:
-				waitTime = waitTime + sampleTime
-
-			time.sleep(waitTime)
+			#while waitTime <= 0:
+			#	waitTime = waitTime + sampleTime
+			if (waitTime > 0):
+				time.sleep(waitTime)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
@@ -124,7 +124,7 @@ def calc_windchill(T,W):
 	JagTi = 13.12 + 0.6215 * T - 11.37 * (W * 3.6)**0.16 + 0.3965 * T * (W * 3.6)**0.16
 	if (JagTi > T):
 		JagTi = T
-		
+
 	return JagTi
 
 def do_report(result, ext_result):
