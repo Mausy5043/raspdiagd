@@ -15,8 +15,9 @@ pushd /home/pi/raspdiagd
 git config core.fileMode false
 
 # Synchronise local copy with $branch
+git fetch origin
 git checkout $branch
-git fetch origin && \
+
  # Check which code has changed
  # git diff --name-only
  # git log --graph --oneline --date-order --decorate --color --all
