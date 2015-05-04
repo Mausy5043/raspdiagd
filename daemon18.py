@@ -29,7 +29,7 @@ class MyDaemon(Daemon):
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		while True:
-			startTime=time.time()
+			startTime = time.time()
 
 			result = do_work().split(',')
 			if (sampleptr == 12):
@@ -133,7 +133,7 @@ def do_report(result, ext_result):
 
 	result = ', '.join(map(str, result))
 	ext_result = ', '.join(map(str, ext_result))
-	flock='/tmp/raspdiagd-18.lock'
+	flock = '/tmp/raspdiagd-18.lock'
 	lock(flock)
 	f = file('/tmp/testser.txt', 'a')
 	f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
