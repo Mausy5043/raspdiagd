@@ -74,12 +74,12 @@ def do_report(result):
 	unlock(flock)
 	return
 
-	def lock(fname):
-		open(fname, 'a').close()
+def lock(fname):
+	open(fname, 'a').close()
 
-	def unlock(fname):
-		if os.path.isfile(fname):
-			os.remove(fname)
+def unlock(fname):
+	if os.path.isfile(fname):
+		os.remove(fname)
 
 if __name__ == "__main__":
 	daemon = MyDaemon('/tmp/raspdiagd-12.pid')

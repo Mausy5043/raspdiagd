@@ -141,12 +141,12 @@ def do_report(result, ext_result):
 	unlock(flock)
 	return
 
-	def lock(fname):
-		open(fname, 'a').close()
+def lock(fname):
+	open(fname, 'a').close()
 
-	def unlock(fname):
-		if os.path.isfile(fname):
-			os.remove(fname)
+def unlock(fname):
+	if os.path.isfile(fname):
+		os.remove(fname)
 
 if __name__ == "__main__":
 	port = serial.Serial('/dev/ttyACM0', 9600, timeout=10)
