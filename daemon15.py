@@ -58,6 +58,13 @@ def do_report(result):
 	f.close()
 	return
 
+	def lock(fname):
+		open(fname, 'a').close()
+
+	def unlock(fname):
+		if os.path.isfile(fname):
+			os.remove(fname)
+
 if __name__ == "__main__":
 	daemon = MyDaemon('/tmp/raspdiagd-15.pid')
 	if len(sys.argv) == 2:
