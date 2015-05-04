@@ -23,12 +23,16 @@ class MyDaemon(Daemon):
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
+		myname = os.uname()[1]
+		remote_lock = '/mnt/share1/dataspool/' + myname + '/client.lock'
 		while True:
 			startTime=time.time()
 
 			if os.path.ismount('/mnt/share1'):
-				print 'dataspool is mounted'
+				#print 'dataspool is mounted'
+				#lock(remote_lock)
 				do_xml()
+				#unlock(remote_lock)
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			while waitTime <= 0:
@@ -48,9 +52,9 @@ def do_xml():
 	freeh           = commands.getoutput("free -h")
 	psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
 	#
-	flock='/tmp/raspdiagd-99.lock'
-	lock(flock)
-	f = file('/mnt/share1/' + uname[1] + '/status.txt', 'w')
+	#flock='/tmp/raspdiagd-99.lock'
+	#lock(flock)
+	f = file('/mnt/share1/' + uname[1] + '/status.xml', 'w')
 
 	f.write('<server>\n')
 
@@ -81,7 +85,7 @@ def do_xml():
 	f.write('</server>\n')
 
 	f.close()
-	unlock(flock)
+	#unlock(flock)
 	return
 
 def lock(fname):
