@@ -8,7 +8,7 @@
 
 # daemon99.py creates an XML-file and uploads data to the server.
 
-import os, sys, platform, time, math, commands
+import os, sys, shutil, glob, platform, time, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):
@@ -24,23 +24,72 @@ class MyDaemon(Daemon):
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		myname = os.uname()[1]
-		remote_lock = '/mnt/share1/' + myname + '/client.lock'
+		mount_path = '/mnt/share1/'
+		remote_path = mount_path + myname
+		remote_lock = remote_path + '/client.lock'
 		while True:
 			startTime=time.time()
 
-			if os.path.ismount('/mnt/share1'):
+			if os.path.ismount(mount_path):
 				#print 'dataspool is mounted'
 				#lock(remote_lock)
-				do_xml()
+				do_mv_data(remote_path)
+				do_xml(remote_path)
 				#unlock(remote_lock)
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			while waitTime <= 0:
-				waitTime = waitTime + sampleTime
+				waitTime += sampleTime
 
 			time.sleep(waitTime)
 
-def do_xml():
+def do_mv_data(rpath):
+	hostlock = rpath + '/host.lock'
+	clientlock = rpath + '/client.lock'
+	count_internal_locks=1
+
+	#
+	rpath='/tmp/test'
+	#
+
+	while os.path.isfile(hostlock):
+		# wait while the server has locked the directory
+		wait(1)
+
+	# server already sets the client.lock. Do it anyway.
+	lock(clientlock)
+
+	# prevent race conditions
+	while os.path.isfile(hostlock):
+		# wait while the server has locked the directory
+		wait(1)
+
+	while count_internal_locks > 0
+		wait(1)
+		count_internal_locks=0
+		for file in glob.glob(r'/tmp/*.lock'):
+	    count_internal_locks += 1
+
+	for file in glob.glob(r'/tmp/*.csv'):
+	    print file
+			if os.path.isfile(clientlock):
+				shutil.copy2(file, rpath)
+
+	for file in glob.glob(r'/tmp/*.err'):
+	    print file
+			if os.path.isfile(clientlock):
+				shutil.copy2(file, rpath)
+
+	for file in glob.glob(r'/tmp/*.png'):
+	    print file
+			if os.path.isfile(clientlock):
+				shutil.copy2(file, rpath)
+
+	unlock(clientlock)
+
+	return
+
+def do_xml(wpath):
 	#
 	uname           = os.uname()
 	Tcpu            = float(commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp"))/1000
@@ -52,9 +101,7 @@ def do_xml():
 	freeh           = commands.getoutput("free -h")
 	psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
 	#
-	#flock='/tmp/raspdiagd-99.lock'
-	#lock(flock)
-	f = file('/mnt/share1/' + uname[1] + '/status.xml', 'w')
+	f = file(wpath + '/status.xml', 'w')
 
 	f.write('<server>\n')
 
@@ -85,7 +132,6 @@ def do_xml():
 	f.write('</server>\n')
 
 	f.close()
-	#unlock(flock)
 	return
 
 def lock(fname):
