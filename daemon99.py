@@ -24,7 +24,7 @@ class MyDaemon(Daemon):
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		myname = os.uname()[1]
-		remote_lock = '/mnt/share1/dataspool/' + myname + '/client.lock'
+		remote_lock = '/mnt/share1/' + myname + '/client.lock'
 		while True:
 			startTime=time.time()
 
