@@ -31,6 +31,7 @@ git checkout $branch
  DIFFd16=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
  DIFFd18=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon18.py)
+ DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
  git reset --hard origin/$branch && \
  git clean -f -d
@@ -73,6 +74,10 @@ if [[ -n "$DIFFd18" ]]; then
   logger -t raspdiagd "Source daemon18 has changed."
   ./daemon18.py stop
 fi
+if [[ -n "$DIFFd99" ]]; then
+  logger -t raspdiagd "Source daemon99 has changed."
+  ./daemon99.py stop
+fi
 
 if [[ -n "$DIFFlib" ]]; then
   logger -t raspdiagd "Source libdaemon has changed."
@@ -85,6 +90,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon16.py stop
   ./daemon17.py stop
   ./daemon18.py stop
+  ./daemon99.py stop
 fi
 
 ######## (Re-)start daemons ######
@@ -107,6 +113,7 @@ destale 12
 destale 13
 destale 14
 destale 15
+destale 99
 
 case "$clnt" in
   rbups )   echo "UPS monitor"

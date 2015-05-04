@@ -45,11 +45,12 @@ def do_xml():
 	gitbinbranch    = commands.getoutput("cat /home/pi/.gitbin.branch")
 	uptime          = commands.getoutput("uptime")
 	dfh             = commands.getoutput("df -h")
+	freeh           = commands.getoutput("free -h")
 	psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
 	#
 	flock='/tmp/raspdiagd-99.lock'
 	lock(flock)
-	f = file('/tmp/status.txt', 'w')
+	f = file('/mnt/share1/' + uname[1] + '/status.txt', 'w')
 
 	f.write('<server>\n')
 
@@ -66,7 +67,7 @@ def do_xml():
 	f.write('</temperature>\n')
 
 	f.write('<memusage>\n')
-	f.write('--- free -h ---\n')
+	f.write(freeh + '\n')
 	f.write('</memusage>\n')
 
 	f.write(' <uptime>\n')
