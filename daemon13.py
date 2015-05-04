@@ -73,9 +73,12 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
+	flock='/tmp/raspdiagd-13.lock'
+	lock(flock)
 	f = file('/tmp/13-nettraffic.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
+	unlock(flock)
 	return
 
 	def lock(fname):

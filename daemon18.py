@@ -133,9 +133,12 @@ def do_report(result, ext_result):
 
 	result = ', '.join(map(str, result))
 	ext_result = ', '.join(map(str, ext_result))
+	flock='/tmp/raspdiagd-18.lock'
+	lock(flock)
 	f = file('/tmp/testser.txt', 'a')
 	f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
 	f.close()
+	unlock(flock)
 	return
 
 	def lock(fname):
