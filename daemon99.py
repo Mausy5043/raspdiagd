@@ -76,17 +76,17 @@ def do_mv_data(rpath):
 	for file in glob.glob(r'/tmp/*.csv'):
 		#print file
 		if os.path.isfile(clientlock):
-			shutil.copy2(file, rpath)
+			shutil.move(file, rpath)
 
 	#for file in glob.glob(r'/tmp/*.err'):
 	#	print file
 	#	if os.path.isfile(clientlock):
-	#		shutil.copy2(file, rpath)
+	#		shutil.move(file, rpath)
 
 	for file in glob.glob(r'/tmp/*.png'):
 		#print file
 		if os.path.isfile(clientlock):
-			shutil.copy2(file, rpath)
+			shutil.move(file, rpath)
 
 	unlock(clientlock)
 
