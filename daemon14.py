@@ -9,7 +9,7 @@
 # daemon14.py measures the memory usage.
 # These are all counters, therefore no averaging is needed.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):

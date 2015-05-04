@@ -8,7 +8,7 @@
 
 # daemon17.py communicates with the smart electricity meter.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 import serial, re

@@ -9,7 +9,7 @@
 # daemon13.py measures the network traffic.
 # These are all counters, therefore no averaging is needed.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):

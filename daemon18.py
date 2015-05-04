@@ -9,7 +9,7 @@
 # daemon18.py reads data from an Arduino running the cmdMULTIsens sketch from
 # https://github.com/Mausy5043/arduino.git.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 import serial, re
 

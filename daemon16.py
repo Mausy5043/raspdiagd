@@ -8,7 +8,7 @@
 
 # daemon16.py reports various UPS variables.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):
