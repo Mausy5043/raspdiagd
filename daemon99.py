@@ -22,7 +22,7 @@ class MyDaemon(Daemon):
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-		#time.sleep(waitTime)
+		time.sleep(waitTime)
 		while True:
 			startTime=time.time()
 
@@ -36,11 +36,9 @@ class MyDaemon(Daemon):
 
 			time.sleep(waitTime)
 
-def do_xml(result):
-	# Get the time and date in human-readable form and UN*X-epoch...
-	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+def do_xml():
 	#
-	uname=os.uname()
+	uname           = os.uname()
 	Tcpu            = float(commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp"))/1000
 	fcpu            = float(commands.getoutput("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"))/1000
 	raspdiagdbranch = commands.getoutput("cat /home/pi/.raspdiagd.branch")
@@ -64,7 +62,7 @@ def do_xml(result):
 	f.write('</df>\n')
 
 	f.write('<temperature>\n')
-	f.write(Tcpu + ' degC @ '+ fcpu +' MHz\n')
+	f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
 	f.write('</temperature>\n')
 
 	f.write('<memusage>\n')
@@ -73,7 +71,7 @@ def do_xml(result):
 
 	f.write(' <uptime>\n')
 	f.write(uptime + '\n')
-	f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform()'\n')
+	f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
 	f.write(' - raspdiagd on: '+ raspdiagdbranch +'\n')
 	f.write(' - gitbin    on: '+ gitbinbranch +'\n')
 	f.write('\nTop 10 processes:\n' + psout +'\n')
