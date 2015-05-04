@@ -8,7 +8,7 @@
 
 # daemon11.py measures the CPU temperature.
 
-import sys, time, math, commands
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):
