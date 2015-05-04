@@ -8,7 +8,7 @@
 
 # daemon99.py creates an XML-file and uploads data to the server.
 
-import os, sys, platform time, math, commands
+import os, sys, platform, time, math, commands
 from libdaemon import Daemon
 
 class MyDaemon(Daemon):
@@ -22,11 +22,11 @@ class MyDaemon(Daemon):
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-		time.sleep(waitTime)
+		#time.sleep(waitTime)
 		while True:
 			startTime=time.time()
 
-			if os.path.ismounted('/mnt/share1'):
+			if os.path.ismount('/mnt/share1'):
 				print 'dataspool is mounted'
 				do_xml()
 
@@ -35,17 +35,6 @@ class MyDaemon(Daemon):
 				waitTime = waitTime + sampleTime
 
 			time.sleep(waitTime)
-
-def do_work():
-	# Read the CPU temperature
-	outTemp = commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp")
-	if float(outTemp) > 75000:
-	  # can't believe my sensors. Probably a glitch. Wait a while then measure again
-	  time.sleep(7)
-	  outTemp = commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp")
-	  outTemp = float(outTemp) + 0.1
-
-	return outTemp
 
 def do_xml(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
@@ -67,27 +56,27 @@ def do_xml(result):
 	f.write('<server>\n')
 
 	f.write('<name>\n')
-	f.write('{0}\n').format(uname[1])
+	f.write(uname[1] + '\n')
 	f.write('</name>\n')
 
 	f.write('<df>\n')
-	f.write('{0}\n').format(dfh)
+	f.write(dfh + '\n')
 	f.write('</df>\n')
 
 	f.write('<temperature>\n')
-	f.write('{0} degC @ {1} MHz\n').format(Tcpu, fcpu)
+	f.write(Tcpu + ' degC @ '+ fcpu +' MHz\n')
 	f.write('</temperature>\n')
 
 	f.write('<memusage>\n')
-	f.write('{0}\n') #free -h
+	f.write('--- free -h ---\n')
 	f.write('</memusage>\n')
 
 	f.write(' <uptime>\n')
-	f.write('{0}\n').format(uptime)
-	f.write('{0} {1} {2} {3} {4} {5}\n').format(uname[0], uname[1], uname[2], uname[3], uname[4], platform.platform())
-	f.write(' - raspdiagd on: {0}\n').format(raspdiagdbranch)
-	f.write(' - gitbin    on: {0}\n').format(gitbinbranch)
-	f.write('\nTop 10 processes:\n {0}').format(psout)
+	f.write(uptime + '\n')
+	f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform()'\n')
+	f.write(' - raspdiagd on: '+ raspdiagdbranch +'\n')
+	f.write(' - gitbin    on: '+ gitbinbranch +'\n')
+	f.write('\nTop 10 processes:\n' + psout +'\n')
 	f.write('</uptime>\n')
 
 	f.write('</server>\n')
