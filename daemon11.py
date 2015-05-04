@@ -57,10 +57,20 @@ def do_work():
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+	flock='/tmp/raspdiagd-11.lock'
+	lock(flock)
 	f = file('/tmp/11-t-cpu.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, float(float(result)/1000)) )
 	f.close()
+	unlock(flock)
 	return
+
+def lock(fname):
+	open(fname, 'a').close()
+
+def unlock(fname):
+	if os.path.isfile(fname):
+		os.remove(fname)
 
 if __name__ == "__main__":
 	daemon = MyDaemon('/tmp/raspdiagd-11.pid')
