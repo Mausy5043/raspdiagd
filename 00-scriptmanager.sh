@@ -7,7 +7,7 @@
 # To suppress git detecting changes by chmod:
 # $ git config core.fileMode false
 # set the branch
-# $ echo master > ~/bin/raspdiagd.branch
+# $ echo master > ~/.raspdiagd.branch
 
 branch=$(cat ~/.raspdiagd.branch)
 clnt=$(hostname)
@@ -132,6 +132,5 @@ case "$clnt" in
   * )       echo "!! undefined client !!"
             ;;
 esac
-
 
 popd
