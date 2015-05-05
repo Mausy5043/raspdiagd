@@ -41,7 +41,7 @@ class MyDaemon(Daemon):
 		serial.XON
 
 		while True:
-			startTime=time.time()
+			startTime = time.time()
 
 			data = do_work().split(', ')
 
@@ -52,7 +52,7 @@ class MyDaemon(Daemon):
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			while waitTime <= 0:
-				waitTime = waitTime + sampleTime
+				waitTime += sampleTime
 
 			time.sleep(waitTime)
 
@@ -138,7 +138,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	flock='/tmp/raspdiagd-17.lock'
+	flock = '/tmp/raspdiagd-17.lock'
 	lock(flock)
 	f = file('/tmp/17-electra.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )

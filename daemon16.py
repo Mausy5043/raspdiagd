@@ -24,7 +24,7 @@ class MyDaemon(Daemon):
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		while True:
-			startTime=time.time()
+			startTime = time.time()
 
 			result = do_work().split(',')
 			data[sampleptr] = map(float, result)
@@ -38,7 +38,7 @@ class MyDaemon(Daemon):
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			while waitTime <= 0:
-				waitTime = waitTime + sampleTime
+				waitTime += sampleTime
 
 			time.sleep(waitTime)
 
@@ -65,7 +65,7 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	flock='/tmp/raspdiagd-16.lock'
+	flock = '/tmp/raspdiagd-16.lock'
 	lock(flock)
 	f = file('/tmp/16-aux-ups.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )

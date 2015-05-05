@@ -24,7 +24,7 @@ class MyDaemon(Daemon):
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		time.sleep(waitTime)
 		while True:
-			startTime=time.time()
+			startTime = time.time()
 
 			result = do_work()
 			data[sampleptr] = int(result)
@@ -39,7 +39,7 @@ class MyDaemon(Daemon):
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			while waitTime <= 0:
-				waitTime = waitTime + sampleTime
+				waitTime += sampleTime
 
 			time.sleep(waitTime)
 
@@ -57,7 +57,7 @@ def do_work():
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-	flock='/tmp/raspdiagd-11.lock'
+	flock = '/tmp/raspdiagd-11.lock'
 	lock(flock)
 	f = file('/tmp/11-t-cpu.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, float(float(result)/1000)) )
