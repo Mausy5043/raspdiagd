@@ -94,7 +94,7 @@ def do_xml(wpath):
 	Tcpu            = float(commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp"))/1000
 	fcpu            = float(commands.getoutput("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"))/1000
 	raspdiagdbranch = commands.getoutput("cat /home/pi/.raspdiagd.branch")
-	gitbinbranch    = commands.getoutput("cat /home/pi/.gitbin.branch")
+	gitbinbranch    = commands.getoutput("cat /home/pi/.raspboot.branch")
 	uptime          = commands.getoutput("uptime")
 	dfh             = commands.getoutput("df -h")
 	freeh           = commands.getoutput("free -h")
