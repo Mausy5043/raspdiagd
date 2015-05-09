@@ -162,6 +162,10 @@ if __name__ == "__main__":
 			serial.XOFF
 			port.close()
 			daemon.stop()
+		elif 'restart' == sys.argv[1]:
+			serial.XOFF
+			port.close()
+			daemon.restart()
 		elif 'foreground' == sys.argv[1]:
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
