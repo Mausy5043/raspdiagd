@@ -37,10 +37,8 @@ class MyDaemon(Daemon):
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-			while waitTime <= 0:
-				waitTime += sampleTime
-
-			time.sleep(waitTime)
+			if (waitTime > 0):
+				time.sleep(waitTime)
 
 def do_work():
 	# 5 datapoints gathered here

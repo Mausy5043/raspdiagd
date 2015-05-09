@@ -38,10 +38,8 @@ class MyDaemon(Daemon):
 				#unlock(remote_lock)
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-			while waitTime <= 0:
-				waitTime += sampleTime
-
-			time.sleep(waitTime)
+			if (waitTime > 0):
+				time.sleep(waitTime)
 
 def do_mv_data(rpath):
 	hostlock = rpath + '/host.lock'

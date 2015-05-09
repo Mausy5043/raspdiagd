@@ -50,9 +50,6 @@ class MyDaemon(Daemon):
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-			#while waitTime <= 0:
-			#	waitTime = waitTime + sampleTime
-			print waitTime
 			if (waitTime > 0):
 				time.sleep(waitTime)
 
