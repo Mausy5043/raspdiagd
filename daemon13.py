@@ -48,21 +48,21 @@ def do_work():
 	loIn = 0
 	loOut = 0
 
-	list = commands.getoutput("cat /proc/net/dev").splitlines()
+	list = commands.getoutput("cat /proc/net/dev").replace(":"," ").splitlines()
 	for line in range(2,len(list)):
 		device = list[line].split()[0]
-		if device == "lo:":
+		if device == "lo":
 			loIn = list[line].split()[1]
 			loOut = list[line].split()[9]
-		if device == "eth0:":
+		if device == "eth0":
 			etIn = list[line].split()[1]
 			etOut = list[line].split()[9]
-		if device == "wlan0:":
+		if device == "wlan0":
 			wlIn = list[line].split()[1]
 			wlOut = list[line].split()[9]
-		if device == "wlan1:":
-			wlIn = list[line].split()[1]
-			wlOut = list[line].split()[9]
+		if device == "wlan1":
+			wlIn += list[line].split()[1]
+			wlOut += list[line].split()[9]
 
 	return '{0}, {1}, {2}, {3}, {4}, {5}'.format(loIn, loOut, etIn, etOut, wlIn, wlOut)
 
