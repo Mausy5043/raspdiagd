@@ -11,10 +11,11 @@
 
 branch=$(cat ~/.raspdiagd.branch)
 clnt=$(hostname)
-usr=$(whoami)
-pushd /home/$usr/raspdiagd
+pushd $HOME/raspdiagd
 git config core.fileMode false
 
+# force recompilation of libraries
+rm *.pyc
 # Synchronise local copy with $branch
 git pull
 git fetch origin
@@ -142,7 +143,7 @@ popd
 # remount it here.
 MOUNTPOINT=/mnt/share1
 MOUNTDRIVE=10.0.1.220:/srv/array1/dataspool
-if grep -qs '/mnt/share1 ' /proc/mounts; then
+if grep -qs $MOUNTPOINT /proc/mounts; then
 	# It's mounted.
   echo "mounted"
 else
