@@ -16,6 +16,7 @@ pushd /home/$usr/raspdiagd
 git config core.fileMode false
 
 # Synchronise local copy with $branch
+git pull
 git fetch origin
 git checkout $branch
 
