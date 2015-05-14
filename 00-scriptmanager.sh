@@ -11,7 +11,8 @@
 
 branch=$(cat ~/.raspdiagd.branch)
 clnt=$(hostname)
-pushd /home/pi/raspdiagd
+usr=$(whoami)
+pushd /home/$usr/raspdiagd
 git config core.fileMode false
 
 # Synchronise local copy with $branch
