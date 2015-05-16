@@ -24,4 +24,4 @@ ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 print s5 - time.time()
 
-print = 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, s1 - time.time())
+print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, s1 - time.time())
