@@ -42,6 +42,7 @@ class MyDaemon(Daemon):
 				extern_data = map(float, extern_result)
 
 			data[sampleptr] = map(float, result)
+			if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
