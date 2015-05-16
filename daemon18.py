@@ -115,11 +115,11 @@ def do_work():
 def do_extern_work():
 
 	start=time.time()
-	#req = Request("http://xml.buienradar.nl/")
-	#response = urlopen(req)
-	#output = response.read()
-	#soup = BeautifulSoup(output)
-	soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
+	req = Request("http://xml.buienradar.nl/")
+	response = urlopen(req)
+	output = response.read()
+	soup = BeautifulSoup(output)
+	#soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
 	souptime = time.time()-start
 
 	MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
