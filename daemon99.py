@@ -27,7 +27,7 @@ class MyDaemon(Daemon):
 		mount_path = '/mnt/share1/'
 		remote_path = mount_path + myname
 		remote_lock = remote_path + '/client.lock'
-		
+
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		if DEBUG:
@@ -46,6 +46,7 @@ class MyDaemon(Daemon):
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			if (waitTime > 0):
+				if DEBUG:print "Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
 
 def do_mv_data(rpath):

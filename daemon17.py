@@ -56,6 +56,7 @@ class MyDaemon(Daemon):
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
 			if (waitTime > 0):
+				if DEBUG:print "Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
 
 def do_work():
