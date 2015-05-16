@@ -16,6 +16,8 @@ import serial, re
 from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 
+DEBUG = False
+
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
@@ -27,7 +29,10 @@ class MyDaemon(Daemon):
 		cycleTime = samples * sampleTime
 		# sync to whole cycleTime
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-		time.sleep(waitTime)
+		if DEBUG:
+			print "NOT waiting {0} s.".format(waitTime)
+		else:
+			time.sleep(waitTime)
 		while True:
 			startTime = time.time()
 
@@ -161,6 +166,7 @@ if __name__ == "__main__":
 		elif 'foreground' == sys.argv[1]:
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
+			DEBUG = True
 			daemon.run()
 		else:
 			print "Unknown command"

@@ -11,6 +11,8 @@
 import os, sys, time, math, commands
 from libdaemon import Daemon
 
+DEBUG = False
+
 import serial, re
 
 port = serial.Serial()
@@ -33,13 +35,15 @@ class MyDaemon(Daemon):
 
 		sampleTime = 10
 		cycleTime = samples * sampleTime
-		# sync to whole minute
-		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-		time.sleep(waitTime)
 
 		port.open()
 		serial.XON
-
+		# sync to whole minute
+		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
+		if DEBUG:
+			print "NOT waiting {0} s.".format(waitTime)
+		else:
+			time.sleep(waitTime)
 		while True:
 			startTime = time.time()
 
@@ -167,6 +171,7 @@ if __name__ == "__main__":
 		elif 'foreground' == sys.argv[1]:
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
+			DEBUG = True
 			daemon.run()
 		else:
 			print "Unknown command"
