@@ -38,7 +38,8 @@ class MyDaemon(Daemon):
 			startTime = time.time()
 
 			result = do_work().split(',')
-			if (sampleptr == 12):
+			if (sampleptr == int(samples/2)):
+				if DEBUG:print "<external data fetch>"
 				extern_result = do_extern_work().split(',')
 				extern_data = map(float, extern_result)
 
@@ -62,6 +63,8 @@ class MyDaemon(Daemon):
 				if DEBUG:print "*** Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
 				waitTime = 0
+			else:
+				if DEBUG:print "*** Carrying {0} s".format(waitTime)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
