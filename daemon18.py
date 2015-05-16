@@ -113,10 +113,13 @@ def do_work():
 	return telegram
 
 def do_extern_work():
-	req = Request("http://xml.buienradar.nl/")
-	response = urlopen(req)
-	output = response.read()
-	soup = BeautifulSoup(output)
+	#req = Request("http://xml.buienradar.nl/")
+	#response = urlopen(req)
+	#output = response.read()
+	#soup = BeautifulSoup(output)
+	start=time.time()
+	soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
+	souptime = time.time()-start
 
 	MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
 	GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
@@ -126,7 +129,7 @@ def do_extern_work():
 	dt = datum.replace("<"," ").replace(">"," ").split()
 
 	#print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
-	gilzerijen = '{0}, {1}'.format(ms, gr)
+	gilzerijen = '{0}, {1}, {2}'.format(ms, gr, souptime)
 	return gilzerijen
 
 def calc_windchill(T,W):
