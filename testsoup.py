@@ -4,8 +4,9 @@ import time
 from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 
+_url="http://xml.buienradar.nl/"
 s1  = time.time()
-req = Request("http://xml.buienradar.nl/")
+req = Request(_url)
 print "Request         = {0}".format(time.time() - s1)
 s2 = time.time()
 response = urlopen(req)
@@ -27,7 +28,7 @@ print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr
 
 
 s6 = time.time()
-soup = BeautifulSoup(urllib2.urlopen("http://www.google.com")
+soup = BeautifulSoup(urllib2.urlopen(_url))
 print "Soup (2)         = {0}".format(time.time() - s6)
 
 s5 = time.time()
