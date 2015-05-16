@@ -52,12 +52,13 @@ class MyDaemon(Daemon):
 				extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
 
 				avg_ext = [format(s, '.3f') for s in extern_data]
+				if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
 				do_report(averages, avg_ext)
 				sampleptr = 0
 
 			waitTime = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
 			if (waitTime > 0):
-				if DEBUG:print "Waiting {0} s".format(waitTime)
+				if DEBUG:print "*** Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
 
 def gettelegram(cmd):
