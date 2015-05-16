@@ -130,7 +130,7 @@ def do_extern_work():
 	#dt = datum.replace("<"," ").replace(">"," ").split()
 
 	#print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
-	gilzerijen = '{0}, {1}, {2}'.format(ms, gr, souptime)
+	gilzerijen = '{0}, {1}, {2}'.format(ms, gr)
 	return gilzerijen
 
 def calc_windchill(T,W):
