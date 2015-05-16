@@ -17,10 +17,8 @@ git config core.fileMode false
 # force recompilation of libraries
 rm *.pyc
 # Synchronise local copy with $branch
-git pull
-git fetch origin
-git checkout $branch
 
+ git fetch origin
  # Check which code has changed
  # git diff --name-only
  # git log --graph --oneline --date-order --decorate --color --all
@@ -36,6 +34,9 @@ git checkout $branch
  DIFFd18=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon18.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
+ git pull
+ git fetch origin
+ git checkout $branch
  git reset --hard origin/$branch && \
  git clean -f -d
 
