@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import time
 from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 
