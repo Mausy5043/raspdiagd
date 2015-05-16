@@ -38,13 +38,14 @@ class MyDaemon(Daemon):
 			startTime = time.time()
 
 			result = do_work().split(',')
+			data[sampleptr] = map(float, result)
+			if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
+
 			if (sampleptr == int(samples/2)):
 				if DEBUG:print "<external data fetch>"
 				extern_result = do_extern_work().split(',')
 				extern_data = map(float, extern_result)
 
-			data[sampleptr] = map(float, result)
-			if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
@@ -52,8 +53,8 @@ class MyDaemon(Daemon):
 				averages = [format(s / samples, '.3f') for s in somma]
 
 				extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
-
 				avg_ext = [format(s, '.3f') for s in extern_data]
+
 				if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
 				do_report(averages, avg_ext)
 				sampleptr = 0
