@@ -21,16 +21,17 @@ DEBUG = False
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5*5
+		samples = 10
 		datapoints = 11
 		data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 12
+		sampleTime = 30
 		cycleTime = samples * sampleTime
 		# sync to whole cycleTime
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		if DEBUG:
 			print "NOT waiting {0} s.".format(waitTime)
+			waitTime = 0
 		else:
 			time.sleep(waitTime)
 		while True:
@@ -56,7 +57,7 @@ class MyDaemon(Daemon):
 				do_report(averages, avg_ext)
 				sampleptr = 0
 
-			waitTime = sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+			waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
 			if (waitTime > 0):
 				if DEBUG:print "*** Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
