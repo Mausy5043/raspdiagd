@@ -113,20 +113,21 @@ def do_work():
 	return telegram
 
 def do_extern_work():
+
+	start=time.time()
 	#req = Request("http://xml.buienradar.nl/")
 	#response = urlopen(req)
 	#output = response.read()
 	#soup = BeautifulSoup(output)
-	start=time.time()
 	soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
 	souptime = time.time()-start
 
 	MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
 	GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
-	datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
+	#datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
 	ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 	gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
-	dt = datum.replace("<"," ").replace(">"," ").split()
+	#dt = datum.replace("<"," ").replace(">"," ").split()
 
 	#print '{0} {1}, {2}, {3}'.format(dt[1], dt[2], ms, gr)
 	gilzerijen = '{0}, {1}, {2}'.format(ms, gr, souptime)
