@@ -61,6 +61,7 @@ class MyDaemon(Daemon):
 			if (waitTime > 0):
 				if DEBUG:print "*** Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
+				waitTime = 0
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
