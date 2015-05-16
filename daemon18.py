@@ -27,7 +27,6 @@ class MyDaemon(Daemon):
 
 		sampleTime = 12
 		cycleTime = samples * sampleTime
-		
 		# sync to whole cycleTime
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
 		if DEBUG:
