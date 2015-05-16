@@ -5,6 +5,7 @@ from urllib2 import Request, urlopen
 from bs4 import BeautifulSoup
 
 _url="http://xml.buienradar.nl/"
+
 s1  = time.time()
 req = Request(_url)
 print "Request         = {0}".format(time.time() - s1)
@@ -24,11 +25,9 @@ GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=63
 ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 print "Extracting info = {0}".format(time.time() - s5)
-print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, time.time() - s1)
-
 
 s6 = time.time()
-soup = BeautifulSoup(urllib2.urlopen(_url))
+soup = BeautifulSoup(urlopen(_url))
 print "Soup (2)         = {0}".format(time.time() - s6)
 
 s5 = time.time()
@@ -37,4 +36,3 @@ GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=63
 ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 print "Extracting info = {0}".format(time.time() - s5)
-print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, time.time() - s1)
