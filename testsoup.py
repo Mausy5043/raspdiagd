@@ -15,13 +15,25 @@ output = response.read()
 print "Read            = {0}".format(time.time() - s3)
 s4 = time.time()
 soup = BeautifulSoup(output)
-print "Soup            = {0}".format(time.time() - s4)
-s5 = time.time()
+print "Soup (1)        = {0}".format(time.time() - s4)
 
+s5 = time.time()
 MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
 GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
 ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 print "Extracting info = {0}".format(time.time() - s5)
+print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, time.time() - s1)
 
+
+s6 = time.time()
+soup = BeautifulSoup(urllib2.urlopen("http://www.google.com")
+print "Soup (2)         = {0}".format(time.time() - s6)
+
+s5 = time.time()
+MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
+GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
+ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
+gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
+print "Extracting info = {0}".format(time.time() - s5)
 print 'speed: {0} m/s, direction: {1} deg, processing time: {2} s'.format(ms, gr, time.time() - s1)
