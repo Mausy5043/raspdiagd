@@ -76,10 +76,10 @@ def do_mv_data(rpath):
 	while (count_internal_locks > 0):
 		time.sleep(1)
 		count_internal_locks=0
-		for file in glob.glob(r'/tmp/*.lock'):
+		for file in glob.glob(r'/tmp/raspdiagd/*.lock'):
 			count_internal_locks += 1
 
-	for file in glob.glob(r'/tmp/*.csv'):
+	for file in glob.glob(r'/tmp/raspdiagd/*.csv'):
 		#print file
 		if os.path.isfile(clientlock):
 			if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
@@ -148,7 +148,7 @@ def unlock(fname):
 		os.remove(fname)
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/tmp/raspdiagd-99.pid')
+	daemon = MyDaemon('/tmp/raspdiagd/99.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

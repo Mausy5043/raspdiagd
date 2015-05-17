@@ -77,9 +77,9 @@ def do_report(result):
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
 	result = ', '.join(map(str, result))
-	flock = '/tmp/raspdiagd-13.lock'
+	flock = '/tmp/raspdiagd/13.lock'
 	lock(flock)
-	f = file('/tmp/13-nettraffic.csv', 'a')
+	f = file('/tmp/raspdiagd/13-nettraffic.csv', 'a')
 	f.write('{0}, {1}\n'.format(outDate, result) )
 	f.close()
 	unlock(flock)
@@ -93,7 +93,7 @@ def unlock(fname):
 		os.remove(fname)
 
 if __name__ == "__main__":
-	daemon = MyDaemon('/tmp/raspdiagd-13.pid')
+	daemon = MyDaemon('/tmp/raspdiagd/13.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

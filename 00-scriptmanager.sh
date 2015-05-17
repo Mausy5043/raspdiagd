@@ -44,6 +44,10 @@ rm *.pyc
 # Set permissions
 chmod -R 744 *
 
+if [[ ! -d /tmp/raspdiagd ]]; then
+  mkdir /tmp/raspdiagd
+fi
+
 ######## Stop daemons ######
 
 if [[ -n "$DIFFd11" ]]; then
@@ -100,10 +104,10 @@ fi
 ######## (Re-)start daemons ######
 
 function destale {
-  if [ -e /tmp/raspdiagd-$1.pid ]; then
-    if ! kill -0 $(cat /tmp/raspdiagd-$1.pid)  > /dev/null 2>&1; then
+  if [ -e /tmp/raspdiagd/$1.pid ]; then
+    if ! kill -0 $(cat /tmp/raspdiagd/$1.pid)  > /dev/null 2>&1; then
       logger -t raspdiagd "Stale daemon$1 pid-file found."
-      rm /tmp/raspdiagd-$1.pid
+      rm /tmp/raspdiagd/$1.pid
       ./daemon$1.py start
     fi
   else
