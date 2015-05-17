@@ -130,7 +130,7 @@ def do_xml(wpath):
 	f.write(' <uptime>\n')
 	f.write(uptime + '\n')
 	f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
-	f.write(' - raspdiagd on: '+ raspdiagdbranch +'\n')
+	f.write(' - raspdiagd   on: '+ raspdiagdbranch +'\n')
 	f.write(' - raspboot    on: '+ raspbootbranch +'\n')
 	f.write('\nTop 10 processes:\n' + psout +'\n')
 	f.write('</uptime>\n')
