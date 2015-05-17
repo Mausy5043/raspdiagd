@@ -101,7 +101,7 @@ def do_xml(wpath):
 	Tcpu            = float(commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp"))/1000
 	fcpu            = float(commands.getoutput("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"))/1000
 	raspdiagdbranch = commands.getoutput("cat /home/pi/.raspdiagd.branch")
-	gitbinbranch    = commands.getoutput("cat /home/pi/.raspboot.branch")
+	raspbootbranch    = commands.getoutput("cat /home/pi/.raspboot.branch")
 	uptime          = commands.getoutput("uptime")
 	dfh             = commands.getoutput("df -h")
 	freeh           = commands.getoutput("free -h")
@@ -131,7 +131,7 @@ def do_xml(wpath):
 	f.write(uptime + '\n')
 	f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
 	f.write(' - raspdiagd on: '+ raspdiagdbranch +'\n')
-	f.write(' - gitbin    on: '+ gitbinbranch +'\n')
+	f.write(' - raspboot    on: '+ raspbootbranch +'\n')
 	f.write('\nTop 10 processes:\n' + psout +'\n')
 	f.write('</uptime>\n')
 

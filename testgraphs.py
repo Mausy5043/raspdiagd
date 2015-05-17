@@ -223,7 +223,7 @@ def graphs():
   Prain = rainchance(A10[lenD -1])
   Ptrend = Pnow + "Neerslagkans: {0}% \n".format(Prain)
 
-  # SyntaxError: Non-ASCII character '\xe2' in file /home/pi/gitbin/testgraphs.py
+  # SyntaxError: Non-ASCII character '\xe2' in file /home/pi/raspboot/testgraphs.py
   # on line 244, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
   # Charactercodes: http://www.fileformat.info/info/unicode/block/arrows/utf8test.htm
 
