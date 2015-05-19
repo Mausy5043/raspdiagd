@@ -85,7 +85,7 @@ def do_mv_data(rpath):
 			if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
 			  shutil.move(file, rpath)
 
-	for file in glob.glob(r'/tmp/*.png'):
+	for file in glob.glob(r'/tmp/raspdiagd/*.png'):
 		if os.path.isfile(clientlock):
 			if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
 				shutil.move(file, rpath)
