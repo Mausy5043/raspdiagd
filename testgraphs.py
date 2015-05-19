@@ -108,7 +108,7 @@ def graphs():
   pl.grid(True)
   pl.legend(loc='upper left', prop={'size':8})
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/C123.png')
+  pl.savefig('/tmp/raspdiagd/C123.png')
 
   print "BMP183 vs DS18B20"
   ab = np.polyfit(A11,A2,1)
@@ -123,7 +123,7 @@ def graphs():
   pl.ylabel("T(DS18B20) [degC]")
   pl.annotate('{0}'.format(r2) , xy=(min(A11)+0.5,fit(min(A11))), size=6 )
   pl.grid(True)
-  pl.savefig('/tmp/C56.png')
+  pl.savefig('/tmp/raspdiagd/C56.png')
 
   pl.close()
   print "Temperature trends"
@@ -136,7 +136,7 @@ def graphs():
   pl.grid(True)
   pl.legend(loc='upper left', prop={'size':8})
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/D123.png')
+  pl.savefig('/tmp/raspdiagd/D123.png')
 
   pl.close()
   print "Relative humidity trend"
@@ -145,7 +145,7 @@ def graphs():
   pl.ylabel('RH [%]')
   pl.grid(True)
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/D4.png')
+  pl.savefig('/tmp/raspdiagd/D4.png')
 
   #pl.close()
   #print "Dewpoint trend"
@@ -155,7 +155,7 @@ def graphs():
   #pl.ylabel('T [degC]')
   #pl.grid(True)
   #pl.gcf().autofmt_xdate()
-  #pl.savefig('/tmp/D56.png')
+  #pl.savefig('/tmp/raspdiagd/D56.png')
 
   pl.close()
   print "Windspeed trend"
@@ -164,7 +164,7 @@ def graphs():
   pl.ylabel('v(wind) [m/s]')
   pl.grid(True)
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/Dd.png')
+  pl.savefig('/tmp/raspdiagd/Dd.png')
 
   pl.close()
   print "Windroos"
@@ -186,7 +186,7 @@ def graphs():
   bar.set_alpha(1.)
   print theta[r], radii[r], width[r]
   pl.title('Windroos')
-  pl.savefig('/tmp/De.png')
+  pl.savefig('/tmp/raspdiagd/De.png')
 
   pl.close()
   print "Temperature trends"
@@ -199,7 +199,7 @@ def graphs():
   pl.grid(True)
   pl.legend(loc='upper left', prop={'size':8})
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/D7.png')
+  pl.savefig('/tmp/raspdiagd/D7.png')
 
   pl.close()
   print "Solar charger trend"
@@ -208,7 +208,7 @@ def graphs():
   pl.ylabel('Charge [V]')
   pl.grid(True)
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/D8.png')
+  pl.savefig('/tmp/raspdiagd/D8.png')
 
   # calculate pressure trend
   Tr1="?"
@@ -257,7 +257,7 @@ def graphs():
   pl.grid(True)
   pl.annotate(Ptrend , xy=(0.1, 0.5), xycoords='axes fraction', size=12 )
   pl.gcf().autofmt_xdate()
-  pl.savefig('/tmp/D11.png')
+  pl.savefig('/tmp/raspdiagd/D11.png')
 
   return
 
