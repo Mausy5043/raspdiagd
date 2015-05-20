@@ -14,4 +14,14 @@
 #    automagically at re-boot.
 # 3. start each of the daemons for the first time.
 
+# To suppress git detecting changes by chmod:
+git config core.fileMode false
+# set the branch
+echo master > ~/.raspdiagd.branch
+
+if [ ! -e /mnt/share1 ]; then
+  echo "Creating mountpoint..."
+  sudo mkdir /mnt/share1
+fi
+
 exit 0
