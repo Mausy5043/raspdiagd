@@ -6,13 +6,13 @@ from matplotlib.dates import strpdate2num
 import numpy as np
 import pylab as pl
 from cmath import rect, phase
-import os, time, headstails, commands
+import os, time, libheadstails, commands
 
 os.nice(10)
 
 def taildata():
   print "Tailing sensor-data"
-  fin = headstails.FileExtremities('/tmp/testser.txt','r')
+  fin = libheadstails.FileExtremities('/tmp/testser.txt','r')
   # read last 5(days)*24(hrs/dy)*6(datapoints/hr) datapoints
   F = fin.tail(2*24*12)
 
