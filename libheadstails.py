@@ -2,13 +2,16 @@
 
 # source: http://stackoverflow.com/questions/136168/get-last-n-lines-of-a-file-with-python-similar-to-tail
 
-# Usage:
-#
-# f = FileExtremities('path/to/file', 'r')
-# f.head(3)
-# f.tail(3)
-
 class FileExtremities(file):
+  """
+  A python module to retrieve the first or last `n` lines of a file.
+
+  Usage:
+
+  f = FileExtremities('path/to/file', 'r')
+  f.head(3)
+  f.tail(3)
+  """
   def head(self, lines_2find=1):
     self.seek(0)                            #Rewind file
     return [self.next() for x in xrange(lines_2find)]
