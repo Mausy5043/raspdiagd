@@ -6,7 +6,7 @@
 
 # Adapted by M.Hendrix [2015]
 
-# daemon18.py reads data from an Arduino running the cmdMULTIsens sketch from
+# daemon23.py reads data from an Arduino running the cmdMULTIsens sketch from
 # https://github.com/Mausy5043/arduino.git.
 
 import os, sys, time, math, commands
@@ -149,7 +149,7 @@ def do_report(result, ext_result):
 
 	result = ', '.join(map(str, result))
 	ext_result = ', '.join(map(str, ext_result))
-	flock = '/tmp/raspdiagd/18.lock'
+	flock = '/tmp/raspdiagd/23.lock'
 	lock(flock)
 	f = file('/tmp/testser.txt', 'a')
 	f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
@@ -168,7 +168,7 @@ if __name__ == "__main__":
 	port = serial.Serial('/dev/ttyACM0', 9600, timeout=10)
 	serial.dsrdtr = False
 	time.sleep(0.5)
-	daemon = MyDaemon('/tmp/raspdiagd/18.pid')
+	daemon = MyDaemon('/tmp/raspdiagd/23.pid')
 	if len(sys.argv) == 2:
 		if 'start' == sys.argv[1]:
 			daemon.start()

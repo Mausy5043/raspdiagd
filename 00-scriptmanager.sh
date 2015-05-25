@@ -25,9 +25,11 @@ rm *.pyc
  DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
  DIFFd16=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
- DIFFd18=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon18.py)
+ DIFFd23=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon23.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
+
+ ./daemon18.py stop
  git pull
  git fetch origin
  git checkout $branch
@@ -72,9 +74,9 @@ if [[ -n "$DIFFd17" ]]; then
   logger -t raspdiagd "Source daemon17 has changed."
   ./daemon17.py stop
 fi
-if [[ -n "$DIFFd18" ]]; then
-  logger -t raspdiagd "Source daemon18 has changed."
-  ./daemon18.py stop
+if [[ -n "$DIFFd23" ]]; then
+  logger -t raspdiagd "Source daemon23 has changed."
+  ./daemon23.py stop
 fi
 if [[ -n "$DIFFd99" ]]; then
   logger -t raspdiagd "Source daemon99 has changed."
@@ -91,7 +93,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py stop
   ./daemon16.py stop
   ./daemon17.py stop
-  ./daemon18.py stop
+  ./daemon23.py stop
   ./daemon99.py stop
 fi
 
@@ -125,7 +127,7 @@ case "$clnt" in
             destale 17
             ;;
   rbian )   echo "Raspberry testbench"
-            destale 18
+            destale 23
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;
