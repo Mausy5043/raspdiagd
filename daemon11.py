@@ -32,13 +32,16 @@ class MyDaemon(Daemon):
 			startTime = time.time()
 
 			result = do_work()
+			if DEBUG:print result
 			data[sampleptr] = int(result)
 
 			# report sample average
 			sampleptr = sampleptr + 1
 			if (sampleptr == samples):
+				if DEBUG:print data
 				somma = sum(data[:])
 				averages = somma / samples
+				if DEBUG:print averages
 				do_report(averages)
 				sampleptr = 0
 
