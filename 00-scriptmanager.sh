@@ -28,8 +28,6 @@ rm *.pyc
  DIFFd23=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon23.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
 
-
- ./daemon18.py stop
  git pull
  git fetch origin
  git checkout $branch
