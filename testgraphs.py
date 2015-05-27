@@ -101,7 +101,7 @@ def graphs():
   A32 = np.subtract(A3,A2)
   pl.plot(D,A32,'g.', label='DHT22  vs. DB18B20', alpha=ahpla)
   A92 = np.subtract(A9,A2)
-  pl.plot(D,A92,'b.', label='TMP36  vs. DS18B20', alpha=ahpla)
+  pl.plot(D,A92,'y.', label='TMP36  vs. DS18B20', alpha=ahpla)
   A112 = np.subtract(A11,A2)
   pl.plot(D,A112,'m.', label='BMP183 vs. DS18B20', alpha=ahpla)
   pl.ylabel("T(x)-T(DS18B20) [degC]")
