@@ -19,6 +19,8 @@ git config core.fileMode false
 # set the branch
 echo master > ~/.raspdiagd.branch
 
+# set a cronjob
+echo "42  * * * * /home/pi/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee /etc/cron.d/raspdiagd
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
   sudo mkdir /mnt/share1
