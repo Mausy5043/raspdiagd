@@ -20,59 +20,59 @@ DEBUG = False
 LOGGING = False
 
 class MyDaemon(Daemon):
-	def run(self):
-		sampleptr = 0
-		samples = 10
-		datapoints = 11
-		data = [[None]*datapoints for _ in range(samples)]
+  def run(self):
+    sampleptr = 0
+    samples = 10
+    datapoints = 11
+    data = [[None]*datapoints for _ in range(samples)]
 
-		sampleTime = 30
-		cycleTime = samples * sampleTime
-		# sync to whole cycleTime
-		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
-		if DEBUG:
-			print "NOT waiting {0} s.".format(waitTime)
-			waitTime = 0
-		else:
-			logtext = "ZZZ Waiting : " + str(waitTime) + " s"
-			if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-			time.sleep(waitTime)
-		while True:
-			startTime = time.time()
+    sampleTime = 30
+    cycleTime = samples * sampleTime
+    # sync to whole cycleTime
+    waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
+    if DEBUG:
+      print "NOT waiting {0} s.".format(waitTime)
+      waitTime = 0
+    else:
+      logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      time.sleep(waitTime)
+    while True:
+      startTime = time.time()
 
-			result = do_work().split(',')
-			data[sampleptr] = map(float, result)
-			if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
+      result = do_work().split(',')
+      data[sampleptr] = map(float, result)
+      if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
 
-			if (sampleptr == int(samples/2)):
-				if DEBUG:print "<external data fetch>"
-				extern_result = do_extern_work().split(',')
-				extern_data = map(float, extern_result)
+      if (sampleptr == int(samples/2)):
+        if DEBUG:print "<external data fetch>"
+        extern_result = do_extern_work().split(',')
+        extern_data = map(float, extern_result)
 
-			# report sample average
-			sampleptr = sampleptr + 1
-			if (sampleptr == samples):
-				somma = map(sum,zip(*data))
-				averages = [format(s / samples, '.3f') for s in somma]
+      # report sample average
+      sampleptr = sampleptr + 1
+      if (sampleptr == samples):
+        somma = map(sum,zip(*data))
+        averages = [format(s / samples, '.3f') for s in somma]
 
-				extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
-				avg_ext = [format(s, '.3f') for s in extern_data]
+        extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+        avg_ext = [format(s, '.3f') for s in extern_data]
 
-				if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
-				do_report(averages, avg_ext)
-				sampleptr = 0
+        if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
+        do_report(averages, avg_ext)
+        sampleptr = 0
 
-			waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-			if (waitTime > 0):
-				if DEBUG:print "*** Waiting {0} s".format(waitTime)
-				logtext = "ZZZ Waiting : " + str(waitTime) + " s"
-				if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-				time.sleep(waitTime)
-				waitTime = 0
-			else:
-				if DEBUG:print "*** Carrying {0} s".format(waitTime)
-				logtext = "ZZZ Carrying : " + str(waitTime) + " s"
-				if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+      if (waitTime > 0):
+        if DEBUG:print "*** Waiting {0} s".format(waitTime)
+        logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+        if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+        time.sleep(waitTime)
+        waitTime = 0
+      else:
+        if DEBUG:print "*** Carrying {0} s".format(waitTime)
+        logtext = "ZZZ Carrying : " + str(waitTime) + " s"
+        if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
@@ -103,8 +103,8 @@ def gettelegram(cmd):
     if loops2go < 0:
       abort = 3
 
-	logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   # Return codes:
   # abort == 1 indicates a successful read
@@ -114,114 +114,114 @@ def gettelegram(cmd):
   return (telegram, abort)
 
 def do_work():
-	# 12 datapoints gathered here
+  # 12 datapoints gathered here
 
-	logtext = "[do_work]..."
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-	start = time.time()
+  logtext = "[do_work]..."
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  start = time.time()
 
-	telegram, status = gettelegram("A")
-	ardtime = time.time()-start
-	#print telegram
-	if (status != 1):
-		telegram = -1
-		logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
-		if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  telegram, status = gettelegram("A")
+  ardtime = time.time()-start
+  #print telegram
+  if (status != 1):
+    telegram = -1
+    logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
+    if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	logtext = "[do_work] : {0} s".format(ardtime)
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  logtext = "[do_work] : {0} s".format(ardtime)
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	return telegram
+  return telegram
 
 def do_extern_work():
 
-	logtext = "[do_extern_work]..."
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  logtext = "[do_extern_work]..."
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	start=time.time()
-	req = Request("http://xml.buienradar.nl/")
-	response = urlopen(req)
-	output = response.read()
-	soup = BeautifulSoup(output)
-	#soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
-	souptime = time.time()-start
+  start=time.time()
+  req = Request("http://xml.buienradar.nl/")
+  response = urlopen(req)
+  output = response.read()
+  soup = BeautifulSoup(output)
+  #soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
+  souptime = time.time()-start
 
-	MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
-	GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
-	#datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
-	ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
-	gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
+  MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
+  GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
+  #datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
+  ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
+  gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 
-	logtext = "[do_extern_work] : {0} s".format(souptime)
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  logtext = "[do_extern_work] : {0} s".format(souptime)
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	gilzerijen = '{0}, {1}'.format(ms, gr)
-	return gilzerijen
+  gilzerijen = '{0}, {1}'.format(ms, gr)
+  return gilzerijen
 
 def calc_windchill(T,W):
-	# use this data to determine the windchill temperature acc. JAG/TI
-	# ref.: http://knmi.nl/bibliotheek/knmipubTR/TR309.pdf
-	JagTi = 13.12 + 0.6215 * T - 11.37 * (W * 3.6)**0.16 + 0.3965 * T * (W * 3.6)**0.16
-	if (JagTi > T):
-		JagTi = T
+  # use this data to determine the windchill temperature acc. JAG/TI
+  # ref.: http://knmi.nl/bibliotheek/knmipubTR/TR309.pdf
+  JagTi = 13.12 + 0.6215 * T - 11.37 * (W * 3.6)**0.16 + 0.3965 * T * (W * 3.6)**0.16
+  if (JagTi > T):
+    JagTi = T
 
-	return JagTi
+  return JagTi
 
 def do_report(result, ext_result):
-	# Get the time and date in human-readable form and UN*X-epoch...
-	#outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-	logtext = "[do_report]..."
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  # Get the time and date in human-readable form and UN*X-epoch...
+  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
+  logtext = "[do_report]..."
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	outDate = commands.getoutput("date '+%F %H:%M:%S'")
+  outDate = commands.getoutput("date '+%F %H:%M:%S'")
 
-	result = ', '.join(map(str, result))
-	ext_result = ', '.join(map(str, ext_result))
-	flock = '/tmp/raspdiagd/23.lock'
-	lock(flock)
-	f = file('/tmp/testser.txt', 'a')
-	f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
-	f.close()
-	unlock(flock)
+  result = ', '.join(map(str, result))
+  ext_result = ', '.join(map(str, ext_result))
+  flock = '/tmp/raspdiagd/23.lock'
+  lock(flock)
+  f = file('/tmp/testser.txt', 'a')
+  f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
+  f.close()
+  unlock(flock)
 
-	logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
-	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-	return
+  logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
+  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  return
 
 def lock(fname):
-	open(fname, 'a').close()
+  open(fname, 'a').close()
 
 def unlock(fname):
-	if os.path.isfile(fname):
-		os.remove(fname)
+  if os.path.isfile(fname):
+    os.remove(fname)
 
 if __name__ == "__main__":
-	port = serial.Serial('/dev/ttyACM0', 9600, timeout=10)
-	serial.dsrdtr = False
-	time.sleep(0.5)
-	daemon = MyDaemon('/tmp/raspdiagd/23.pid')
-	if len(sys.argv) == 2:
-		if 'start' == sys.argv[1]:
-			daemon.start()
-		if 'logstart' == sys.argv[1]:
-			LOGGING =True
-			import syslog
-			logtext = "Daemon logging is ON"
-			if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-			daemon.start()
-		elif 'stop' == sys.argv[1]:
-			daemon.stop()
-		elif 'restart' == sys.argv[1]:
-			daemon.restart()
-		elif 'foreground' == sys.argv[1]:
-			# assist with debugging.
-			print "Debug-mode started. Use <Ctrl>+C to stop."
-			DEBUG = True
-			daemon.run()
-		else:
-			print "Unknown command"
-			sys.exit(2)
-		sys.exit(0)
-	else:
-		print "usage: %s start|stop|restart|foreground" % sys.argv[0]
-		sys.exit(2)
+  port = serial.Serial('/dev/ttyACM0', 9600, timeout=10)
+  serial.dsrdtr = False
+  time.sleep(0.5)
+  daemon = MyDaemon('/tmp/raspdiagd/23.pid')
+  if len(sys.argv) == 2:
+    if 'start' == sys.argv[1]:
+      daemon.start()
+    if 'logstart' == sys.argv[1]:
+      LOGGING =True
+      import syslog
+      logtext = "Daemon logging is ON"
+      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      daemon.start()
+    elif 'stop' == sys.argv[1]:
+      daemon.stop()
+    elif 'restart' == sys.argv[1]:
+      daemon.restart()
+    elif 'foreground' == sys.argv[1]:
+      # assist with debugging.
+      print "Debug-mode started. Use <Ctrl>+C to stop."
+      DEBUG = True
+      daemon.run()
+    else:
+      print "Unknown command"
+      sys.exit(2)
+    sys.exit(0)
+  else:
+    print "usage: %s start|stop|restart|foreground" % sys.argv[0]
+    sys.exit(2)
