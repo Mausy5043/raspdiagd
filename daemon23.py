@@ -103,8 +103,9 @@ def gettelegram(cmd):
     if loops2go < 0:
       abort = 3
 
-		logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go) )
-		if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+	logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
+	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+
   # Return codes:
   # abort == 1 indicates a successful read
   # abort == 2 means that a serial port read/write error occurred
@@ -115,7 +116,7 @@ def gettelegram(cmd):
 def do_work():
 	# 12 datapoints gathered here
 
-	logtext = "[do_work]..." )
+	logtext = "[do_work]..."
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 	start = time.time()
 
@@ -124,17 +125,17 @@ def do_work():
 	#print telegram
 	if (status != 1):
 		telegram = -1
-		logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime) )
+		logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
 		if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-	logtext = "[do_work] : {0} s".format(ardtime) )
+	logtext = "[do_work] : {0} s".format(ardtime)
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 	return telegram
 
 def do_extern_work():
 
-	logtext = "[do_extern_work]..." )
+	logtext = "[do_extern_work]..."
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 	start=time.time()
@@ -151,7 +152,7 @@ def do_extern_work():
 	ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
 	gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 
-	logtext = "[do_extern_work] : {0} s".format(souptime) )
+	logtext = "[do_extern_work] : {0} s".format(souptime)
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 	gilzerijen = '{0}, {1}'.format(ms, gr)
@@ -169,7 +170,7 @@ def calc_windchill(T,W):
 def do_report(result, ext_result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	#outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-	logtext = "[do_report]..." )
+	logtext = "[do_report]..."
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 	outDate = commands.getoutput("date '+%F %H:%M:%S'")
@@ -183,7 +184,7 @@ def do_report(result, ext_result):
 	f.close()
 	unlock(flock)
 
-	logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result) )
+	logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
 	if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 	return
 
