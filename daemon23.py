@@ -139,21 +139,31 @@ def do_extern_work():
   if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   start=time.time()
-  req = Request("http://xml.buienradar.nl/")
-  response = urlopen(req)
-  output = response.read()
-  soup = BeautifulSoup(output)
-  #soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
-  souptime = time.time()-start
-
-  MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
-  GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
-  #datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
-  ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
-  gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
-
-  logtext = "[do_extern_work] : {0} s".format(souptime)
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  try:
+    req = Request("http://xml.buienradar.nl/")
+    response = urlopen(req)
+    output = response.read()
+    soup = BeautifulSoup(output)
+    #soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
+    souptime = time.time()-start
+    logtext = "[do_extern_work] : {0} s".format(souptime)
+    if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+    MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
+    GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
+    #datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
+    ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
+    gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
+  except Exception as e:
+    if LOGGING:
+      logtext = "[do_extern_work] : Exception encountered"
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
+      logtext = "****** Error : " + e
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
+      souptime = time.time()-start
+      logtext = "[do_extern_work] : {0} s".format(souptime)
+      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      ms = 0
+      gr = 270
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
   return gilzerijen
