@@ -125,7 +125,8 @@ case "$clnt" in
             destale 17
             ;;
   rbian )   echo "Raspberry testbench"
-            destale 23
+            #destale 23
+            ./daemon23.py logstart
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;
