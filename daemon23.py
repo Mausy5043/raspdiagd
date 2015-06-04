@@ -157,7 +157,7 @@ def do_extern_work():
     if LOGGING:
       logtext = "[do_extern_work] : Exception encountered"
       syslog.syslog(syslog.LOG_DEBUG, logtext)
-      logtext = "****** Error : " + e
+      logtext = "****** Error : " + str(e)
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       souptime = time.time()-start
       logtext = "[do_extern_work] : {0} s".format(souptime)
