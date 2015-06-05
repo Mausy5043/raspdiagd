@@ -142,6 +142,10 @@ def do_work():
 
 def do_extern_work():
 
+  #set defaults
+  ms = 0
+  gr = 270
+
   if LOGGING:
     logtext = "[do_extern_work]..."
     syslog.syslog(syslog.LOG_DEBUG, logtext)
@@ -172,8 +176,7 @@ def do_extern_work():
       souptime = time.time()-start
       logtext = "[do_extern_work] : {0} s".format(souptime)
       syslog.syslog(syslog.LOG_DEBUG, logtext)
-    ms = 0
-    gr = 270
+
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
   return gilzerijen
