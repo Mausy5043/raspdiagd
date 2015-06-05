@@ -34,8 +34,9 @@ class MyDaemon(Daemon):
       print "NOT waiting {0} s.".format(waitTime)
       waitTime = 0
     else:
-      logtext = "ZZZ Waiting : " + str(waitTime) + " s"
-      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      if LOGGING:
+        logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+        syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
     while True:
       startTime = time.time()
@@ -65,14 +66,16 @@ class MyDaemon(Daemon):
       waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
       if (waitTime > 0):
         if DEBUG:print "*** Waiting {0} s".format(waitTime)
-        logtext = "ZZZ Waiting : " + str(waitTime) + " s"
-        if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+        if LOGGING:
+          logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+          syslog.syslog(syslog.LOG_DEBUG, logtext)
         time.sleep(waitTime)
         waitTime = 0
       else:
         if DEBUG:print "*** Carrying {0} s".format(waitTime)
-        logtext = "ZZZ Carrying : " + str(waitTime) + " s"
-        if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+        if LOGGING:
+          logtext = "ZZZ Carrying : " + str(waitTime) + " s"
+          syslog.syslog(syslog.LOG_DEBUG, logtext)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
@@ -103,8 +106,9 @@ def gettelegram(cmd):
     if loops2go < 0:
       abort = 3
 
-  logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   # Return codes:
   # abort == 1 indicates a successful read
@@ -116,8 +120,9 @@ def gettelegram(cmd):
 def do_work():
   # 12 datapoints gathered here
 
-  logtext = "[do_work]..."
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[do_work]..."
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
   start = time.time()
 
   telegram, status = gettelegram("A")
@@ -125,18 +130,21 @@ def do_work():
   #print telegram
   if (status != 1):
     telegram = -1
-    logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
-    if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+    if LOGGING:
+      logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-  logtext = "[do_work] : {0} s".format(ardtime)
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[do_work] : {0} s".format(ardtime)
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   return telegram
 
 def do_extern_work():
 
-  logtext = "[do_extern_work]..."
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[do_extern_work]..."
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   start=time.time()
   try:
@@ -144,15 +152,17 @@ def do_extern_work():
     response = urlopen(req)
     output = response.read()
     soup = BeautifulSoup(output)
-    #soup = BeautifulSoup(urlopen(Request("http://xml.buienradar.nl/")).read())
     souptime = time.time()-start
-    logtext = "[do_extern_work] : {0} s".format(souptime)
-    if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+
     MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
     GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
     #datum = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).datum)
     ms = MSwind.replace("<"," ").replace(">"," ").split()[1]
     gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
+
+    if LOGGING:
+      logtext = "[do_extern_work] : {0} s".format(souptime)
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
   except Exception as e:
     if LOGGING:
       logtext = "[do_extern_work] : Exception encountered"
@@ -161,9 +171,9 @@ def do_extern_work():
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       souptime = time.time()-start
       logtext = "[do_extern_work] : {0} s".format(souptime)
-      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
-      ms = 0
-      gr = 270
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
+    ms = 0
+    gr = 270
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
   return gilzerijen
@@ -180,8 +190,9 @@ def calc_windchill(T,W):
 def do_report(result, ext_result):
   # Get the time and date in human-readable form and UN*X-epoch...
   #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-  logtext = "[do_report]..."
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[do_report]..."
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   outDate = commands.getoutput("date '+%F %H:%M:%S'")
 
@@ -194,8 +205,9 @@ def do_report(result, ext_result):
   f.close()
   unlock(flock)
 
-  logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
-  if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+  if LOGGING:
+    logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
   return
 
 def lock(fname):
@@ -216,8 +228,9 @@ if __name__ == "__main__":
     if 'logstart' == sys.argv[1]:
       LOGGING =True
       import syslog
-      logtext = "Daemon logging is ON"
-      if LOGGING:syslog.syslog(syslog.LOG_DEBUG, logtext)
+      if LOGGING:
+        logtext = "Daemon logging is ON"
+        syslog.syslog(syslog.LOG_DEBUG, logtext)
       daemon.start()
     elif 'stop' == sys.argv[1]:
       daemon.stop()
@@ -227,6 +240,11 @@ if __name__ == "__main__":
       # assist with debugging.
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
+      LOGGING = True
+      import syslog
+      if LOGGING:
+        logtext = "Daemon logging is ON"
+        syslog.syslog(syslog.LOG_DEBUG, logtext)
       daemon.run()
     else:
       print "Unknown command"
