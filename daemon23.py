@@ -35,7 +35,7 @@ class MyDaemon(Daemon):
       waitTime = 0
     else:
       if LOGGING:
-        logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+        logtext = "ZZZ Waiting for start : " + str(waitTime) + " s"
         syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
     while True:
@@ -67,7 +67,7 @@ class MyDaemon(Daemon):
       if (waitTime > 0):
         if DEBUG:print "*** Waiting {0} s".format(waitTime)
         if LOGGING:
-          logtext = "ZZZ Waiting : " + str(waitTime) + " s"
+          logtext = "ZZZ Waiting for next sample: " + str(waitTime) + " s"
           syslog.syslog(syslog.LOG_DEBUG, logtext)
         time.sleep(waitTime)
         waitTime = 0
