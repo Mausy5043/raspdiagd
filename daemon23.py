@@ -153,7 +153,7 @@ def do_extern_work():
   start=time.time()
   try:
     req = Request("http://xml.buienradar.nl/")
-    response = urlopen(req)
+    response = urlopen(req, timeout=25)
     output = response.read()
     soup = BeautifulSoup(output)
     souptime = time.time()-start
