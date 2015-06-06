@@ -9,7 +9,7 @@
 # daemon23.py reads data from an Arduino running the cmdMULTIsens sketch from
 # https://github.com/Mausy5043/arduino.git.
 
-import os, sys, time, math, commands
+import os, sys, time, math, commands, syslog
 from libdaemon import Daemon
 import serial, re
 
@@ -168,15 +168,11 @@ def do_extern_work():
       logtext = "[do_extern_work] : {0} s".format(souptime)
       syslog.syslog(syslog.LOG_DEBUG, logtext)
   except Exception as e:
-    if LOGGING:
-      logtext = "[do_extern_work] : Exception encountered"
-      syslog.syslog(syslog.LOG_DEBUG, logtext)
-      logtext = "****** Error : " + str(e)
-      syslog.syslog(syslog.LOG_DEBUG, logtext)
-      souptime = time.time()-start
-      logtext = "[do_extern_work] : {0} s".format(souptime)
-      syslog.syslog(syslog.LOG_DEBUG, logtext)
-
+    logtext = "****** Exception encountered : " + str(e)
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
+    souptime = time.time()-start
+    logtext = "****** after {0} s".format(souptime)
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
   return gilzerijen
@@ -244,7 +240,6 @@ if __name__ == "__main__":
       print "Debug-mode started. Use <Ctrl>+C to stop."
       DEBUG = True
       LOGGING = True
-      import syslog
       if LOGGING:
         logtext = "Daemon logging is ON"
         syslog.syslog(syslog.LOG_DEBUG, logtext)
