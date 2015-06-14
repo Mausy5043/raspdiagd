@@ -47,13 +47,14 @@ class MyDaemon(Daemon):
 def do_work():
 	# 3 datapoints gathered here
 	uname           = os.uname()
+  kernlog=messlog=syslog=0
 
-	if (uname == "osmc"):
+	if (uname[1] == "osmc"):
 		#
 		kernlog = commands.getoutput("sudo journalctl --no-pager |grep -i 'fail' |wc -l").split()[0]
 		messlog = commands.getoutput("sudo journalctl --no-pager |grep -i 'warn\|error' |wc -l").split()[0]
 		syslog  = commands.getoutput("sudo journalctl --no-pager |wc -l").split()[0]
-	else
+	else:
 		kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
 		messlog = commands.getoutput("wc -l /var/log/messages").split()[0]
 		syslog  = commands.getoutput("wc -l /var/log/syslog").split()[0]
