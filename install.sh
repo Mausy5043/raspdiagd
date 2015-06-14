@@ -6,7 +6,7 @@
 # `raspboot` then installs additional packages and modifies the system
 # configuration accordingly. Among others, `raspdiagd` may be installed
 # using `git clone`. Followed by calling this `install.sh` script
-
+ME=$(whoami)
 # Installing `raspdiagd` requires:
 # 1. Add a cronjob in `/etc/cron.d/` periodically running `00-scriptmanager`
 #    to keep the daemons up-to-date
@@ -22,8 +22,8 @@ echo master > ~/.raspdiagd.branch
 
 # set a cronjob
 echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/raspdiagd
-echo "42  * *   *   *   pi    /home/pi/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
-echo "@reboot           pi    /home/pi/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
+echo "42  * *   *   *   $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
+echo "@reboot           $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
 
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
