@@ -20,6 +20,11 @@ git config core.fileMode false
 # set the branch
 echo master > ~/.raspdiagd.branch
 
+if [ ! -d /etc/cron.d ]; then
+  echo "Creating /etc/cron.d..."
+  sudo mkdir /etc/cron.d
+fi
+
 # set a cronjob
 echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/raspdiagd
 echo "42  * *   *   *   $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
