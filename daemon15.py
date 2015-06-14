@@ -47,7 +47,7 @@ class MyDaemon(Daemon):
 def do_work():
 	# 3 datapoints gathered here
 	uname           = os.uname()
-  kernlog=messlog=syslog=0
+	kernlog=messlog=syslog=0
 
 	if (uname[1] == "osmc"):
 		#
