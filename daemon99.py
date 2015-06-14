@@ -100,8 +100,10 @@ def do_xml(wpath):
 	uname           = os.uname()
 	Tcpu            = float(commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp"))/1000
 	fcpu            = float(commands.getoutput("cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"))/1000
-	raspdiagdbranch = commands.getoutput("cat /home/pi/.raspdiagd.branch")
-	raspbootbranch    = commands.getoutput("cat /home/pi/.raspboot.branch")
+  cmdstring       = "cat /home/"+ usr +"/.raspdiagd.branch"
+	raspdiagdbranch = commands.getoutput(cmdstring)
+	cmdstring       = "cat /home/"+ usr +"/.raspboot.branch"
+	raspbootbranch  = commands.getoutput(cmdstring)
 	uptime          = commands.getoutput("uptime")
 	dfh             = commands.getoutput("df -h")
 	freeh           = commands.getoutput("free -h")
