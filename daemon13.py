@@ -9,10 +9,12 @@
 # daemon13.py measures the network traffic.
 # These are all counters, therefore no averaging is needed.
 
-import os, sys, time, math, commands
+import os, sys, time, math, commands, syslog
 from libdaemon import Daemon
 
 DEBUG = False
+LOGGING = False
+IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
 	def run(self):
@@ -105,6 +107,10 @@ if __name__ == "__main__":
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
 			DEBUG = True
+      LOGGING = True
+      if LOGGING:
+        logtext = "Daemon logging is ON"
+        syslog.syslog(syslog.LOG_DEBUG, logtext)
 			daemon.run()
 		else:
 			print "Unknown command"

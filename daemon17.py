@@ -8,12 +8,13 @@
 
 # daemon17.py communicates with the smart electricity meter.
 
-import os, sys, time, math, commands
+import os, sys, time, math, commands, syslog
 from libdaemon import Daemon
+import serial, re
 
 DEBUG = False
-
-import serial, re
+LOGGING = False
+IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 port = serial.Serial()
 port.baudrate = 9600
@@ -173,6 +174,10 @@ if __name__ == "__main__":
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
 			DEBUG = True
+      LOGGING = True
+      if LOGGING:
+        logtext = "Daemon logging is ON"
+        syslog.syslog(syslog.LOG_DEBUG, logtext)
 			daemon.run()
 		else:
 			print "Unknown command"

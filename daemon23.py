@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 
 DEBUG = False
 LOGGING = False
+IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
@@ -223,13 +224,6 @@ if __name__ == "__main__":
   daemon = MyDaemon('/tmp/raspdiagd/23.pid')
   if len(sys.argv) == 2:
     if 'start' == sys.argv[1]:
-      daemon.start()
-    if 'logstart' == sys.argv[1]:
-      LOGGING =True
-      import syslog
-      if LOGGING:
-        logtext = "Daemon logging is ON"
-        syslog.syslog(syslog.LOG_DEBUG, logtext)
       daemon.start()
     elif 'stop' == sys.argv[1]:
       daemon.stop()
