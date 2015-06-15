@@ -13,14 +13,17 @@ import os, sys, time, math, commands
 from libdaemon import Daemon
 
 DEBUG = False
+IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
 		samples = 1
 		datapoints = 3
-
-		sampleTime = 60
+		if IS_SYSTEMD:
+			sampleTime = 300
+		else:
+			sampleTime = 60
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -46,10 +49,10 @@ class MyDaemon(Daemon):
 
 def do_work():
 	# 3 datapoints gathered here
-	uname           = os.uname()
+	#uname           = os.uname()
 	kernlog=messlog=syslog=0
 
-	if (uname[1] == "osmc"):
+	if IS_SYSTEMD:
 		#
 		kernlog = commands.getoutput("sudo journalctl --no-pager |grep -i 'fail' |wc -l").split()[0]
 		messlog = commands.getoutput("sudo journalctl --no-pager |grep -i 'warn\|error' |wc -l").split()[0]
