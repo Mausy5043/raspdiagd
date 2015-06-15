@@ -13,7 +13,6 @@ from libdaemon import Daemon
 import serial, re
 
 DEBUG = False
-LOGGING = False
 IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 port = serial.Serial()
@@ -174,8 +173,7 @@ if __name__ == "__main__":
 			# assist with debugging.
 			print "Debug-mode started. Use <Ctrl>+C to stop."
 			DEBUG = True
-      LOGGING = True
-      if LOGGING:
+      if DEBUG:
         logtext = "Daemon logging is ON"
         syslog.syslog(syslog.LOG_DEBUG, logtext)
 			daemon.run()
