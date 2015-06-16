@@ -21,7 +21,7 @@ class MyDaemon(Daemon):
 		samples = 1
 		datapoints = 3
 		if IS_SYSTEMD:
-			sampleTime = 300
+			sampleTime = 180
 		else:
 			sampleTime = 60
 		cycleTime = samples * sampleTime
