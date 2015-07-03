@@ -99,7 +99,7 @@ def graphs():
   print "Sensor differences graph"
   pl.title('Sensor differences')
   A32 = np.subtract(A3,A2)
-  pl.plot(D,A32,'g.', label='DHT22  vs. DB18B20', alpha=ahpla)
+  pl.plot(D,A32,'g.', label='DHT22  vs. DS18B20', alpha=ahpla)
   A92 = np.subtract(A9,A2)
   pl.plot(D,A92,'y.', label='TMP36  vs. DS18B20', alpha=ahpla)
   A112 = np.subtract(A11,A2)
@@ -247,7 +247,7 @@ def graphs():
     if (delta3 < -0.20):
       Tr3=u'\u21D8'
 
-  Ptrend = Ptrend + " | 3h {0:.2f}: ".format(delta3) + Tr3
+  Ptrend = Ptrend + " | 3h {0:.2f}: ".format(delta3) + Tr3/3 + "mbar/hr"
 
   pl.close()
   print "Pressure trend"
