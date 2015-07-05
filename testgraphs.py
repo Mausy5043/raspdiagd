@@ -236,7 +236,7 @@ def graphs():
     if (delta1 < -0.15):
       Tr1=u'\u21D8'
 
-  Ptrend = Ptrend + "1h {0:.2f}: ".format(delta1) + Tr1
+  Ptrend = Ptrend + "1h {0:.2f} mbar/hr: ".format(delta1) + Tr1
 
   if ( lenD > L3 ):
     delta3 = float(A10[lenD-1] - A10[lenD-1-L3])
@@ -247,7 +247,7 @@ def graphs():
     if (delta3 < -0.20):
       Tr3=u'\u21D8'
 
-  Ptrend = Ptrend + " | 3h {0:.2f}: ".format(delta3) + Tr3/3 + "mbar/hr"
+  Ptrend = Ptrend + " | 3h {0:.2f} mbar/hr: ".format(delta3/3) + Tr3
 
   pl.close()
   print "Pressure trend"
