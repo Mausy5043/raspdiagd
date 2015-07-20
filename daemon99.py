@@ -8,7 +8,7 @@
 
 # daemon99.py creates an XML-file and uploads data to the server.
 
-import os, sys, shutil, glob, platform, time, commands, syslog
+import os, sys, shutil, glob, platform, time, commands, syslog, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
@@ -108,7 +108,15 @@ def do_xml(wpath):
 	uptime          = commands.getoutput("uptime")
 	dfh             = commands.getoutput("df -h")
 	freeh           = commands.getoutput("free -h")
-	psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
+	#psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
+	p1              = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"], stdout=subprocess.PIPE)
+	p2              = subprocess.Popen(["cut", "-c", "-132"], stdin=p1.stdout, stdout=subprocess.PIPE)
+	p3              = subprocess.Popen(["awk", "NR>2"], stdin=p2.stdout, stdout=subprocess.PIPE)
+	p4              = subprocess.Popen(["sort", "-nr"], stdin=p3.stdout, stdout=subprocess.PIPE)
+	p5              = subprocess.Popen(["head", "-10"], stdin=p4.stdout, stdout=subprocess.PIPE)
+	p6              = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout, stdout=subprocess.PIPE)
+	p7              = subprocess.Popen(["sed", "s/>/\&gt;/g"], stdin=p6.stdout, stdout=subprocess.PIPE)
+	psout           = p7.stdout.read()
 	#
 	f = file(wpath + '/status.xml', 'w')
 
