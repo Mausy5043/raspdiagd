@@ -54,8 +54,8 @@ def do_work():
 
 	if IS_SYSTEMD:
 		#
-		kernlog = commands.getoutput("journalctl --since=00:00:00 --no-pager |grep -i 'fail\|smartd' |wc -l").split()[0]
-		messlog = commands.getoutput("journalctl --since=00:00:00 --no-pager |grep -i 'warn\|error' |wc -l").split()[0]
+		kernlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p err |wc -l").split()[0]
+		messlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p warning |wc -l").split()[0]
 		syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
 	else:
 		kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
