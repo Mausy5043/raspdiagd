@@ -53,9 +53,16 @@ def do_work():
 	kernlog=messlog=syslog=0
 
 	if IS_SYSTEMD:
-		#
-		kernlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p err |wc -l").split()[0]
-		messlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p warning |wc -l").split()[0]
+		# -p, --priority=
+		#       Filter output by message priorities or priority ranges. Takes either a single numeric or textual log level (i.e.
+		#       between 0/"emerg" and 7/"debug"), or a range of numeric/text log levels in the form FROM..TO. The log levels are the
+		#       usual syslog log levels as documented in syslog(3), i.e.  "emerg" (0), "alert" (1), "crit" (2), "err" (3),
+		#       "warning" (4), "notice" (5), "info" (6), "debug" (7). If a single log level is specified, all messages with this log
+		#       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
+		#       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
+		#       specified priorities.
+		kernlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 3 |wc -l").split()[0]
+		messlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
 		syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
 	else:
 		kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
