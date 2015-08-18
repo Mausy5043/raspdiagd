@@ -27,8 +27,8 @@ fi
 
 # set a cronjob
 echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/raspdiagd
-echo "42  * *   *   *   $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
-echo "@reboot           $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>/tmp/raspdiagd.err 1>&2" | sudo tee --append /etc/cron.d/raspdiagd
+echo "42  * *   *   *   $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
+echo "@reboot           $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
 
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
