@@ -52,12 +52,9 @@ class MyDaemon(Daemon):
 					if DEBUG:print "Waiting {0} s".format(waitTime)
 					time.sleep(waitTime)
 			except Exception as e:
-				print "Unexpected error:"
-				print "***"
-				print e.__doc__
-				print "*** ***"
+				print("Unexpected error:")
+				syslog.syslog(e.__doc__)
 				print e.message
-				print "***"
 				syslog_trace(traceback.format_exc())
 				raise
 
