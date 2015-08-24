@@ -51,9 +51,11 @@ class MyDaemon(Daemon):
 				if (waitTime > 0):
 					if DEBUG:print "Waiting {0} s".format(waitTime)
 					time.sleep(waitTime)
-			except:
-	    	print "Unexpected error:", sys.exc_info()[0]
-	    	raise
+			except Exception as e:
+				print "Unexpected error:"
+				print e.__doc__
+				print e.message
+				raise
 
 def do_work():
 	return 0
