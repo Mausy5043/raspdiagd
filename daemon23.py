@@ -9,7 +9,8 @@
 # daemon23.py reads data from an Arduino running the cmdMULTIsens sketch from
 # https://github.com/Mausy5043/arduino.git.
 
-import os, sys, time, math, commands, syslog
+import syslog, traceback
+import os, sys, time, math, commands
 from libdaemon import Daemon
 import serial, re
 
@@ -39,43 +40,58 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
     while True:
-      startTime = time.time()
+      try:
+        startTime = time.time()
 
-      result = do_work().split(',')
-      data[sampleptr] = map(float, result)
-      if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
+        result = do_work().split(',')
+        data[sampleptr] = map(float, result)
+        if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
 
-      if (sampleptr == int(samples/2)):
-        if DEBUG:print "<external data fetch>"
-        extern_result = do_extern_work().split(',')
-        extern_data = map(float, extern_result)
+        if (sampleptr == int(samples/2)):
+          if DEBUG:print "<external data fetch>"
+          extern_result = do_extern_work().split(',')
+          extern_data = map(float, extern_result)
 
-      # report sample average
-      sampleptr = sampleptr + 1
-      if (sampleptr == samples):
-        somma = map(sum,zip(*data))
-        averages = [format(s / samples, '.3f') for s in somma]
+        # report sample average
+        sampleptr = sampleptr + 1
+        if (sampleptr == samples):
+          somma = map(sum,zip(*data))
+          averages = [format(s / samples, '.3f') for s in somma]
 
-        extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
-        avg_ext = [format(s, '.3f') for s in extern_data]
+          extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+          avg_ext = [format(s, '.3f') for s in extern_data]
 
-        if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
-        do_report(averages, avg_ext)
-        sampleptr = 0
+          if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
+          do_report(averages, avg_ext)
+          sampleptr = 0
 
-      waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-      if (waitTime > 0):
-        if DEBUG:print "*** Waiting {0} s".format(waitTime)
-        if DEBUG:
-          logtext = "ZZZ Waiting for next sample: " + str(waitTime) + " s"
-          syslog.syslog(syslog.LOG_DEBUG, logtext)
-        time.sleep(waitTime)
-        waitTime = 0
-      else:
-        if DEBUG:print "*** Carrying {0} s".format(waitTime)
-        if DEBUG:
-          logtext = "ZZZ Carrying : " + str(waitTime) + " s"
-          syslog.syslog(syslog.LOG_DEBUG, logtext)
+        waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
+        if (waitTime > 0):
+          if DEBUG:print "*** Waiting {0} s".format(waitTime)
+          if DEBUG:
+            logtext = "ZZZ Waiting for next sample: " + str(waitTime) + " s"
+            syslog.syslog(syslog.LOG_DEBUG, logtext)
+          time.sleep(waitTime)
+          waitTime = 0
+        else:
+          if DEBUG:print "*** Carrying {0} s".format(waitTime)
+          if DEBUG:
+            logtext = "ZZZ Carrying : " + str(waitTime) + " s"
+            syslog.syslog(syslog.LOG_DEBUG, logtext)
+      except Exception as e:
+      	if DEBUG:
+      		print("Unexpected error:")
+      		print e.message
+      	syslog.syslog(e.__doc__)
+      	syslog_trace(traceback.format_exc())
+      	raise
+
+def syslog_trace(trace):
+	'''Log a python stack trace to syslog'''
+	log_lines = trace.split('\n')
+	for line in log_lines:
+		if len(line):
+			syslog.syslog(line)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
