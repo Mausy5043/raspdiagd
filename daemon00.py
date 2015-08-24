@@ -8,7 +8,8 @@
 
 # daemon99.py creates an XML-file and uploads data to the server.
 
-import os, sys, shutil, glob, platform, time, commands, syslog, traceback, subprocess
+import syslog, traceback
+import os, sys, shutil, glob, platform, time, commands, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
@@ -52,15 +53,15 @@ class MyDaemon(Daemon):
 					if DEBUG:print "Waiting {0} s".format(waitTime)
 					time.sleep(waitTime)
 			except Exception as e:
-				print("Unexpected error:")
+				if DEBUG:
+					print("Unexpected error:")
+					print e.message
 				syslog.syslog(e.__doc__)
-				print e.message
 				syslog_trace(traceback.format_exc())
 				raise
 
 def syslog_trace(trace):
 	'''Log a python stack trace to syslog'''
-
 	log_lines = trace.split('\n')
 	for line in log_lines:
 		if len(line):
