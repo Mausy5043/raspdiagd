@@ -30,26 +30,30 @@ class MyDaemon(Daemon):
 		else:
 			time.sleep(waitTime)
 		while True:
-			startTime = time.time()
+			try:
+				startTime = time.time()
 
-			result = do_work()
-			if DEBUG:print result
-			data[sampleptr] = int(result)
+				result = do_work()
+				if DEBUG:print result
+				data[sampleptr] = int(result)
 
-			# report sample average
-			sampleptr = sampleptr + 1
-			if (sampleptr == samples):
-				if DEBUG:print data
-				somma = sum(data[:])
-				averages = somma / samples
-				if DEBUG:print averages
-				do_report(averages)
-				sampleptr = 0
+				# report sample average
+				sampleptr = sampleptr + 1
+				if (sampleptr == samples):
+					if DEBUG:print data
+					somma = sum(data[:])
+					averages = somma / samples
+					if DEBUG:print averages
+					do_report(averages)
+					sampleptr = 0
 
-			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-			if (waitTime > 0):
-				if DEBUG:print "Waiting {0} s".format(waitTime)
-				time.sleep(waitTime)
+				waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+				if (waitTime > 0):
+					if DEBUG:print "Waiting {0} s".format(waitTime)
+					time.sleep(waitTime)
+			except:
+	    	print "Unexpected error:", sys.exc_info()[0]
+	    	raise
 
 def do_work():
 	return 0
