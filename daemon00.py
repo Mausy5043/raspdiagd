@@ -53,8 +53,11 @@ class MyDaemon(Daemon):
 					time.sleep(waitTime)
 			except Exception as e:
 				print "Unexpected error:"
+				print "***"
 				print e.__doc__
+				print "*** ***"
 				print e.message
+				print "***"
 				raise
 
 def do_work():
