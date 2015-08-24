@@ -51,10 +51,10 @@ class MyDaemon(Daemon):
 				if DEBUG:print "Waiting {0} s".format(waitTime)
 				time.sleep(waitTime)
 
-def do_work()
+def do_work():
 	return 0
 
-def do_report()
+def do_report():
 	return
 
 def lock(fname):
