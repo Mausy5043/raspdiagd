@@ -8,7 +8,8 @@
 
 # daemon16.py reports various UPS variables.
 
-import os, sys, time, math, commands, syslog
+import syslog, traceback
+import os, sys, time, math, commands
 from libdaemon import Daemon
 
 DEBUG = False
@@ -30,22 +31,37 @@ class MyDaemon(Daemon):
 		else:
 			time.sleep(waitTime)
 		while True:
-			startTime = time.time()
+			try:
+				startTime = time.time()
 
-			result = do_work().split(',')
-			data[sampleptr] = map(float, result)
+				result = do_work().split(',')
+				data[sampleptr] = map(float, result)
 
-			sampleptr = sampleptr + 1
-			if (sampleptr == samples):
-				somma = map(sum,zip(*data))
-				averages = [format(s / samples, '.3f') for s in somma]
-				do_report(averages)
-				sampleptr = 0
+				sampleptr = sampleptr + 1
+				if (sampleptr == samples):
+					somma = map(sum,zip(*data))
+					averages = [format(s / samples, '.3f') for s in somma]
+					do_report(averages)
+					sampleptr = 0
 
-			waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-			if (waitTime > 0):
-				if DEBUG:print "Waiting {0} s".format(waitTime)
-				time.sleep(waitTime)
+				waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+				if (waitTime > 0):
+					if DEBUG:print "Waiting {0} s".format(waitTime)
+					time.sleep(waitTime)
+			except Exception as e:
+				if DEBUG:
+					print("Unexpected error:")
+					print e.message
+				syslog.syslog(e.__doc__)
+				syslog_trace(traceback.format_exc())
+				raise
+
+def syslog_trace(trace):
+	'''Log a python stack trace to syslog'''
+	log_lines = trace.split('\n')
+	for line in log_lines:
+		if len(line):
+			syslog.syslog(line)
 
 def do_work():
 	# 5 datapoints gathered here
