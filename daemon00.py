@@ -8,7 +8,7 @@
 
 # daemon99.py creates an XML-file and uploads data to the server.
 
-import os, sys, shutil, glob, platform, time, commands, syslog, subprocess
+import os, sys, shutil, glob, platform, time, commands, syslog, traceback, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
