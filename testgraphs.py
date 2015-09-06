@@ -161,7 +161,7 @@ def graphs():
   print "Windspeed trend"
   pl.plot(D,A13,'.b', alpha=ahpla)
   pl.title('Windspeed trend')
-  pl.ylabel('v(wind) [m/s]')
+  pl.ylabel('v(wind) [km/h]')
   pl.grid(True)
   pl.gcf().autofmt_xdate()
   pl.savefig('/tmp/raspdiagd/Dd.png')
