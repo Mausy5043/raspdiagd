@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
 
 				result = do_work()
 				if DEBUG:print result
-				data[sampleptr] = int(result)
+				data[sampleptr] = result
 
 				# report sample average
 				sampleptr = sampleptr + 1
@@ -46,6 +46,7 @@ class MyDaemon(Daemon):
 					averages = somma / samples
 					if DEBUG:print averages
 					do_report(averages)
+					do_repsql(averages)
 					sampleptr = 0
 
 				waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
@@ -72,7 +73,12 @@ def do_work():
 	with open("/dev/random", 'rb') as file:
 		r = [ord(x) for x in file.read(10)]
 
-	return r
+	return sum(r)
+
+def do_repsql(result):
+	# Get the time and date in human-readable form and UN*X-epoch...
+	outDate = commands.getoutput("date '+%F %H:%M:%S'")
+  if DEBUG:print "Sending {0} {1}".format(outDate, result)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
@@ -80,10 +86,9 @@ def do_report(result):
 	flock = '/tmp/raspdiagd/sr.lock'
 	lock(flock)
 	f = file('/tmp/raspdiagd/sqlrand.csv.txt', 'a')
-	f.write('{0}, {1}\n'.format(outDate, float(float(result)/1000)) )
+	f.write('{0}, {1}\n'.format(outDate, float(result)) )
 	f.close()
 	unlock(flock)
-	return
 
 def lock(fname):
 	open(fname, 'a').close()
