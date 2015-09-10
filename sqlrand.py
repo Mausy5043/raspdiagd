@@ -72,13 +72,12 @@ def do_work():
 	# Read the CPU temperature
 	with open("/dev/random", 'rb') as file:
 		r = [ord(x) for x in file.read(10)]
-
 	return sum(r)
 
 def do_repsql(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S'")
-	if DEBUG:print "Sending {0} {1}".format(outDate, result)
+	if DEBUG:print "Sending {0} : {1}".format(outDate, result)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
