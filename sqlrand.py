@@ -82,7 +82,7 @@ def do_repsql(result):
 	con = mdb.connect('sql.lan', 'demouser', 'demo', 'demo');
 	with con:
 		cur = con.cursor()
-		cur.execute("INSERT INTO tabel(titel, nummer) VALUES(outDate, result)")
+		cur.execute('INSERT INTO tabel(titel, nummer) VALUES( %s, %s)',(outDate, result))
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
