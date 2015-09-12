@@ -19,11 +19,11 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 5
+		samples = 30
 		datapoints = 10
 		data = range(samples)
 
-		sampleTime = 12
+		sampleTime = 2
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
