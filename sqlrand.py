@@ -20,7 +20,7 @@ class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
 		samples = 30
-		datapoints = 10
+		datapoints = 1
 		data = range(samples)
 
 		sampleTime = 2
@@ -69,10 +69,10 @@ def syslog_trace(trace):
 		if len(line):
 			syslog.syslog(line)
 
-def do_work():
+def do_work(dp):
 	# Read the CPU temperature
 	with open("/dev/random", 'rb') as file:
-		r = [ord(x) for x in file.read(10)]
+		r = [ord(x) for x in file.read(100)]
 	return sum(r)
 
 def do_repsql(result):
