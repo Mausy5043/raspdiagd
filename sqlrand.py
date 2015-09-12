@@ -19,11 +19,11 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 30
+		samples = 15
 		datapoints = 1
 		data = range(samples)
 
-		sampleTime = 2
+		sampleTime = 4
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -35,7 +35,7 @@ class MyDaemon(Daemon):
 			try:
 				startTime = time.time()
 
-				result = do_work()
+				result = do_work(datapoints)
 				if DEBUG:print result
 				data[sampleptr] = result
 
@@ -51,9 +51,13 @@ class MyDaemon(Daemon):
 					sampleptr = 0
 
 				waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-				if (waitTime > 0):
-					if DEBUG:print "Waiting {0} s".format(waitTime)
+				if (waitTime > 0.8):
+					datapoints += 1
+					if DEBUG:print "Waiting {0} s -- {1}".format(waitTime, datapoints)
 					time.sleep(waitTime)
+				if (waitTime < -0.8):
+					datapoints -= 1
+					if DEBUG:print "NOT waiting {0} s -- {1}".format(waitTime, datapoints)
 			except Exception as e:
 				if DEBUG:
 					print("Unexpected error:")
@@ -69,10 +73,10 @@ def syslog_trace(trace):
 		if len(line):
 			syslog.syslog(line)
 
-def do_work():
+def do_work(dp):
 	# Read the CPU temperature
 	with open("/dev/random", 'rb') as file:
-		r = [ord(x) for x in file.read(100)]
+		r = [ord(x) for x in file.read(dp)]
 	return sum(r)
 
 def do_repsql(result):
