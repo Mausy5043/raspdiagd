@@ -69,7 +69,7 @@ def syslog_trace(trace):
 		if len(line):
 			syslog.syslog(line)
 
-def do_work(dp):
+def do_work():
 	# Read the CPU temperature
 	with open("/dev/random", 'rb') as file:
 		r = [ord(x) for x in file.read(100)]
