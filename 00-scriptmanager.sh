@@ -27,6 +27,7 @@ rm *.pyc
  DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
  DIFFd23=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon23.py)
  DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
+ DIFFdsr=$(git --no-pager diff --name-only $branch..origin/$branch -- ./sqlrand.py)
 
  git pull
  git fetch origin
@@ -80,6 +81,10 @@ if [[ -n "$DIFFd99" ]]; then
   logger -t raspdiagd "Source daemon99 has changed."
   ./daemon99.py stop
 fi
+if [[ -n "$DIFFdsr" ]]; then
+  logger -t raspdiagd "Source sqlrand has changed."
+  ./sqlrand.py stop
+fi
 
 if [[ -n "$DIFFlib" ]]; then
   logger -t raspdiagd "Source libdaemon has changed."
@@ -93,6 +98,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon17.py stop
   ./daemon23.py stop
   ./daemon99.py stop
+  ./sqlrand.py stop
 fi
 
 ######## (Re-)start daemons ######
@@ -126,7 +132,7 @@ case "$clnt" in
             ;;
   rbian )   echo "Raspberry testbench"
             destale 23
-            #./daemon23.py logstart
+            sqlrand.py restart
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;
