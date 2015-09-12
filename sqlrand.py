@@ -51,11 +51,11 @@ class MyDaemon(Daemon):
 					sampleptr = 0
 
 				waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
-				if (waitTime > 0.8):
+				if (waitTime > (sampleTime/2)):
 					datapoints += 1
 					if DEBUG:print "Waiting {0} s -- {1}".format(waitTime, datapoints)
 					time.sleep(waitTime)
-				if (waitTime < -0.8):
+				if (waitTime < -1*(sampleTime/2)):
 					datapoints -= 1
 					if DEBUG:print "NOT waiting {0} s -- {1}".format(waitTime, datapoints)
 			except Exception as e:
