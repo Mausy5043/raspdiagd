@@ -132,7 +132,7 @@ case "$clnt" in
             ;;
   rbian )   echo "Raspberry testbench"
             destale 23
-            sqlrand.py restart
+            ./sqlrand.py restart
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;
