@@ -19,11 +19,11 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
 	def run(self):
 		sampleptr = 0
-		samples = 15
+		samples = 12
 		datapoints = 1
 		data = range(samples)
 
-		sampleTime = 4
+		sampleTime = 5
 		cycleTime = samples * sampleTime
 		# sync to whole minute
 		waitTime = (cycleTime + sampleTime) - (time.time() % cycleTime)
@@ -58,6 +58,7 @@ class MyDaemon(Daemon):
 				if (waitTime < -1*(sampleTime/2)):
 					datapoints -= 1
 					if DEBUG:print "NOT waiting {0} s -- {1}".format(waitTime, datapoints)
+				if (datapoints <=0):datapoints=1
 			except Exception as e:
 				if DEBUG:
 					print("Unexpected error:")
