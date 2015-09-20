@@ -91,30 +91,30 @@ def do_work():
 	if status == 1:
 		for element in range(0, len(telegram) - 1):
 			line =  re.split( '[\(\*\)]', telegram[element] )
-			#['1-0:1.8.1', '00175.402', 'kWh', '']
+			#['1-0:1.8.1', '00175.402', 'kWh', '']  T1 in
 			if (line[0] == '1-0:1.8.1'):
 			  electra1in = int(float(line[1]) * 1000)
-			#['1-0:1.8.2', '00136.043', 'kWh', '']
+			#['1-0:1.8.2', '00136.043', 'kWh', '']  T2 in
 			if (line[0] == '1-0:1.8.2'):
 			  electra2in = int(float(line[1]) * 1000)
-			#['1-0:2.8.1', '00000.000', 'kWh', '']
+			#['1-0:2.8.1', '00000.000', 'kWh', '']  T1 out
 			if (line[0] == '1-0:2.8.1'):
 			  electra1out = int(float(line[1]) * 1000)
-			#['1-0:2.8.2', '00000.000', 'kWh', '']
+			#['1-0:2.8.2', '00000.000', 'kWh', '']  T2 out
 			if (line[0] == '1-0:2.8.2'):
 			  electra2out = int(float(line[1]) * 1000)
-			#['0-0:96.14.0', '0002', '']
+			#['0-0:96.14.0', '0002', '']  tarif 1 or 2
 			if (line[0] == '0-0:96.14.0'):
 			  tarif = int(line[1])
-			#['1-0:1.7.0', '0000.32', 'kW', '']
+			#['1-0:1.7.0', '0000.32', 'kW', '']  power in
 			if (line[0] == '1-0:1.7.0'):
 			  powerin = int(float(line[1]) * 1000)
-			#['1-0:2.7.0', '0000.00', 'kW', '']
+			#['1-0:2.7.0', '0000.00', 'kW', ''] power out
 			if (line[0] == '1-0:2.7.0'):
 			  powerout = int(float(line[1]) * 1000)
 			#['0-0:17.0.0', '999', 'A', '']
 			   # not recorded
-			#['0-0:96.3.10', '1', '']
+			#['0-0:96.3.10', '1', '']  powerusage (1) or powermanufacturing ()
 			if (line[0] == '0-0:96.3.10'):
 			  swits = int(line[1])
 			#['0-0:96.13.1', '', '']
