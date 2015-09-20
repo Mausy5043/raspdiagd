@@ -46,48 +46,48 @@ fi
 ######## Stop daemons ######
 
 if [[ -n "$DIFFd11" ]]; then
-  logger -t raspdiagd "Source daemon11 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon11 has changed."
   ./daemon11.py stop
 fi
 if [[ -n "$DIFFd12" ]]; then
-  logger -t raspdiagd "Source daemon12 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon12 has changed."
   ./daemon12.py stop
 fi
 if [[ -n "$DIFFd13" ]]; then
-  logger -t raspdiagd "Source daemon13 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon13 has changed."
   ./daemon13.py stop
 fi
 if [[ -n "$DIFFd14" ]]; then
-  logger -t raspdiagd "Source daemon14 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon14 has changed."
   ./daemon14.py stop
 fi
 if [[ -n "$DIFFd15" ]]; then
-  logger -t raspdiagd "Source daemon15 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon15 has changed."
   ./daemon15.py stop
 fi
 if [[ -n "$DIFFd16" ]]; then
-  logger -t raspdiagd "Source daemon16 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon16 has changed."
   ./daemon16.py stop
 fi
 if [[ -n "$DIFFd17" ]]; then
-  logger -t raspdiagd "Source daemon17 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon17 has changed."
   ./daemon17.py stop
 fi
 if [[ -n "$DIFFd23" ]]; then
-  logger -t raspdiagd "Source daemon23 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon23 has changed."
   ./daemon23.py stop
 fi
 if [[ -n "$DIFFd99" ]]; then
-  logger -t raspdiagd "Source daemon99 has changed."
+  logger -p user.notice -t raspdiagd "Source daemon99 has changed."
   ./daemon99.py stop
 fi
 if [[ -n "$DIFFdsr" ]]; then
-  logger -t raspdiagd "Source sqlrand has changed."
+  logger -p user.notice -t raspdiagd "Source sqlrand has changed."
   ./sqlrand.py stop
 fi
 
 if [[ -n "$DIFFlib" ]]; then
-  logger -t raspdiagd "Source libdaemon has changed."
+  logger -p user.notice -t raspdiagd "Source libdaemon has changed."
   # stop all daemons
   ./daemon11.py stop
   ./daemon12.py stop
@@ -106,12 +106,12 @@ fi
 function destale {
   if [ -e /tmp/raspdiagd/$1.pid ]; then
     if ! kill -0 $(cat /tmp/raspdiagd/$1.pid)  > /dev/null 2>&1; then
-      logger -t raspdiagd "Stale daemon$1 pid-file found."
+      logger -p user.err -t raspdiagd "Stale daemon$1 pid-file found."
       rm /tmp/raspdiagd/$1.pid
       ./daemon$1.py start
     fi
   else
-    logger -t raspdiagd "Found daemon$1 not running."
+    logger -p user.warn -t raspdiagd "Found daemon$1 not running."
     ./daemon$1.py start
   fi
 }

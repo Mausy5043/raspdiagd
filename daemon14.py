@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
 				if DEBUG:
 					print("Unexpected error:")
 					print e.message
-				syslog.syslog(e.__doc__)
+				syslog.syslog(syslog.LOG_ALERT,e.__doc__)
 				syslog_trace(traceback.format_exc())
 				raise
 
@@ -59,7 +59,7 @@ def syslog_trace(trace):
 	log_lines = trace.split('\n')
 	for line in log_lines:
 		if len(line):
-			syslog.syslog(line)
+			syslog.syslog(syslog.LOG_ALERT,line)
 
 def do_work():
 	# 8 datapoints gathered here

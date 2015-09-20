@@ -89,7 +89,7 @@ class Daemon:
 		# Start the daemon
 		message = "Started process \n"
 		sys.stderr.write(message)
-		syslog.syslog(message)
+		syslog.syslog(syslog.INFO,message)
 		self.daemonize()
 		self.run()
 
@@ -113,7 +113,7 @@ class Daemon:
 		# Try killing the daemon process
 		try:
 			message = "Stopped process \n"
-			syslog.syslog(message)
+			syslog.syslog(syslog.INFO,message)
 			sys.stderr.write(message)
 
 			while 1:
