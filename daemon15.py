@@ -77,15 +77,15 @@ def do_work():
 		#       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
 		#       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
 		#       specified priorities.
-		kernlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 3 |wc -l").split()[0]
-		messlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
+		critlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 0..3 |wc -l").split()[0]
+		warnlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
 		syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
 	else:
-		kernlog = commands.getoutput("wc -l /var/log/kern.log").split()[0]
-		messlog = commands.getoutput("wc -l /var/log/messages").split()[0]
+		critlog = commands.getoutput("cat /var/log/0emerg.log /var/log/1alert.log /var/log/2critical.log /var/log/3err.log |wc -l").split()[0]
+		warnlog = commands.getoutput("wc -l /var/log/4warn.log").split()[0]
 		syslog  = commands.getoutput("wc -l /var/log/syslog").split()[0]
 
-	return '{0}, {1}, {2}'.format(kernlog, messlog, syslog)
+	return '{0}, {1}, {2}'.format(critlog, warnlog, syslog)
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
