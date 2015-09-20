@@ -50,6 +50,7 @@ class MyDaemon(Daemon):
 				startTime = time.time()
 
 				data = do_work().split(', ')
+				if DEBUG: print data
 
 				sampleptr = sampleptr + 1
 				if (sampleptr == samples):
@@ -155,7 +156,7 @@ def gettelegram():
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
 	outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-
+	if DEBUG:print result
 	result = ', '.join(map(str, result))
 	flock = '/tmp/raspdiagd/17.lock'
 	lock(flock)
