@@ -8,10 +8,10 @@ def getuxtime(method):
     cmd = ["date", "+'%s'"]
     dt = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.PIPE)
     output, err = dt.communicate()
+    output = output.replace("'", "")
   if method == 2:
-    output = commands.getoutput("date '+%F %H:%M:%S, %s'")
-  #entries = output.replace("'", "").splitlines()
-  return entries
+    output = commands.getoutput("date +'%s'")
+  return output
 
 def wrapper(func, *args, **kwargs):
     def wrapped():
@@ -33,11 +33,11 @@ if __name__ == '__main__':
     print ux
 
     wrapped = wrapper(getuxtime, 1)
-    timeit.timeit(wrapped, number=1000)
-
+    tm = timeit.timeit(wrapped, number=1000)
+    print tm
     wrapped = wrapper(getuxtime, 2)
-    timeit.timeit(wrapped, number=1000)
-
+    tm = timeit.timeit(wrapped, number=1000)
+    print tm
   except Exception as e:
     syslog.syslog(syslog.LOG_ALERT,e.__doc__)
     syslog_trace(traceback.format_exc())
