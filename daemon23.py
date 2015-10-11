@@ -79,19 +79,19 @@ class MyDaemon(Daemon):
             logtext = "ZZZ Carrying : " + str(waitTime) + " s"
             syslog.syslog(syslog.LOG_DEBUG, logtext)
       except Exception as e:
-      	if DEBUG:
-      		print("Unexpected error:")
-      		print e.message
-      	syslog.syslog(syslog.LOG_ALERT,e.__doc__)
-      	syslog_trace(traceback.format_exc())
-      	raise
+        if DEBUG:
+          print("Unexpected error:")
+          print e.message
+        syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+        syslog_trace(traceback.format_exc())
+        raise
 
 def syslog_trace(trace):
-	'''Log a python stack trace to syslog'''
-	log_lines = trace.split('\n')
-	for line in log_lines:
-		if len(line):
-			syslog.syslog(syslog.LOG_ALERT,line)
+  '''Log a python stack trace to syslog'''
+  log_lines = trace.split('\n')
+  for line in log_lines:
+    if len(line):
+      syslog.syslog(syslog.LOG_ALERT,line)
 
 def gettelegram(cmd):
   # flag used to exit the while-loop
