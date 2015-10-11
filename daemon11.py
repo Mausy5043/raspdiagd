@@ -69,14 +69,19 @@ def syslog_trace(trace):
 
 def do_work():
 	# Read the CPU temperature
-	outTemp = commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp")
-	if float(outTemp) > 75000:
+	fi   = "/sys/class/thermal/thermal_zone0/temp"
+	f    = file(fi,'r')
+	Tcpu = float(f.read().strip('\n'))/1000
+	f.close()
+	if float(Tcpu) > 75000:
 	  # can't believe my sensors. Probably a glitch. Wait a while then measure again
 	  time.sleep(7)
-	  outTemp = commands.getoutput("cat /sys/class/thermal/thermal_zone0/temp")
-	  outTemp = float(outTemp) + 0.1
+		fi   = "/sys/class/thermal/thermal_zone0/temp"
+		f    = file(fi,'r')
+		Tcpu = float(f.read().strip('\n'))/1000
+	  Tcpu = float(Tcpu) + 0.1
 
-	return outTemp
+	return Tcpu
 
 def do_report(result):
 	# Get the time and date in human-readable form and UN*X-epoch...
