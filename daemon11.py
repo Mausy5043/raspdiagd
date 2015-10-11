@@ -36,7 +36,7 @@ class MyDaemon(Daemon):
 
         result = do_work()
         if DEBUG:print result
-        data[sampleptr] = int(result)
+        data[sampleptr] = float(result)
 
         # report sample average
         sampleptr = sampleptr + 1
@@ -73,7 +73,7 @@ def do_work():
   f    = file(fi,'r')
   Tcpu = float(f.read().strip('\n'))/1000
   f.close()
-  if float(Tcpu) > 75000:
+  if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     time.sleep(7)
     fi   = "/sys/class/thermal/thermal_zone0/temp"
@@ -89,7 +89,7 @@ def do_report(result):
   flock = '/tmp/raspdiagd/11.lock'
   lock(flock)
   f = file('/tmp/raspdiagd/11-t-cpu.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, float(float(result)/1000)) )
+  f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)
   return
