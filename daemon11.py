@@ -79,7 +79,7 @@ def do_work():
 		fi   = "/sys/class/thermal/thermal_zone0/temp"
 		f    = file(fi,'r')
 		Tcpu = float(f.read().strip('\n'))/1000
-	  Tcpu = float(Tcpu) + 0.1
+		Tcpu = float(Tcpu) + 0.1
 
 	return Tcpu
 
