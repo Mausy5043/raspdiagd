@@ -74,7 +74,10 @@ def syslog_trace(trace):
 
 def do_work():
   # 6 datapoints gathered here
-  outHistLoad = commands.getoutput("cat /proc/loadavg").replace(" ",", ").replace("/",", ")
+  fi   = "/proc/loadavg"
+  f    = file(fi,'r')
+  outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
+  f.close()
 
   # 5 datapoints gathered here
   outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
