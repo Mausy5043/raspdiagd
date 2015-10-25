@@ -20,7 +20,10 @@ class MyDaemon(Daemon):
     sampleptr = 0
     samples = 6
     datapoints = 5
-    data = [[None]*datapoints for _ in range(samples)]
+    if (datapoints == 1):
+      data = [None for i in range(samples)]
+    else:
+      data = [[None] * datapoints for i in range(samples)]
 
     sampleTime = 10
     cycleTime = samples * sampleTime
