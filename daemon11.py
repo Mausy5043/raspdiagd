@@ -48,7 +48,7 @@ class MyDaemon(Daemon):
         sampleptr = sampleptr + 1
 
         # report sample average
-        if (sampleptr%SamplesPerCycle == 0):
+        if (sampleptr % SamplesPerCycle == 0):
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
