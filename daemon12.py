@@ -18,12 +18,12 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    samples = 5
+    cycles = 3
+    SamplesPerCycle = 5
+    samples = SamplesPerCycle * cycles
+
     datapoints = 11
-    if (datapoints == 1):
-      data = [None for i in range(samples)]
-    else:
-      data = [[None] * datapoints for i in range(samples)]
+    data = []
 
     sampleTime = 12
     cycleTime = samples * sampleTime
@@ -39,22 +39,26 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         if DEBUG:print result
-        data[sampleptr] = map(float, result)
+
+        data.append(map(float, result))
+        if (len(data) > samples):data.pop(0)
+        sampleptr = sampleptr + 1
 
         # report sample average
-        sampleptr = sampleptr + 1
-        if (sampleptr == samples):
+        if (sampleptr % SamplesPerCycle == 0):
           if DEBUG:print data
           somma = map(sum,zip(*data))
           # not all entries should be float
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
-          averages = [format(s / samples, '.3f') for s in somma]
+          averages = [format(s / len(data), '.3f') for s in somma]
+          # Report the last measurement for these parameters:
           averages[3]=int(data[sampleptr-1][3])
           averages[4]=int(data[sampleptr-1][4])
           averages[5]=int(data[sampleptr-1][5])
           if DEBUG:print averages
           do_report(averages)
-          sampleptr = 0
+          if (sampleptr == samples):
+            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
