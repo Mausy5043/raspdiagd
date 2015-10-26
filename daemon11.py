@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon11.py measures the CPU temperature.
+# uses moving averages
 
 import syslog, traceback
 import os, sys, time, math, commands

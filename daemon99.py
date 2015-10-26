@@ -19,8 +19,6 @@ class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
     samples = 1
-    #datapoints = 1
-    #data = range(samples)
 
     sampleTime = 60
     cycleTime = samples * sampleTime

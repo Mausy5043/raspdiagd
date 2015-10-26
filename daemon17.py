@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon17.py communicates with the smart electricity meter.
+# This is all singular data, no averaging needed.
 
 import syslog, traceback
 import os, sys, time, math, commands
@@ -55,8 +56,7 @@ class MyDaemon(Daemon):
         sampleptr = sampleptr + 1
         if (sampleptr == samples):
           do_report(data)
-          if (sampleptr == samples):
-            sampleptr = 0
+          sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):

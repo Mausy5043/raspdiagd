@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon12.py measures the CPU load.
+# uses moving averages
 
 import syslog, traceback
 import os, sys, time, math, commands

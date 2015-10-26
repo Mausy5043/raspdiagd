@@ -7,6 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon16.py reports various UPS variables.
+# uses moving averages
 
 import syslog, traceback
 import os, sys, time, math, commands
