@@ -17,10 +17,10 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
+    sampleptr = 0
     cycles = 3
     SamplesPerCycle = 5
     samples = SamplesPerCycle * cycles
-    sampleptr = 0
 
     datapoints = 1
     if (datapoints == 1):
