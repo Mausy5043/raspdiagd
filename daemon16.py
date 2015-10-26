@@ -45,7 +45,8 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / samples, '.3f') for s in somma]
           do_report(averages)
-          sampleptr = 0
+          if (sampleptr == samples):
+            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):

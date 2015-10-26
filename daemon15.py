@@ -43,7 +43,8 @@ class MyDaemon(Daemon):
         sampleptr = sampleptr + 1
         if (sampleptr == samples):
           do_report(data)
-          sampleptr = 0
+          if (sampleptr == samples):
+            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):

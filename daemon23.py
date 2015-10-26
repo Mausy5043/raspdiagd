@@ -66,7 +66,8 @@ class MyDaemon(Daemon):
 
           if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
           do_report(averages, avg_ext)
-          sampleptr = 0
+          if (sampleptr == samples):
+            sampleptr = 0
 
         waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
