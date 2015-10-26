@@ -18,12 +18,12 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    samples = 6
-    datapoints = 5
-    if (datapoints == 1):
-      data = [None for i in range(samples)]
-    else:
-      data = [[None] * datapoints for i in range(samples)]
+    cycles = 3
+    SamplesPerCycle = 5
+    samples = SamplesPerCycle * cycles
+
+    datapoints = 11
+    data = []
 
     sampleTime = 10
     cycleTime = samples * sampleTime
@@ -38,12 +38,18 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
-        data[sampleptr] = map(float, result)
+        if DEBUG:print "result:",result
 
+        data.append(map(float, result))
+        if (len(data) > samples):data.pop(0)
         sampleptr = sampleptr + 1
-        if (sampleptr == samples):
+
+        # report sample average
+        if (sampleptr % SamplesPerCycle == 0):
+          if DEBUG:print "data:",data
           somma = map(sum,zip(*data))
-          averages = [format(s / samples, '.3f') for s in somma]
+          averages = [format(s / len(data), '.3f') for s in somma]
+          if DEBUG:print "averages:",averages
           do_report(averages)
           if (sampleptr == samples):
             sampleptr = 0

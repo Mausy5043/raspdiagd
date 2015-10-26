@@ -55,7 +55,7 @@ class MyDaemon(Daemon):
           averages[3]=int(data[sampleptr-1][3])
           averages[4]=int(data[sampleptr-1][4])
           averages[5]=int(data[sampleptr-1][5])
-          if DEBUG:print averages
+          if DEBUG:print "average:", averages
           do_report(averages)
           if (sampleptr == samples):
             sampleptr = 0
