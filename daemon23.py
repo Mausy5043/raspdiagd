@@ -23,12 +23,12 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    samples = 10
+    cycles = 2
+    SamplesPerCycle = 5
+    samples = SamplesPerCycle * cycles
+
     datapoints = 11
-    if (datapoints == 1):
-      data = [None for i in range(samples)]
-    else:
-      data = [[None] * datapoints for i in range(samples)]
+    data = []
 
     sampleTime = 30
     cycleTime = samples * sampleTime
@@ -47,8 +47,11 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
-        data[sampleptr] = map(float, result)
-        if DEBUG:print "Sample: {0} = {1}".format(sampleptr, data[sampleptr])
+        if DEBUG:print result
+
+        data.append(map(float, result))
+        if (len(data) > samples):data.pop(0)
+        sampleptr = sampleptr + 1
 
         if (sampleptr == int(samples/2)):
           if DEBUG:print "<external data fetch>"
@@ -56,10 +59,9 @@ class MyDaemon(Daemon):
           extern_data = map(float, extern_result)
 
         # report sample average
-        sampleptr = sampleptr + 1
-        if (sampleptr == samples):
+        if (sampleptr % SamplesPerCycle == 0):
           somma = map(sum,zip(*data))
-          averages = [format(s / samples, '.3f') for s in somma]
+          averages = [format(s / len(data), '.3f') for s in somma]
 
           extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
           avg_ext = [format(s, '.3f') for s in extern_data]
