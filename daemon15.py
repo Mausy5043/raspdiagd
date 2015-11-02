@@ -83,11 +83,9 @@ def do_work():
     warnlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
     syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
   else:
-
-    critlog = commands.getoutput("cat /var/log/0emerg.log /var/log/1alert.log /var/log/2critical.log /var/log/3err.log |wc -l").split()[0]
-    warnlog = commands.getoutput("wc -l /var/log/4warn.log").split()[0]
-    syslog  = commands.getoutput("wc -l /var/log/syslog").split()[0]
-
+    critlog = wc("/var/log/0emerg.log") + wc("/var/log/1alert.log") + wc("/var/log/2critical.log") + wc("/var/log/3err.log")
+    warnlog = wc("/var/log/4warn.log")
+    syslog  = wc("/var/log/syslog")
   return '{0}, {1}, {2}'.format(critlog, warnlog, syslog)
 
 def wc(filename):
