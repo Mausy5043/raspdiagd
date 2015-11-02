@@ -77,7 +77,6 @@ def do_work():
   cat = f.read().strip('\n')
   f.close()
   out = cat.splitlines()
-  #out = commands.getoutput("cat /proc/meminfo").splitlines()
   for line in range(0,len(out)-1):
     mem = out[line].split()
     if mem[0] == 'MemFree:':
