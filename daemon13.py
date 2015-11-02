@@ -62,7 +62,7 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
-def cat(filename)
+def cat(filename):
   ret = ""
   if os.path.isfile(filename):
     f = file(filename,'r')
