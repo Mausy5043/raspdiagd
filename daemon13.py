@@ -62,6 +62,14 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
+def cat(filename)
+  ret = ""
+  if os.path.isfile(filename):
+    f = file(filename,'r')
+    ret = f.read().strip('\n')
+    f.close()
+  return ret
+
 def do_work():
   # 6 datapoints gathered here
   # Network traffic
@@ -71,12 +79,12 @@ def do_work():
   etOut = 0
   loIn = 0
   loOut = 0
-  fi = "/proc/net/dev"
-  f    = file(fi,'r')
-  cat = f.read().strip('\n')
-  f.close()
-  list = cat.replace(":"," ").splitlines()
-  #list = commands.getoutput("cat /proc/net/dev").replace(":"," ").splitlines()
+  #fi = "/proc/net/dev"
+  #f    = file(fi,'r')
+  #cat = f.read().strip('\n')
+  #f.close()
+  list = cat("/proc/net/dev").replace(":"," ").splitlines()
+
   for line in range(2,len(list)):
     device = list[line].split()[0]
     if device == "lo":
