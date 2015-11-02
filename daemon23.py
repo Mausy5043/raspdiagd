@@ -55,14 +55,14 @@ class MyDaemon(Daemon):
 
         # report sample average
         if (sampleptr % SamplesPerCycle == 0):
+          somma = map(sum,zip(*data))
+          averages = [format(s / len(data), '.3f') for s in somma]
+
           if DEBUG:print "<external data fetch>"
           extern_result = do_extern_work().split(',')
           extern_data = map(float, extern_result)
           extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
           avg_ext = [format(s, '.3f') for s in extern_data]
-
-          somma = map(sum,zip(*data))
-          averages = [format(s / len(data), '.3f') for s in somma]
 
           if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
           do_report(averages, avg_ext)
