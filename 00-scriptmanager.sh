@@ -4,9 +4,10 @@
 # * It synchronises the local copy of raspdiagd with the current github branch
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
-branch=$(cat ~/.raspdiagd.branch)
-clnt=$(hostname)
-pushd $HOME/raspdiagd
+CLNT=$(hostname)
+ME=$(whoami)
+branch=$(cat /home/$ME/.raspdiagd.branch)
+pushd /home/$ME/raspdiagd
 
 # force recompilation of libraries
 rm *.pyc
@@ -123,7 +124,7 @@ destale 14
 destale 15
 destale 99
 
-case "$clnt" in
+case "$CLNT" in
   rbups )   echo "UPS monitor"
             destale 16
             ;;

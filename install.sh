@@ -18,7 +18,7 @@ date
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
 # set the branch
-echo master > ~/.raspdiagd.branch
+echo master > /home/$ME/.raspdiagd.branch
 
 if [ ! -d /etc/cron.d ]; then
   echo "Creating /etc/cron.d..."
