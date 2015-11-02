@@ -71,8 +71,12 @@ def do_work():
   etOut = 0
   loIn = 0
   loOut = 0
-
-  list = commands.getoutput("cat /proc/net/dev").replace(":"," ").splitlines()
+  fi = "/proc/net/dev"
+  f    = file(fi,'r')
+  cat = f.read().strip('\n')
+  f.close()
+  list = cat.replace(":"," ").splitlines()
+  #list = commands.getoutput("cat /proc/net/dev").replace(":"," ").splitlines()
   for line in range(2,len(list)):
     device = list[line].split()[0]
     if device == "lo":
