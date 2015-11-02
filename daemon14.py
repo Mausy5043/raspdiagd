@@ -62,6 +62,14 @@ def syslog_trace(trace):
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
+def cat(filename):
+  ret = ""
+  if os.path.isfile(filename):
+    f = file(filename,'r')
+    ret = f.read().strip('\n')
+    f.close()
+  return ret
+
 def do_work():
   # 8 datapoints gathered here
   # memory /proc/meminfo
@@ -72,11 +80,8 @@ def do_work():
   # swapUse = SwapTotal - SwapFree
   # ref: http://thoughtsbyclayg.blogspot.nl/2008/09/display-free-memory-on-linux-ubuntu.html
   # ref: http://serverfault.com/questions/85470/meaning-of-the-buffers-cache-line-in-the-output-of-free
-  fi = "/proc/meminfo"
-  f    = file(fi,'r')
-  cat = f.read().strip('\n')
-  f.close()
-  out = cat.splitlines()
+
+  out = cat("/proc/meminfo").splitlines()
   for line in range(0,len(out)-1):
     mem = out[line].split()
     if mem[0] == 'MemFree:':
