@@ -34,7 +34,7 @@ class MyDaemon(Daemon):
     cycleTime = samples * sampleTime
 
     # Start by getting external data.
-    EXTERNAL_DATA_EXPIRY_TIME = 300
+    EXTERNAL_DATA_EXPIRY_TIME = 600 #seconds
     # This decouples the fetching of external data
     # from the reporting cycle.
     extern_result = do_extern_work().split(',')
