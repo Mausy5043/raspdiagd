@@ -162,7 +162,7 @@ def do_work():
       syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   if DEBUG:
-    logtext = ">>> [do_work]              : {0:.2f} s".format(ardtime)
+    logtext = ":   [do_work]              : {0:.2f} s".format(ardtime)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -188,7 +188,7 @@ def do_extern_work():
     gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 
     if DEBUG:
-      logtext = ">>> [do_extern_work]       : {0:.2f} s".format(souptime)
+      logtext = ":   [do_extern_work]       : {0:.2f} s".format(souptime)
       print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
   except Exception as e:
@@ -229,7 +229,7 @@ def do_report(result, ext_result):
     logtext = ":   [do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
     print logtext
     #syslog.syslog(syslog.LOG_DEBUG, logtext)
-    logtext = ">>> [do_report]            : {0:.2f} s".format(ardtime)
+    logtext = ":   [do_report]            : {0:.2f} s".format(ardtime)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
   return
