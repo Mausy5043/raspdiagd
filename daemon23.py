@@ -40,7 +40,11 @@ class MyDaemon(Daemon):
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       waitTime = 0
     else:
+      logtext = ">>> Waiting                : {0:.2f} s.".format(waitTime)
       time.sleep(waitTime)
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
+
+    DEBUG = True
 
     # Start by getting external data. This decouples the fetching of external data
     # from the reporting cycle.
