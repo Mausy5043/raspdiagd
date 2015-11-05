@@ -79,8 +79,9 @@ class MyDaemon(Daemon):
             extern_data = map(float, extern_result)
             extern_time = time.time() + EXTERNAL_DATA_EXPIRY_TIME
 
-          extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+          windchill = calc_windchill(float(averages[1]), extern_data[0])
           avg_ext = [format(s, '.3f') for s in extern_data]
+          avg_ext.append(windchill)
 
           if DEBUG:
             logtext = ":   Reporting sample {0} = {1} + {2}".format(sampleptr, averages, avg_ext)
