@@ -47,7 +47,9 @@ class MyDaemon(Daemon):
         startTime = time.time()
 
         result = do_work().split(',')
-        if DEBUG:print result
+        if DEBUG:
+          print result
+          syslog.syslog(syslog.LOG_DEBUG, result)
 
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
@@ -58,29 +60,32 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.3f') for s in somma]
 
-          if DEBUG:print "<external data fetch>"
           extern_result = do_extern_work().split(',')
           extern_data = map(float, extern_result)
           extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
           avg_ext = [format(s, '.3f') for s in extern_data]
 
-          if DEBUG:print "> Reporting {0} + {1}".format(averages, avg_ext)
+          if DEBUG:
+            logtext = "> Reporting {0} + {1}".format(averages, avg_ext)
+            print logtext
+            syslog.syslog(syslog.LOG_DEBUG, logtext)
+
           do_report(averages, avg_ext)
           if (sampleptr == samples):
             sampleptr = 0
 
         waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
-          if DEBUG:print "*** Waiting {0} s".format(waitTime)
           if DEBUG:
             logtext = "ZZZ Waiting for next sample: " + str(waitTime) + " s"
+            print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
           time.sleep(waitTime)
           waitTime = 0
         else:
-          if DEBUG:print "*** Carrying {0} s".format(waitTime)
           if DEBUG:
             logtext = "ZZZ Carrying : " + str(waitTime) + " s"
+            print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
       except Exception as e:
         if DEBUG:
@@ -128,6 +133,7 @@ def gettelegram(cmd):
 
   if DEBUG:
     logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
+    print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   # Return codes:
@@ -168,6 +174,7 @@ def do_extern_work():
 
   if DEBUG:
     logtext = "[do_extern_work]..."
+    print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   start=time.time()
@@ -186,6 +193,7 @@ def do_extern_work():
 
     if DEBUG:
       logtext = "[do_extern_work] : {0} s".format(souptime)
+      print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
   except Exception as e:
     logtext = "****** Exception encountered : " + str(e)
@@ -211,6 +219,7 @@ def do_report(result, ext_result):
   #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
   if DEBUG:
     logtext = "[do_report]..."
+    print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   outDate = commands.getoutput("date '+%F %H:%M:%S'")
@@ -226,6 +235,7 @@ def do_report(result, ext_result):
 
   if DEBUG:
     logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
+    print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
   return
 
