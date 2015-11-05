@@ -35,7 +35,7 @@ class MyDaemon(Daemon):
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
     if DEBUG:
-      logtext = ">>> NOT waiting              : {0:.2f} s.".format(waitTime)
+      logtext = ">>> NOT waiting            : {0:.2f} s.".format(waitTime)
       print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       waitTime = 0
@@ -112,7 +112,6 @@ def gettelegram(cmd):
   loops2go = 10
   #
   telegram = "NaN";
-  ardtime = time.time()
 
   while abort == 0:
     try:
@@ -134,11 +133,8 @@ def gettelegram(cmd):
     loops2go = loops2go - 1
     if loops2go < 0:
       abort = 3
-  ardtime = time.time() - ardtime
+
   if DEBUG:
-    logtext = ">>> [gettelegram] time     : {0:.2f} s".format(ardtime)
-    print logtext
-    syslog.syslog(syslog.LOG_DEBUG, logtext)
     logtext = "    [gettelegram] code: {0}; loops: {1}".format(abort, loops2go)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
@@ -154,34 +150,28 @@ def do_work():
   # 12 datapoints gathered here
 
   ardtime = time.time()
-
   telegram, status = gettelegram("A")
   ardtime = time.time() - ardtime
+
   #print telegram
   if (status != 1):
     telegram = -1
     if DEBUG:
-      logtext = "*** [do_work] : {0:.2f} s - NO TELEGRAM.".format(ardtime)
+      logtext = "*** [do_work] NO TELEGRAM!"
       print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   if DEBUG:
-    logtext = "*** [do_work] : {0:.2f} s".format(ardtime)
+    logtext = ">>> [do_work]              : {0:.2f} s".format(ardtime)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   return telegram
 
 def do_extern_work():
-
   #set defaults
   ms = 0
   gr = 270
-
-  if DEBUG:
-    logtext = "[do_extern_work]..."
-    print logtext
-    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   ardtime=time.time()
   try:
@@ -189,7 +179,7 @@ def do_extern_work():
     response = urlopen(req, timeout=25)
     output = response.read()
     soup = BeautifulSoup(output)
-    souptime = time.time()-start
+    souptime = time.time()-ardtime
 
     MSwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windsnelheidms)
     GRwind = str(soup.buienradarnl.weergegevens.actueel_weer.weerstations.find(id=6350).windrichtinggr)
@@ -198,14 +188,14 @@ def do_extern_work():
     gr = GRwind.replace("<"," ").replace(">"," ").split()[1]
 
     if DEBUG:
-      logtext = "[do_extern_work] : {0} s".format(souptime)
+      logtext = ">>> [do_extern_work]       : {0:.2f} s".format(souptime)
       print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
   except Exception as e:
     logtext = "****** Exception encountered : " + str(e)
     syslog.syslog(syslog.LOG_DEBUG, logtext)
     ardtime = time.time() - ardtime
-    logtext = "****** after {0} s".format(ardtime)
+    logtext = "****** after                 {0:.2f} s".format(ardtime)
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
