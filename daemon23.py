@@ -23,14 +23,14 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     sampleptr = 0
-    cycles = 2
-    SamplesPerCycle = 5
+    cycles = 5
+    SamplesPerCycle = 3
     samples = SamplesPerCycle * cycles
 
     datapoints = 11
     data = []
 
-    sampleTime = 30
+    sampleTime = 20
     cycleTime = samples * sampleTime
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
@@ -40,10 +40,14 @@ class MyDaemon(Daemon):
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       waitTime = 0
     else:
-      if DEBUG:
-        logtext = ">>> Waiting for start      : {0:.2f} s".format(waitTime)
-        syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
+
+    # Start by getting external data. This decouples the fetching of external data
+    # from the reporting cycle.
+    extern_result = do_extern_work().split(',')
+    extern_data = map(float, extern_result)
+    extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+
     while True:
       try:
         startTime = time.time()
