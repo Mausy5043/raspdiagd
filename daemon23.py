@@ -32,6 +32,13 @@ class MyDaemon(Daemon):
 
     sampleTime = 20
     cycleTime = samples * sampleTime
+
+    # Start by getting external data. This decouples the fetching of external data
+    # from the reporting cycle.
+    extern_result = do_extern_work().split(',')
+    extern_data = map(float, extern_result)
+    extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
     if DEBUG:
@@ -44,13 +51,6 @@ class MyDaemon(Daemon):
       syslog.syslog(syslog.LOG_DEBUG, logtext)
 
     time.sleep(waitTime)
-    DEBUG = True
-
-    # Start by getting external data. This decouples the fetching of external data
-    # from the reporting cycle.
-    extern_result = do_extern_work().split(',')
-    extern_data = map(float, extern_result)
-    extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
 
     while True:
       try:
