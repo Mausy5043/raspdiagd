@@ -33,11 +33,13 @@ class MyDaemon(Daemon):
     sampleTime = 20
     cycleTime = samples * sampleTime
 
-    # Start by getting external data. This decouples the fetching of external data
+    # Start by getting external data.
+    EXTERNAL_DATA_EXPIRY_TIME = 300
+    # This decouples the fetching of external data
     # from the reporting cycle.
     extern_result = do_extern_work().split(',')
     extern_data = map(float, extern_result)
-    extern_time = time.time()
+    extern_time = time.time() + EXTERNAL_DATA_EXPIRY_TIME
 
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
@@ -72,10 +74,10 @@ class MyDaemon(Daemon):
           averages = [format(s / len(data), '.3f') for s in somma]
 
           # only fetch external data is current data is older than 5 minutes
-          if extern_time < (time.time() - 300):
+          if (extern_time < time.time()):
             extern_result = do_extern_work().split(',')
             extern_data = map(float, extern_result)
-            extern_time = time.time()
+            extern_time = time.time() + EXTERNAL_DATA_EXPIRY_TIME
 
           extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
           avg_ext = [format(s, '.3f') for s in extern_data]
