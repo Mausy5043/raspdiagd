@@ -37,7 +37,7 @@ class MyDaemon(Daemon):
     # from the reporting cycle.
     extern_result = do_extern_work().split(',')
     extern_data = map(float, extern_result)
-    extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
+    extern_time = time.time()
 
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
@@ -71,8 +71,12 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.3f') for s in somma]
 
-          extern_result = do_extern_work().split(',')
-          extern_data = map(float, extern_result)
+          # only fetch external data is current data is older than 5 minutes
+          if extern_time < (time.time() - 300):
+            extern_result = do_extern_work().split(',')
+            extern_data = map(float, extern_result)
+            extern_time = time.time()
+
           extern_data.append(calc_windchill(float(averages[1]), extern_data[0]))
           avg_ext = [format(s, '.3f') for s in extern_data]
 
