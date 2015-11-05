@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         if DEBUG:
-          logtext = "*** Result = {0}".format(result)
+          logtext = ":   Result = {0}".format(result)
           print logtext
           #syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -69,7 +69,7 @@ class MyDaemon(Daemon):
           avg_ext = [format(s, '.3f') for s in extern_data]
 
           if DEBUG:
-            logtext = "> Reporting {0} + {1} + {2}".format(averages, avg_ext, sampleptr)
+            logtext = ":   Reporting sample {0} = {1} + {2}".format(sampleptr, averages, avg_ext)
             print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -135,7 +135,7 @@ def gettelegram(cmd):
       abort = 3
 
   if DEBUG:
-    logtext = "    [gettelegram] code: {0}; loops: {1}".format(abort, loops2go)
+    logtext = ":   [gettelegram] code: {0}; loops: {1}".format(abort, loops2go)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -213,13 +213,9 @@ def calc_windchill(T,W):
 def do_report(result, ext_result):
   # Get the time and date in human-readable form and UN*X-epoch...
   #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-  if DEBUG:
-    logtext = "[do_report]..."
-    print logtext
-    syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   outDate = commands.getoutput("date '+%F %H:%M:%S'")
-
+  ardtime = time.time()
   result = ', '.join(map(str, result))
   ext_result = ', '.join(map(str, ext_result))
   flock = '/tmp/raspdiagd/23.lock'
@@ -228,9 +224,12 @@ def do_report(result, ext_result):
   f.write('{0}, {1}, {2}\n'.format(outDate, result, ext_result) )
   f.close()
   unlock(flock)
-
+  ardtime = time.time() - ardtime
   if DEBUG:
-    logtext = "[do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
+    logtext = ":   [do_report] : {0}, {1}, {2}".format(outDate, result, ext_result)
+    print logtext
+    #syslog.syslog(syslog.LOG_DEBUG, logtext)
+    logtext = ">>> [do_report]            : {0:.2f} s".format(ardtime)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
   return
