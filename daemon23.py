@@ -35,13 +35,13 @@ class MyDaemon(Daemon):
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
     if DEBUG:
-      logtext = ">>> NOT waiting {0:.2f} s.".format(waitTime)
+      logtext = ">>> NOT waiting              : {0:.2f} s.".format(waitTime)
       print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
       waitTime = 0
     else:
       if DEBUG:
-        logtext = ">>> Waiting for start : {0:.2f} s".format(waitTime)
+        logtext = ">>> Waiting for start      : {0:.2f} s".format(waitTime)
         syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
     while True:
@@ -50,7 +50,7 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         if DEBUG:
-          logtext = "*** Result = {0:.2f}".format(result)
+          logtext = "*** Result = {0}".format(result)
           print logtext
           syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -80,14 +80,14 @@ class MyDaemon(Daemon):
         waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
         if (waitTime > 0):
           if DEBUG:
-            logtext = "ZZZ Waiting for next sample: " + str(waitTime) + " s"
+            logtext = ">>> Waiting for next sample: {0:.2f} s".format(waitTime)
             print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
           time.sleep(waitTime)
           waitTime = 0
         else:
           if DEBUG:
-            logtext = "ZZZ Carrying : " + str(waitTime) + " s"
+            logtext = ">>> NOT waiting            : {0:.2f} s".format(waitTime)
             print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
       except Exception as e:
@@ -112,6 +112,7 @@ def gettelegram(cmd):
   loops2go = 10
   #
   telegram = "NaN";
+  ardtime = time.time()
 
   while abort == 0:
     try:
@@ -133,9 +134,12 @@ def gettelegram(cmd):
     loops2go = loops2go - 1
     if loops2go < 0:
       abort = 3
-
+  ardtime = time.time() - ardtime
   if DEBUG:
-    logtext = "[gettelegram] : code {0} (loops: {1})".format(abort, loops2go)
+    logtext = ">>> [gettelegram] time     : {0:.2f} s".format(ardtime)
+    print logtext
+    syslog.syslog(syslog.LOG_DEBUG, logtext)
+    logtext = "    [gettelegram] code: {0}; loops: {1}".format(abort, loops2go)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
@@ -149,22 +153,21 @@ def gettelegram(cmd):
 def do_work():
   # 12 datapoints gathered here
 
-  if DEBUG:
-    logtext = "[do_work]..."
-    syslog.syslog(syslog.LOG_DEBUG, logtext)
-  start = time.time()
+  ardtime = time.time()
 
   telegram, status = gettelegram("A")
-  ardtime = time.time()-start
+  ardtime = time.time() - ardtime
   #print telegram
   if (status != 1):
     telegram = -1
     if DEBUG:
-      logtext = "[do_work] : {0} s - NO TELEGRAM.".format(ardtime)
+      logtext = "*** [do_work] : {0:.2f} s - NO TELEGRAM.".format(ardtime)
+      print logtext
       syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   if DEBUG:
-    logtext = "[do_work] : {0} s".format(ardtime)
+    logtext = "*** [do_work] : {0:.2f} s".format(ardtime)
+    print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   return telegram
@@ -180,7 +183,7 @@ def do_extern_work():
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
-  start=time.time()
+  ardtime=time.time()
   try:
     req = Request("http://xml.buienradar.nl/")
     response = urlopen(req, timeout=25)
@@ -201,8 +204,8 @@ def do_extern_work():
   except Exception as e:
     logtext = "****** Exception encountered : " + str(e)
     syslog.syslog(syslog.LOG_DEBUG, logtext)
-    souptime = time.time()-start
-    logtext = "****** after {0} s".format(souptime)
+    ardtime = time.time() - ardtime
+    logtext = "****** after {0} s".format(ardtime)
     syslog.syslog(syslog.LOG_DEBUG, logtext)
 
   gilzerijen = '{0}, {1}'.format(ms, gr)
