@@ -41,9 +41,9 @@ class MyDaemon(Daemon):
       waitTime = 0
     else:
       logtext = ">>> Waiting                : {0:.2f} s.".format(waitTime)
-      time.sleep(waitTime)
       syslog.syslog(syslog.LOG_DEBUG, logtext)
 
+    time.sleep(waitTime)
     DEBUG = True
 
     # Start by getting external data. This decouples the fetching of external data
