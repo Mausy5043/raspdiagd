@@ -35,11 +35,13 @@ class MyDaemon(Daemon):
     # sync to whole cycleTime
     waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
     if DEBUG:
-      print "NOT waiting {0} s.".format(waitTime)
+      logtext = ">>> NOT waiting {0:.2f} s.".format(waitTime)
+      print logtext
+      syslog.syslog(syslog.LOG_DEBUG, logtext)
       waitTime = 0
     else:
       if DEBUG:
-        logtext = "ZZZ Waiting for start : " + str(waitTime) + " s"
+        logtext = ">>> Waiting for start : {0:.2f} s".format(waitTime)
         syslog.syslog(syslog.LOG_DEBUG, logtext)
       time.sleep(waitTime)
     while True:
@@ -48,8 +50,9 @@ class MyDaemon(Daemon):
 
         result = do_work().split(',')
         if DEBUG:
-          print result
-          syslog.syslog(syslog.LOG_DEBUG, result)
+          logtext = "*** Result = {0:.2f}".format(result)
+          print logtext
+          syslog.syslog(syslog.LOG_DEBUG, logtext)
 
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
@@ -66,7 +69,7 @@ class MyDaemon(Daemon):
           avg_ext = [format(s, '.3f') for s in extern_data]
 
           if DEBUG:
-            logtext = "> Reporting {0} + {1}".format(averages, avg_ext)
+            logtext = "> Reporting {0} + {1} + {2}".format(averages, avg_ext, sampleptr)
             print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
 
