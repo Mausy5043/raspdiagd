@@ -52,7 +52,7 @@ class MyDaemon(Daemon):
         if DEBUG:
           logtext = "*** Result = {0}".format(result)
           print logtext
-          syslog.syslog(syslog.LOG_DEBUG, logtext)
+          #syslog.syslog(syslog.LOG_DEBUG, logtext)
 
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
