@@ -73,7 +73,8 @@ class MyDaemon(Daemon):
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.3f') for s in somma]
 
-          # only fetch external data is current data is older than 5 minutes
+          # only fetch external data if current data is
+          # older than EXTERNAL_DATA_EXPIRY_TIME
           if (extern_time < time.time()):
             extern_result = do_extern_work().split(',')
             extern_data = map(float, extern_result)
