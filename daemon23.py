@@ -229,7 +229,7 @@ def do_report(result, ext_result):
   # Get the time and date in human-readable form and UN*X-epoch...
   #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
 
-  outDate = commands.getoutput("date '+%F %H:%M:%S'")
+  outDate = commands.getoutput("date '+%FT%H:%M:%S'")
   ardtime = time.time()
   result = ', '.join(map(str, result))
   ext_result = ', '.join(map(str, ext_result))

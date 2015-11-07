@@ -13,8 +13,8 @@ os.nice(10)
 def taildata():
   print "Tailing sensor-data"
   fin = libheadstails.FileExtremities('/tmp/testser.txt','r')
-  # read last 5(days)*24(hrs/dy)*6(datapoints/hr) datapoints
-  F = fin.tail(2*24*12)
+  # read last 5(days)*24(hrs/dy)*60(datapoints/hr) datapoints
+  F = fin.tail(3*24*60)
 
   fout = file('/tmp/taildata.txt','w')
   for c in F:
@@ -23,7 +23,7 @@ def taildata():
 
 def graphs():
   print "Loading sensor-data"
-  C=np.loadtxt('/tmp/taildata.txt',delimiter=',',converters={0:strpdate2num("%Y-%m-%d %H:%M:%S")})
+  C=np.loadtxt('/tmp/taildata.txt',delimiter=',',converters={0:strpdate2num("%Y-%m-%dT%H:%M:%S")})
   # 1 = ATMEGA chip
   # 2 = DS18B20
   # 3 = DHT22
