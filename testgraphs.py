@@ -67,7 +67,7 @@ def graphs():
   startA14=0
   if (len(A14) > (12*24*2)):
     startA14 = len(A14) - (12*24*2)
-  hrsmpls=6
+  hrsmpls=60
   l=len(A14)
   last14 = A14[l-1]
   last13 = A13[l-1]
