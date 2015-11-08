@@ -64,9 +64,9 @@ def graphs():
   # convert degrees to radians and m/s to km/hr
   A14[:] = [x*d2r for x in A14]
   A13[:] = [x*ms2kmh for x in A13]
-  startA14=0
-  if (len(A14) > (12*24*2)):
-    startA14 = len(A14) - (12*24*2)
+  #startA14=0
+  #if (len(A14) > (12*24*2)):
+  #  startA14 = len(A14) - (12*24*2)
   hrsmpls=60
   l=len(A14)
   last14 = A14[l-1]
