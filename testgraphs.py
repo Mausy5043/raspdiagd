@@ -13,8 +13,8 @@ os.nice(10)
 def taildata():
   print "Tailing sensor-data"
   fin = libheadstails.FileExtremities('/tmp/testser.txt','r')
-  # read last 5(days)*24(hrs/dy)*60(datapoints/hr) datapoints
-  F = fin.tail(3*24*60)
+  # read last x(days)*y(hrs/dy)*z(datapoints/hr) datapoints
+  F = fin.tail(1*24*60)
 
   fout = file('/tmp/taildata.txt','w')
   for c in F:
