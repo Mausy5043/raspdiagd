@@ -48,7 +48,7 @@ def graphs():
   A6 = np.array(C[:,6])
   A7 = np.array(C[:,7])
   A8 = np.array(C[:,8])
-  A9 = np.array(C[:,9])
+  #A9 = np.array(C[:,9])
   A10 = np.array(C[:,10])
   A11 = np.array(C[:,11])
   A11_extrema = [np.nanmin(A11),np.nanmax(A11)]
@@ -100,8 +100,8 @@ def graphs():
   pl.title('Sensor differences')
   A32 = np.subtract(A3,A2)
   pl.plot(D,A32,'g.', label='DHT22  vs. DS18B20', alpha=ahpla)
-  A92 = np.subtract(A9,A2)
-  pl.plot(D,A92,'y.', label='TMP36  vs. DS18B20', alpha=ahpla)
+  #A92 = np.subtract(A9,A2)
+  #pl.plot(D,A92,'y.', label='TMP36  vs. DS18B20', alpha=ahpla)
   A112 = np.subtract(A11,A2)
   pl.plot(D,A112,'m.', label='BMP183 vs. DS18B20', alpha=ahpla)
   pl.ylabel("T(x)-T(DS18B20) [degC]")
@@ -129,7 +129,7 @@ def graphs():
   print "Temperature trends"
   pl.plot(D,A2, '.k', label='DS18B20', alpha=ahpla)
   pl.plot(D,A3, '.g', label='DHT22', alpha=ahpla)
-  pl.plot(D,A9, '.y', label='TMP36', alpha=ahpla)
+  #pl.plot(D,A9, '.y', label='TMP36', alpha=ahpla)
   pl.plot(D,A11, '.m', label='BMP183', alpha=ahpla)
   pl.title('Temperature trends')
   pl.ylabel('T [degC]')
