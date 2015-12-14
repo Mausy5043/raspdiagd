@@ -10,7 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math
 from libdaemon import Daemon
 
 DEBUG = False
