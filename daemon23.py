@@ -22,16 +22,14 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
-    cycles = 5
-    SamplesPerCycle = 3
-    samples = SamplesPerCycle * cycles
+    reportTime = 60                                 # time [s] between reports
+    cycles = 3                                      # number of cycles to aggregate
+    samplesperCycle = 5                             # total number of samples in each cycle
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
 
-    datapoints = 11
-    data = []
-
-    sampleTime = 20
-    cycleTime = samples * sampleTime
+    data = []                                       # array for holding sampledata
 
     # Start by getting external data.
     EXTERNAL_DATA_EXPIRY_TIME = 11*60 #seconds
@@ -41,19 +39,6 @@ class MyDaemon(Daemon):
     extern_data = map(float, extern_result)
     extern_time = time.time() + EXTERNAL_DATA_EXPIRY_TIME
 
-    # sync to whole cycleTime
-    waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
-    if DEBUG:
-      logtext = ">>> NOT waiting            : {0:.2f} s.".format(waitTime)
-      print logtext
-      syslog.syslog(syslog.LOG_DEBUG, logtext)
-      waitTime = 0
-    else:
-      logtext = ">>> Waiting                : {0:.2f} s.".format(waitTime)
-      syslog.syslog(syslog.LOG_DEBUG, logtext)
-
-    time.sleep(waitTime)
-
     while True:
       try:
         startTime = time.time()
@@ -62,14 +47,12 @@ class MyDaemon(Daemon):
         if DEBUG:
           logtext = ":   Result = {0}".format(result)
           print logtext
-          #syslog.syslog(syslog.LOG_DEBUG, logtext)
 
         data.append(map(float, result))
         if (len(data) > samples):data.pop(0)
-        sampleptr = sampleptr + 1
 
         # report sample average
-        if (sampleptr % SamplesPerCycle == 0):
+        if (startTime % reportTime < sampleTime):   # sync reports to reportTime
           somma = map(sum,zip(*data))
           averages = [format(s / len(data), '.3f') for s in somma]
 
@@ -85,27 +68,16 @@ class MyDaemon(Daemon):
           avg_ext.append(windchill)
 
           if DEBUG:
-            logtext = ":   Reporting sample {0} = {1} + {2}".format(sampleptr, averages, avg_ext)
+            logtext = ":   Reporting sample : {1} + {2}".format(averages, avg_ext)
             print logtext
             syslog.syslog(syslog.LOG_DEBUG, logtext)
 
           do_report(averages, avg_ext)
-          if (sampleptr == samples):
-            sampleptr = 0
 
-        waitTime += sampleTime - (time.time() - startTime) - (startTime % sampleTime)
-        if (waitTime > 0):
-          if DEBUG:
-            logtext = ">>> Waiting for next sample: {0:.2f} s".format(waitTime)
-            print logtext
-            syslog.syslog(syslog.LOG_DEBUG, logtext)
+        waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
+        if (waitTime > 0):                          # sync to sampleTime [s]
+          if DEBUG:print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
-          waitTime = 0
-        else:
-          if DEBUG:
-            logtext = ">>> NOT waiting            : {0:.2f} s".format(waitTime)
-            print logtext
-            syslog.syslog(syslog.LOG_DEBUG, logtext)
       except Exception as e:
         if DEBUG:
           print("Unexpected error:")
