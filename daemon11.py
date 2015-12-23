@@ -18,7 +18,7 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    killer = Euthanasia()
+    #killer = Euthanasia()
     sampleptr = 0
     cycles = 3
     SamplesPerCycle = 5
