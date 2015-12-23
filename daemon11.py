@@ -7,7 +7,7 @@
 # Adapted by M.Hendrix [2015]
 
 # daemon11.py measures the CPU temperature.
-# uses moving averages
+# uses moving averages.
 
 import syslog, traceback
 import os, sys, time, math
@@ -18,22 +18,15 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
-    cycles = 3
-    SamplesPerCycle = 5
-    samples = SamplesPerCycle * cycles
+    reportTime = 60                                 # time [s] between reports
+    cycles = 3                                      # number of cycles to aggregate
+    samplesperCycle = 5                             # total number of samples in each cycle
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
 
-    datapoints = 1
-    data = []      # data = [None for i in range(samples)]
+    data = []                                       # array for holding sampledata
 
-    sampleTime = 12
-    cycleTime = samples * sampleTime
-    # sync to whole minute
-    waitTime = (cycleTime + sampleTime) - (time.time() % (cycleTime/cycles))
-    if DEBUG:
-      print "NOT waiting {0} s.".format(waitTime)
-    else:
-      time.sleep(waitTime)
     while True:
       try:
         startTime = time.time()
@@ -46,13 +39,11 @@ class MyDaemon(Daemon):
         sampleptr = sampleptr + 1
 
         # report sample average
-        if (sampleptr % SamplesPerCycle == 0):
+        if (startTime % reportTime < sampleTime):
           if DEBUG:print data
           averages = sum(data[:]) / len(data)
           if DEBUG:print averages
           do_report(averages)
-          if (sampleptr == samples):
-            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
