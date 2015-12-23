@@ -36,7 +36,6 @@ class MyDaemon(Daemon):
 
         data.append(float(result))
         if (len(data) > samples):data.pop(0)
-        sampleptr = sampleptr + 1
 
         # report sample average
         if (startTime % reportTime < sampleTime):
