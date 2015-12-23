@@ -18,7 +18,6 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    killer = Euthanasia()
     sampleptr = 0
     cycles = 3
     SamplesPerCycle = 5
@@ -59,12 +58,6 @@ class MyDaemon(Daemon):
         if (waitTime > 0):
           if DEBUG:print "Waiting {0} s".format(waitTime)
           time.sleep(waitTime)
-
-        if killer.death_wish:
-          if DEBUG:print("daemon is euthanised")
-          syslog.syslog(syslog.LOG_INFO,"daemon is euthanised")
-          daemon.stop()
-
       except Exception as e:
         if DEBUG:
           print("Unexpected error:")
@@ -72,15 +65,6 @@ class MyDaemon(Daemon):
         syslog.syslog(syslog.LOG_ALERT,e.__doc__)
         syslog_trace(traceback.format_exc())
         raise
-
-class Euthanasia():
-  kill_now = False
-  def __init__(self):
-    signal.signal(signal.SIGINT, self.kill_request)
-    signal.signal(signal.SIGTERM, self.kill_request)
-
-  def kill_request(self,signum, frame):
-    self.death_wish = True
 
 def syslog_trace(trace):
   '''Log a python stack trace to syslog'''
