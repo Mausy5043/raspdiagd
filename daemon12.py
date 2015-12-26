@@ -45,9 +45,9 @@ class MyDaemon(Daemon):
           # 0.37, 0.18, 0.17, 4, 143, 32147, 3, 4, 93, 0, 0
           averages = [format(s / len(data), '.3f') for s in somma]
           # Report the last measurement for these parameters:
-          averages[3]=int(data[sampleptr-1][3])
-          averages[4]=int(data[sampleptr-1][4])
-          averages[5]=int(data[sampleptr-1][5])
+          averages[3]=int(data[-1][3])
+          averages[4]=int(data[-1][4])
+          averages[5]=int(data[-1][5])
           if DEBUG:print "average:", averages
           do_report(averages)
 
