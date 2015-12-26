@@ -50,8 +50,6 @@ class MyDaemon(Daemon):
           averages[5]=int(data[sampleptr-1][5])
           if DEBUG:print "average:", averages
           do_report(averages)
-          if (sampleptr == samples):
-            sampleptr = 0
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
