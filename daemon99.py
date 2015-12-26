@@ -17,7 +17,6 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
     samples = 1
 
     sampleTime = 60

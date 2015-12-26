@@ -30,13 +30,14 @@ port.port = "/dev/ttyUSB0"
 
 class MyDaemon(Daemon):
   def run(self):
-    sampleptr = 0
-    samples = 6
-    datapoints = 8
-    #data = [[None]*datapoints for _ in range(samples)]
+    reportTime = 60                                 # time [s] between reports
+    cycles = 3                                      # number of cycles to aggregate
+    samplesperCycle = 6                             # total number of samples in each cycle
+    samples = samplesperCycle * cycles              # total number of samples averaged
+    sampleTime = reportTime/samplesperCycle         # time [s] between samples
+    cycleTime = samples * sampleTime                # time [s] per cycle
 
-    sampleTime = 10
-    cycleTime = samples * sampleTime
+    data = []                                       # array for holding sampledata
 
     port.open()
     serial.XON
@@ -53,10 +54,13 @@ class MyDaemon(Daemon):
         data = do_work().split(', ')
         if DEBUG: print data
 
-        sampleptr = sampleptr + 1
-        if (sampleptr == samples):
-          do_report(data)
-          sampleptr = 0
+        # report sample average
+        if (startTime % reportTime < sampleTime):
+          if DEBUG:print data
+          averages = data
+          #averages = sum(data[:]) / len(data)
+          #if DEBUG:print averages
+          do_report(averages)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
