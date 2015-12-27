@@ -6,8 +6,8 @@
 
 CLNT=$(hostname)
 ME=$(whoami)
-branch=$(cat /home/$ME/.raspdiagd.branch)
-pushd /home/$ME/raspdiagd
+branch=$(cat $HOME/.raspdiagd.branch)
+pushd $HOME/raspdiagd
 
 # force recompilation of libraries
 rm *.pyc
