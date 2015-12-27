@@ -9,7 +9,7 @@ branch=$(cat "$HOME/.raspdiagd.branch")
 pushd "$HOME/raspdiagd"
 
 # force recompilation of libraries
-rm *.pyc
+rm -f ./*.pyc
 # Synchronise local copy with $branch
 
  git fetch origin
@@ -36,7 +36,7 @@ rm *.pyc
 
 #python -m compileall .
 # Set permissions
-chmod -R 744 *
+chmod -R 744 ./*
 
 if [[ ! -d /tmp/raspdiagd ]]; then
   mkdir /tmp/raspdiagd
