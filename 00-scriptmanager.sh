@@ -5,8 +5,8 @@
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 CLNT=$(hostname)
-branch=$(cat $HOME/.raspdiagd.branch)
-pushd $HOME/raspdiagd
+branch=$(cat "$HOME/.raspdiagd.branch")
+pushd "$HOME/raspdiagd"
 
 # force recompilation of libraries
 rm *.pyc
@@ -17,22 +17,21 @@ rm *.pyc
  # git diff --name-only
  # git log --graph --oneline --date-order --decorate --color --all
 
- DIFFlib=$(git --no-pager diff --name-only $branch..origin/$branch -- ./libdaemon.py)
- DIFFd11=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon11.py)
- DIFFd12=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon12.py)
- DIFFd13=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon13.py)
- DIFFd14=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon14.py)
- DIFFd15=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon15.py)
- DIFFd16=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon16.py)
- DIFFd17=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon17.py)
- DIFFd23=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon23.py)
- DIFFd99=$(git --no-pager diff --name-only $branch..origin/$branch -- ./daemon99.py)
- #DIFFdsr=$(git --no-pager diff --name-only $branch..origin/$branch -- ./sqlrand.py)
+ DIFFlib=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./libdaemon.py)
+ DIFFd11=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon11.py)
+ DIFFd12=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon12.py)
+ DIFFd13=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon13.py)
+ DIFFd14=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon14.py)
+ DIFFd15=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon15.py)
+ DIFFd16=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon16.py)
+ DIFFd17=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon17.py)
+ DIFFd23=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon23.py)
+ DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
 
  git pull
  git fetch origin
- git checkout $branch
- git reset --hard origin/$branch && \
+ git checkout "$branch"
+ git reset --hard "origin/$branch" && \
  git clean -f -d
 
 #python -m compileall .
@@ -81,10 +80,6 @@ if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon99 has changed."
   ./daemon99.py stop
 fi
-#if [[ -n "$DIFFdsr" ]]; then
-#  logger -p user.notice -t raspdiagd "Source sqlrand has changed."
-#  ./sqlrand.py stop
-#fi
 
 if [[ -n "$DIFFlib" ]]; then
   logger -p user.notice -t raspdiagd "Source libdaemon has changed."
@@ -104,15 +99,15 @@ fi
 ######## (Re-)start daemons ######
 
 function destale {
-  if [ -e /tmp/raspdiagd/$1.pid ]; then
-    if ! kill -0 $(cat /tmp/raspdiagd/$1.pid)  > /dev/null 2>&1; then
+  if [ -e "/tmp/raspdiagd/$1.pid" ]; then
+    if ! kill -0 $(cat "/tmp/raspdiagd/$1.pid")  > /dev/null 2>&1; then
       logger -p user.err -t raspdiagd "Stale daemon$1 pid-file found."
-      rm /tmp/raspdiagd/$1.pid
-      ./daemon$1.py start
+      rm "/tmp/raspdiagd/$1.pid"
+      ./"daemon$1.py" start
     fi
   else
     logger -p user.warn -t raspdiagd "Found daemon$1 not running."
-    ./daemon$1.py start
+    ./"daemon$1.py" start
   fi
 }
 
