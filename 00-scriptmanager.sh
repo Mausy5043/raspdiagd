@@ -5,7 +5,6 @@
 # * It checks the state of and (re-)starts daemons if they are not (yet) running.
 
 CLNT=$(hostname)
-ME=$(whoami)
 branch=$(cat $HOME/.raspdiagd.branch)
 pushd $HOME/raspdiagd
 
