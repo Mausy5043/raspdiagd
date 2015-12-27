@@ -18,7 +18,7 @@ date
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
 # set the branch
-echo master > /home/$ME/.raspdiagd.branch
+echo master > $HOME/.raspdiagd.branch
 
 if [ ! -d /etc/cron.d ]; then
   echo "Creating /etc/cron.d..."
@@ -27,8 +27,8 @@ fi
 
 # set a cronjob
 echo "# m h dom mon dow user  command" | sudo tee /etc/cron.d/raspdiagd
-echo "42  * *   *   *   $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
-echo "@reboot           $ME    /home/$ME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
+echo "42  * *   *   *   $ME    $HOME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
+echo "@reboot           $ME    $HOME/raspdiagd/00-scriptmanager.sh 2>&1 | logger -p info -t raspdiagd" | sudo tee --append /etc/cron.d/raspdiagd
 
 if [ ! -e /mnt/share1 ]; then
   echo "Creating mountpoint..."
