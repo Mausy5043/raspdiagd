@@ -94,7 +94,7 @@ def do_work():
   telegram, status = gettelegram()
 
   if status == 1:
-    for element in range(0, len(telegram) - 1):
+    for element in range(0, len(telegram)):
       line =  re.split( '[\(\*\)]', telegram[element] )
       #['1-0:1.8.1', '00175.402', 'kWh', '']  T1 in
       if (line[0] == '1-0:1.8.1'):
