@@ -26,6 +26,7 @@ rm -f ./*.pyc
  DIFFd16=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon17.py)
  DIFFd23=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon23.py)
+ DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
 
  git pull
@@ -76,6 +77,10 @@ if [[ -n "$DIFFd23" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon23 has changed."
   ./daemon23.py stop
 fi
+if [[ -n "$DIFFd98" ]]; then
+  logger -p user.notice -t raspdiagd "Source daemon98 has changed."
+  ./daemon99.py stop
+fi
 if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon99 has changed."
   ./daemon99.py stop
@@ -92,8 +97,8 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon16.py stop
   ./daemon17.py stop
   ./daemon23.py stop
+  ./daemon98.py stop
   ./daemon99.py stop
-#  ./sqlrand.py stop
 fi
 
 ######## (Re-)start daemons ######
@@ -116,6 +121,7 @@ destale 12
 destale 13
 destale 14
 destale 15
+destale 98
 destale 99
 
 case "$CLNT" in
@@ -127,7 +133,6 @@ case "$CLNT" in
             ;;
   rbian )   echo "Raspberry testbench"
             destale 23
-            #./sqlrand.py restart
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;

@@ -6,7 +6,7 @@
 
 # Adapted by M.Hendrix [2015]
 
-# daemon99.py creates an XML-file and uploads data to the server.
+# daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
 import os, sys, shutil, glob, platform, time, subprocess
@@ -38,11 +38,8 @@ class MyDaemon(Daemon):
         startTime=time.time()
 
         if os.path.ismount(mount_path):
-          #print 'dataspool is mounted'
-          #lock(remote_lock)
-          do_mv_data(remote_path)
+          # print 'dataspool is mounted'
           do_xml(remote_path)
-          #unlock(remote_lock)
 
         waitTime = sampleTime - (time.time() - startTime) - (startTime%sampleTime)
         if (waitTime > 0):
@@ -57,59 +54,13 @@ class MyDaemon(Daemon):
         raise
 
 def syslog_trace(trace):
-  '''Log a python stack trace to syslog'''
+  # Log a python stack trace to syslog
   log_lines = trace.split('\n')
   for line in log_lines:
     if len(line):
       syslog.syslog(syslog.LOG_ALERT,line)
 
-def do_mv_data(rpath):
-  hostlock = rpath + '/host.lock'
-  clientlock = rpath + '/client.lock'
-  count_internal_locks=1
-
-  #
-  #rpath='/tmp/test'
-  #
-
-  # wait 3 seconds for processes to finish
-  time.sleep(3)
-
-  while os.path.isfile(hostlock):
-    # wait while the server has locked the directory
-    time.sleep(1)
-
-  # server already sets the client.lock. Do it anyway.
-  lock(clientlock)
-
-  # prevent race conditions
-  while os.path.isfile(hostlock):
-    # wait while the server has locked the directory
-    time.sleep(1)
-
-  while (count_internal_locks > 0):
-    time.sleep(1)
-    count_internal_locks=0
-    for file in glob.glob(r'/tmp/raspdiagd/*.lock'):
-      count_internal_locks += 1
-
-  for file in glob.glob(r'/tmp/raspdiagd/*.csv'):
-    #print file
-    if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        shutil.move(file, rpath)
-
-  for file in glob.glob(r'/tmp/raspdiagd/*.png'):
-    if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        shutil.move(file, rpath)
-
-  unlock(clientlock)
-
-  return
-
 def do_xml(wpath):
-  #
   usr							= os.path.expanduser('~')
   uname           = os.uname()
 
@@ -136,7 +87,6 @@ def do_xml(wpath):
   uptime          = subprocess.check_output(["uptime"])
   dfh             = subprocess.check_output(["df", "-h"])
   freeh           = subprocess.check_output(["free", "-h"])
-  #psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
   p1              = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"], stdout=subprocess.PIPE)
   p2              = subprocess.Popen(["cut", "-c", "-132"], stdin=p1.stdout, stdout=subprocess.PIPE)
   p3              = subprocess.Popen(["awk", "NR>2"], stdin=p2.stdout, stdout=subprocess.PIPE)
@@ -145,7 +95,7 @@ def do_xml(wpath):
   p6              = subprocess.Popen(["sed", "s/&/\&amp;/g"], stdin=p5.stdout, stdout=subprocess.PIPE)
   p7              = subprocess.Popen(["sed", "s/>/\&gt;/g"], stdin=p6.stdout, stdout=subprocess.PIPE)
   psout           = p7.stdout.read()
-  #
+
   f = file(wpath + '/status.xml', 'w')
 
   f.write('<server>\n')
