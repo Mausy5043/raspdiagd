@@ -10,8 +10,7 @@
 # These are all counters, therefore no averaging is needed.
 
 import syslog, traceback
-import os, sys, time, math, commands
-from subprocess import check_output
+import os, sys, time, math, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
@@ -80,17 +79,33 @@ def do_work():
     #       level or a lower (hence more important) log level are shown. If a range is specified, all messages within the range
     #       are shown, including both the start and the end value of the range. This will add "PRIORITY=" matches for the
     #       specified priorities.
-    critlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 0..3 |wc -l").split()[0]
-    warnlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
-    syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
+    #critlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 0..3 |wc -l").split()[0]
+    #warnlog = commands.getoutput("journalctl --since=00:00:00 --no-pager -p 4 |wc -l").split()[0]
+    #syslog  = commands.getoutput("journalctl --since=00:00:00 --no-pager |wc -l").split()[0]
+    p1 = subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p 0..3"], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["wc", "-l"], stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
+    p3 = p2.communicate()[0]
+    critlog = p3.split()[0]
+    p1 = subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager", "-p 4"], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["wc", "-l"], stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
+    p3 = p2.communicate()[0]
+    warnlog = p3.split()[0]
+    p1 = subprocess.Popen(["journalctl", "--since=00:00:00", "--no-pager"], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["wc", "-l"], stdin=p1.stdout, stdout=subprocess.PIPE)
+    p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
+    p3 = p2.communicate()[0]
+    syslog = p3.split()[0]
   else:
     critlog = wc("/var/log/0emerg.log") + wc("/var/log/1alert.log") + wc("/var/log/2critical.log") + wc("/var/log/3err.log")
     warnlog = wc("/var/log/4warn.log")
     syslog  = wc("/var/log/syslog")
+
   return '{0}, {1}, {2}'.format(critlog, warnlog, syslog)
 
 def wc(filename):
-    return int(check_output(["wc", "-l", filename]).split()[0])
+    return int(subprocess.check_output(["wc", "-l", filename]).split()[0])
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
