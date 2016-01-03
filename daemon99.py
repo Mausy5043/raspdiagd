@@ -9,7 +9,7 @@
 # daemon99.py creates an XML-file on the server.
 
 import syslog, traceback
-import os, sys, shutil, glob, platform, time, subprocess
+import os, sys, platform, time, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
