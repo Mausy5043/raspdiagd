@@ -79,7 +79,7 @@ if [[ -n "$DIFFd23" ]]; then
 fi
 if [[ -n "$DIFFd98" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon98 has changed."
-  ./daemon99.py stop
+  ./daemon98.py stop
 fi
 if [[ -n "$DIFFd99" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon99 has changed."
