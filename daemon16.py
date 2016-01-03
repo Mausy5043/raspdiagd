@@ -10,8 +10,7 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math
-from subprocess import check_output
+import os, sys, time, math, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
@@ -67,7 +66,7 @@ def syslog_trace(trace):
 
 def do_work():
   # 5 datapoints gathered here
-  upsc = check_output(["upsc","ups@localhost"]).splitlines()
+  upsc = subprocess.check_output(["upsc","ups@localhost"]).splitlines()
   for element in range(0, len(upsc) - 1):
     var = upsc[element].split(': ')
     if (var[0] == 'input.voltage'):

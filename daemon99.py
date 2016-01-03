@@ -9,7 +9,7 @@
 # daemon99.py creates an XML-file and uploads data to the server.
 
 import syslog, traceback
-import os, sys, shutil, glob, platform, time, commands, subprocess
+import os, sys, shutil, glob, platform, time, subprocess
 from libdaemon import Daemon
 
 DEBUG = False
@@ -133,9 +133,9 @@ def do_xml(wpath):
   raspbootbranch  = f.read().strip('\n')
   f.close()
 
-  uptime          = commands.getoutput("uptime")
-  dfh             = commands.getoutput("df -h")
-  freeh           = commands.getoutput("free -h")
+  uptime          = subprocess.check_output(["uptime"])
+  dfh             = subprocess.check_output(["df", "-h"])
+  freeh           = subprocess.check_output(["free", "-h"])
   #psout           = commands.getoutput("ps -e -o pcpu,args | awk 'NR>2' | sort -nr | head -10 | sed 's/&/\&amp;/g' | sed 's/>/\&gt;/g'")
   p1              = subprocess.Popen(["ps", "-e", "-o", "pcpu,args"], stdout=subprocess.PIPE)
   p2              = subprocess.Popen(["cut", "-c", "-132"], stdin=p1.stdout, stdout=subprocess.PIPE)
@@ -155,7 +155,7 @@ def do_xml(wpath):
   f.write('</name>\n')
 
   f.write('<df>\n')
-  f.write(dfh + '\n')
+  f.write(dfh)
   f.write('</df>\n')
 
   f.write('<temperature>\n')
@@ -163,11 +163,11 @@ def do_xml(wpath):
   f.write('</temperature>\n')
 
   f.write('<memusage>\n')
-  f.write(freeh + '\n')
+  f.write(freeh)
   f.write('</memusage>\n')
 
   f.write(' <uptime>\n')
-  f.write(uptime + '\n')
+  f.write(uptime)
   f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
   f.write(' - raspdiagd   on: '+ raspdiagdbranch +'\n')
   f.write(' - raspboot    on: '+ raspbootbranch +'\n')
