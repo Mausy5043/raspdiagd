@@ -110,7 +110,7 @@ def do_mv_data(rpath):
 
 def do_xml(wpath):
   #
-  usr							= commands.getoutput("whoami")
+  usr							= os.path.expanduser('~')
   uname           = os.uname()
 
   fi              = "/sys/class/thermal/thermal_zone0/temp"
@@ -123,12 +123,12 @@ def do_xml(wpath):
   fcpu						= float(f.read().strip('\n'))/1000
   f.close()
 
-  fi              = "/home/"+ usr +"/.raspdiagd.branch"
+  fi              = usr +"/.raspdiagd.branch"
   f 							= file(fi,'r')
   raspdiagdbranch = f.read().strip('\n')
   f.close()
 
-  fi              = "/home/"+ usr +"/.raspboot.branch"
+  fi              = usr +"/.raspboot.branch"
   f 							= file(fi,'r')
   raspbootbranch  = f.read().strip('\n')
   f.close()
