@@ -10,7 +10,8 @@
 # uses moving averages
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math
+from subprocess import check_output
 from libdaemon import Daemon
 
 DEBUG = False
@@ -78,7 +79,7 @@ def do_work():
   f.close()
 
   # 5 datapoints gathered here
-  outCpu = commands.getoutput("vmstat 1 2").splitlines()[3].split()
+  outCpu = check_output(["vmstat","1","2"]).splitlines()[-1].split()
   outCpuUS = outCpu[12]
   outCpuSY = outCpu[13]
   outCpuID = outCpu[14]
