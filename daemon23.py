@@ -10,7 +10,7 @@
 # https://github.com/Mausy5043/arduino.git.
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math
 from libdaemon import Daemon
 import serial, re
 
@@ -200,9 +200,7 @@ def calc_windchill(T,W):
 
 def do_report(result, ext_result):
   # Get the time and date in human-readable form and UN*X-epoch...
-  #outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
-
-  outDate = commands.getoutput("date '+%FT%H:%M:%S'")
+  outDate = time.strftime('%Y-%m-%dT%H:%M:%S')
   ardtime = time.time()
   result = ', '.join(map(str, result))
   ext_result = ', '.join(map(str, ext_result))

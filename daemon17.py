@@ -10,7 +10,7 @@
 # This is all singular data, no averaging needed.
 
 import syslog, traceback
-import os, sys, time, math, commands
+import os, sys, time, math
 from libdaemon import Daemon
 import serial, re
 
