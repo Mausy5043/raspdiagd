@@ -21,7 +21,8 @@ class MyDaemon(Daemon):
   def run(self):
     iniconf = ConfigParser.ConfigParser()
     inisection = "11"
-    s = iniconf.read('config.ini')
+    home = os.path.expanduser('~')
+    s = iniconf.read(home + '/raspdiagd/config.ini')
     if DEBUG: print "config file : ", s
     if DEBUG: print iniconf.items(inisection)
     reportTime = iniconf.getint(inisection, "reporttime")
