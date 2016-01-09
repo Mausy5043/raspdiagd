@@ -85,20 +85,20 @@ def do_mv_data(rpath):
   while (count_internal_locks > 0):
     time.sleep(1)
     count_internal_locks=0
-    for file in glob.glob(r'/tmp/raspdiagd/*.lock'):
+    for fname in glob.glob(r'/tmp/raspdiagd/*.lock'):
       count_internal_locks += 1
     if DEBUG:print "{0} internal locks exist".format(count_internal_locks)
 
-  for file in glob.glob(r'/tmp/raspdiagd/*.csv'):
+  for fname in glob.glob(r'/tmp/raspdiagd/*.csv'):
     if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        if DEBUG:print "moving data " + file
-        shutil.move(file, rpath)
+      if not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
+        if DEBUG:print "moving data " + fname
+        shutil.move(fname, rpath)
 
-  for file in glob.glob(r'/tmp/raspdiagd/*.png'):
+  for fname in glob.glob(r'/tmp/raspdiagd/*.png'):
     if os.path.isfile(clientlock):
-      if not (os.path.isfile(rpath + "/" + os.path.split(file)[1])):
-        shutil.move(file, rpath)
+      if not (os.path.isfile(rpath + "/" + os.path.split(fname)[1])):
+        shutil.move(fname, rpath)
 
   unlock(clientlock)
   if DEBUG:print "unlocked..."
