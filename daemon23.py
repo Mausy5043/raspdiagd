@@ -218,7 +218,6 @@ def do_report(result, ext_result):
     logtext = ":   [do_report]            : {0:.2f} s".format(ardtime)
     print logtext
     syslog.syslog(syslog.LOG_DEBUG, logtext)
-  return
 
 def lock(fname):
   open(fname, 'a').close()

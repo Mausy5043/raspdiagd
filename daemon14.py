@@ -112,7 +112,6 @@ def do_report(result):
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)
-  return
 
 def lock(fname):
   open(fname, 'a').close()

@@ -127,7 +127,6 @@ def do_xml(wpath):
   f.write('</server>\n')
 
   f.close()
-  return
 
 def lock(fname):
   open(fname, 'a').close()

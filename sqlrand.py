@@ -88,7 +88,6 @@ def do_repsql(result):
   with con:
     cur = con.cursor()
     cur.execute('INSERT INTO tabel(titel, nummer) VALUES( %s, %s)',(outDate, result))
-  #return
 
 def do_report(result):
   # Get the time and date in human-readable form and UN*X-epoch...
