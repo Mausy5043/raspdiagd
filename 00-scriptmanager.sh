@@ -132,7 +132,7 @@ case "$CLNT" in
             destale 17
             ;;
   rbian )   echo "Raspberry testbench"
-            destale 23
+            #destale 23
             ;;
   rxbmc )   echo "RaspBMC mediacenter"
             ;;
