@@ -25,7 +25,7 @@ rm -f ./*.pyc
  DIFFd15=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon15.py)
  DIFFd16=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon16.py)
  DIFFd17=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon17.py)
- DIFFd23=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon23.py)
+ #DIFFd23=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon23.py)
  DIFFd98=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon98.py)
  DIFFd99=$(git --no-pager diff --name-only "$branch..origin/$branch" -- ./daemon99.py)
 
@@ -73,10 +73,10 @@ if [[ -n "$DIFFd17" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon17 has changed."
   ./daemon17.py stop
 fi
-if [[ -n "$DIFFd23" ]]; then
-  logger -p user.notice -t raspdiagd "Source daemon23 has changed."
-  ./daemon23.py stop
-fi
+#if [[ -n "$DIFFd23" ]]; then
+#  logger -p user.notice -t raspdiagd "Source daemon23 has changed."
+#  ./daemon23.py stop
+#fi
 if [[ -n "$DIFFd98" ]]; then
   logger -p user.notice -t raspdiagd "Source daemon98 has changed."
   ./daemon98.py stop
@@ -96,7 +96,7 @@ if [[ -n "$DIFFlib" ]]; then
   ./daemon15.py stop
   ./daemon16.py stop
   ./daemon17.py stop
-  ./daemon23.py stop
+#  ./daemon23.py stop
   ./daemon98.py stop
   ./daemon99.py stop
 fi
