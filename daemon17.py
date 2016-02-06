@@ -146,8 +146,14 @@ def gettelegram():
         abort = 1
       if line != "":
         telegram.append(line)
-    except:
+    except Exception as e:
+      if DEBUG:
+        print "*** Serialport read error:"
+        print e.message
+      syslog.syslog(syslog.LOG_ALERT,e.__doc__)
+      syslog_trace(traceback.format_exc())
       abort = 2
+
     loops2go = loops2go - 1
     if loops2go < 0:
       abort = 3
@@ -156,6 +162,10 @@ def gettelegram():
   if telegram[0][0] != "/":
     abort = 2
 
+  # Return codes:
+  # abort == 1 indicates a successful read
+  # abort == 2 means that a serial port read/write error occurred
+  # abort == 3 no valid data after several attempts
   return telegram, abort
 
 def do_report(result):
