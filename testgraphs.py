@@ -18,7 +18,7 @@ def taildata():
 
   fout = file('/tmp/taildata.txt','w')
   for c in F:
-    fout.write("%s" % (c) )
+    fout.write("{0!s}".format((c)) )
   fout.close()
 
 def graphs():
