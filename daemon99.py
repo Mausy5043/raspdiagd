@@ -65,22 +65,22 @@ def do_xml(wpath):
   uname           = os.uname()
 
   fi              = "/sys/class/thermal/thermal_zone0/temp"
-  f 							= file(fi,'r')
+  f 							= open(fi,'r')
   Tcpu            = float(f.read().strip('\n'))/1000
   f.close()
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  f 							= file(fi,'r')
+  f 							= open(fi,'r')
   fcpu						= float(f.read().strip('\n'))/1000
   f.close()
 
   fi              = usr +"/.raspdiagd.branch"
-  f 							= file(fi,'r')
+  f 							= open(fi,'r')
   raspdiagdbranch = f.read().strip('\n')
   f.close()
 
   fi              = usr +"/.raspboot.branch"
-  f 							= file(fi,'r')
+  f 							= open(fi,'r')
   raspbootbranch  = f.read().strip('\n')
   f.close()
 
@@ -97,7 +97,7 @@ def do_xml(wpath):
   p8              = subprocess.Popen(["sed", "s/</\&lt;/g"], stdin=p7.stdout, stdout=subprocess.PIPE)
   psout           = p8.stdout.read()
 
-  f = file(wpath + '/status.xml', 'w')
+  f = open(wpath + '/status.xml', 'w')
 
   f.write('<server>\n')
 

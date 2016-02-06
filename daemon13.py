@@ -63,7 +63,7 @@ def syslog_trace(trace):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    f = file(filename,'r')
+    f = open(filename,'r')
     ret = f.read().strip('\n')
     f.close()
   return ret
@@ -104,7 +104,7 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/13.lock'
   lock(flock)
-  f = file('/tmp/raspdiagd/13-nettraffic.csv', 'a')
+  f = open('/tmp/raspdiagd/13-nettraffic.csv', 'a')
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)

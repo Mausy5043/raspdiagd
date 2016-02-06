@@ -16,7 +16,7 @@ def taildata():
   # read last x(days)*y(hrs/dy)*z(datapoints/hr) datapoints
   F = fin.tail(1*24*60)
 
-  fout = file('/tmp/taildata.txt','w')
+  fout = open('/tmp/taildata.txt','w')
   for c in F:
     fout.write("{0!s}".format((c)) )
   fout.close()

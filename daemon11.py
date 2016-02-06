@@ -79,14 +79,14 @@ def syslog_trace(trace):
 def do_work():
   # Read the CPU temperature
   fi   = "/sys/class/thermal/thermal_zone0/temp"
-  f    = file(fi,'r')
+  f    = open(fi,'r')
   Tcpu = float(f.read().strip('\n'))/1000
   f.close()
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     time.sleep(7)
     fi   = "/sys/class/thermal/thermal_zone0/temp"
-    f    = file(fi,'r')
+    f    = open(fi,'r')
     Tcpu = float(f.read().strip('\n'))/1000
     Tcpu = float(Tcpu) + 0.1
 
@@ -98,8 +98,8 @@ def do_report(result, flock, fdata):
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
   #flock = '/tmp/raspdiagd/11.lock'
   lock(flock)
-  #f = file('/tmp/raspdiagd/11-t-cpu.csv', 'a')
-  f = file(fdata, 'a')
+  #f = open('/tmp/raspdiagd/11-t-cpu.csv', 'a')
+  f = open(fdata, 'a')
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)

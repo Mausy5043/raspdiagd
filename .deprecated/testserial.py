@@ -48,6 +48,6 @@ if __name__ == "__main__":
   telegram, status = gettelegram("A")
   dt = commands.getoutput("date '+%F %H:%M:%S'")
   if status == 1:
-    f = file('/tmp/testserial.py.txt', 'a')
+    f = open('/tmp/testserial.py.txt', 'a')
     f.write('{0},{1}\n'.format(dt, telegram))
     f.close()

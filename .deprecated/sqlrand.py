@@ -94,7 +94,7 @@ def do_report(result):
   outDate = commands.getoutput("date '+%F %H:%M:%S, %s'")
   flock = '/tmp/raspdiagd/sr.lock'
   lock(flock)
-  f = file('/tmp/raspdiagd/sqlrand.csv.txt', 'a')
+  f = open('/tmp/raspdiagd/sqlrand.csv.txt', 'a')
   f.write('{0}, {1}\n'.format(outDate, float(result)) )
   f.close()
   unlock(flock)

@@ -175,7 +175,7 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/17.lock'
   lock(flock)
-  f = file('/tmp/raspdiagd/17-electra.csv', 'a')
+  f = open('/tmp/raspdiagd/17-electra.csv', 'a')
   f.write('{0}, {1}\n'.format(outDate, result) )
   f.close()
   unlock(flock)
