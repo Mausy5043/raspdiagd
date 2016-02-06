@@ -33,7 +33,7 @@ class Daemon:
         # exit first parent
         sys.exit(0)
     except OSError, e:
-      sys.stderr.write("fork no.1 failed: %d (%s)\n" % (e.errno, e.strerror))
+      sys.stderr.write("fork no.1 failed: {0:d} ({1!s})\n".format(e.errno, e.strerror))
       sys.exit(1)
 
     # decouple from parent environment
@@ -48,7 +48,7 @@ class Daemon:
         # exit from second parent
         sys.exit(0)
     except OSError, e:
-      sys.stderr.write("fork no.2 failed: %d (%s)\n" % (e.errno, e.strerror))
+      sys.stderr.write("fork no.2 failed: {0:d} ({1!s})\n".format(e.errno, e.strerror))
       sys.exit(1)
 
     # redirect standard file descriptors
@@ -64,7 +64,7 @@ class Daemon:
     # write pidfile
     atexit.register(self.delpid)
     pid = str(os.getpid())
-    file(self.pidfile,'w+').write("%s\n" % pid)
+    file(self.pidfile,'w+').write("{0!s}\n".format(pid))
 
   def delpid(self):
     os.remove(self.pidfile)
