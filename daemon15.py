@@ -114,7 +114,7 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/15.lock'
   lock(flock)
-  with open('/tmp/raspdiagd/15-cnt-loglines.csv', 'a') as f
+  with open('/tmp/raspdiagd/15-cnt-loglines.csv', 'a') as f:
     f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 
