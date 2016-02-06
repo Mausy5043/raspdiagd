@@ -79,16 +79,15 @@ def syslog_trace(trace):
 def do_work():
   # Read the CPU temperature
   fi   = "/sys/class/thermal/thermal_zone0/temp"
-  f    = open(fi,'r')
-  Tcpu = float(f.read().strip('\n'))/1000
-  f.close()
+  with open(fi,'r') as f
+    Tcpu = float(f.read().strip('\n'))/1000
   if Tcpu > 75.000:
     # can't believe my sensors. Probably a glitch. Wait a while then measure again
     time.sleep(7)
     fi   = "/sys/class/thermal/thermal_zone0/temp"
-    f    = open(fi,'r')
-    Tcpu = float(f.read().strip('\n'))/1000
-    Tcpu = float(Tcpu) + 0.1
+    with open(fi,'r') as f
+      Tcpu = float(f.read().strip('\n'))/1000
+      Tcpu = float(Tcpu) + 0.1
 
   return Tcpu
 
@@ -96,12 +95,9 @@ def do_report(result, flock, fdata):
   # Get the time and date in human-readable form and UN*X-epoch...
   #outDate = commands.getoutput("date '+%FT%H:%M:%S, %s'")
   outDate = time.strftime('%Y-%m-%dT%H:%M:%S, %s')
-  #flock = '/tmp/raspdiagd/11.lock'
   lock(flock)
-  #f = open('/tmp/raspdiagd/11-t-cpu.csv', 'a')
-  f = open(fdata, 'a')
-  f.write('{0}, {1}\n'.format(outDate, float(result)) )
-  f.close()
+  with open(fdata, 'a') as f
+    f.write('{0}, {1}\n'.format(outDate, float(result)) )
   unlock(flock)
 
 def lock(fname):

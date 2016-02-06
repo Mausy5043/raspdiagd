@@ -64,9 +64,8 @@ def syslog_trace(trace):
 def cat(filename):
   ret = ""
   if os.path.isfile(filename):
-    f = open(filename,'r')
-    ret = f.read().strip('\n')
-    f.close()
+    with open(filename,'r') as f
+      ret = f.read().strip('\n')
   return ret
 
 def do_work():
@@ -108,9 +107,8 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/14.lock'
   lock(flock)
-  f = open('/tmp/raspdiagd/14-memory.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, result) )
-  f.close()
+  with open('/tmp/raspdiagd/14-memory.csv', 'a') as f
+    f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 
 def lock(fname):

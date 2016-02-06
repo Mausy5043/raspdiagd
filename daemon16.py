@@ -89,9 +89,8 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/16.lock'
   lock(flock)
-  f = open('/tmp/raspdiagd/16-aux-ups.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, result) )
-  f.close()
+  with open('/tmp/raspdiagd/16-aux-ups.csv', 'a') as f
+    f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 
 def lock(fname):

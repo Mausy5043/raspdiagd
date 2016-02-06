@@ -74,9 +74,8 @@ def syslog_trace(trace):
 def do_work():
   # 6 datapoints gathered here
   fi   = "/proc/loadavg"
-  f    = open(fi,'r')
-  outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
-  f.close()
+  with open(fi,'r') as f
+    outHistLoad = f.read().strip('\n').replace(" ",", ").replace("/",", ")
 
   # 5 datapoints gathered here
   outCpu = check_output(["vmstat","1","2"]).splitlines()[-1].split()
@@ -94,9 +93,8 @@ def do_report(result):
   result = ', '.join(map(str, result))
   flock = '/tmp/raspdiagd/12.lock'
   lock(flock)
-  f = open('/tmp/raspdiagd/12-load-cpu.csv', 'a')
-  f.write('{0}, {1}\n'.format(outDate, result) )
-  f.close()
+  with open('/tmp/raspdiagd/12-load-cpu.csv', 'a') as f
+    f.write('{0}, {1}\n'.format(outDate, result) )
   unlock(flock)
 
 def lock(fname):

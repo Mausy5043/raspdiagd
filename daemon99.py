@@ -65,24 +65,20 @@ def do_xml(wpath):
   uname           = os.uname()
 
   fi              = "/sys/class/thermal/thermal_zone0/temp"
-  f 							= open(fi,'r')
-  Tcpu            = float(f.read().strip('\n'))/1000
-  f.close()
+  with open(fi,'r') as f
+    Tcpu            = float(f.read().strip('\n'))/1000
 
   fi              = "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-  f 							= open(fi,'r')
-  fcpu						= float(f.read().strip('\n'))/1000
-  f.close()
+  with open(fi,'r') as f
+    fcpu						= float(f.read().strip('\n'))/1000
 
   fi              = usr +"/.raspdiagd.branch"
-  f 							= open(fi,'r')
-  raspdiagdbranch = f.read().strip('\n')
-  f.close()
+  with open(fi,'r') as f
+    raspdiagdbranch = f.read().strip('\n')
 
   fi              = usr +"/.raspboot.branch"
-  f 							= open(fi,'r')
-  raspbootbranch  = f.read().strip('\n')
-  f.close()
+  with open(fi,'r') as f
+    raspbootbranch  = f.read().strip('\n')
 
   uptime          = subprocess.check_output(["uptime"])
   dfh             = subprocess.check_output(["df", "-h"])
@@ -97,37 +93,35 @@ def do_xml(wpath):
   p8              = subprocess.Popen(["sed", "s/</\&lt;/g"], stdin=p7.stdout, stdout=subprocess.PIPE)
   psout           = p8.stdout.read()
 
-  f = open(wpath + '/status.xml', 'w')
+  with open(wpath + '/status.xml', 'w') as f
 
-  f.write('<server>\n')
+    f.write('<server>\n')
 
-  f.write('<name>\n')
-  f.write(uname[1] + '\n')
-  f.write('</name>\n')
+    f.write('<name>\n')
+    f.write(uname[1] + '\n')
+    f.write('</name>\n')
 
-  f.write('<df>\n')
-  f.write(dfh)
-  f.write('</df>\n')
+    f.write('<df>\n')
+    f.write(dfh)
+    f.write('</df>\n')
 
-  f.write('<temperature>\n')
-  f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
-  f.write('</temperature>\n')
+    f.write('<temperature>\n')
+    f.write(str(Tcpu) + ' degC @ '+ str(fcpu) +' MHz\n')
+    f.write('</temperature>\n')
 
-  f.write('<memusage>\n')
-  f.write(freeh)
-  f.write('</memusage>\n')
+    f.write('<memusage>\n')
+    f.write(freeh)
+    f.write('</memusage>\n')
 
-  f.write(' <uptime>\n')
-  f.write(uptime)
-  f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
-  f.write(' - raspdiagd   on: '+ raspdiagdbranch +'\n')
-  f.write(' - raspboot    on: '+ raspbootbranch +'\n')
-  f.write('\nTop 10 processes:\n' + psout +'\n')
-  f.write('</uptime>\n')
+    f.write(' <uptime>\n')
+    f.write(uptime)
+    f.write(uname[0]+ ' ' +uname[1]+ ' ' +uname[2]+ ' ' +uname[3]+ ' ' +uname[4]+ ' ' +platform.platform() +'\n')
+    f.write(' - raspdiagd   on: '+ raspdiagdbranch +'\n')
+    f.write(' - raspboot    on: '+ raspbootbranch +'\n')
+    f.write('\nTop 10 processes:\n' + psout +'\n')
+    f.write('</uptime>\n')
 
-  f.write('</server>\n')
-
-  f.close()
+    f.write('</server>\n')
 
 def lock(fname):
   open(fname, 'a').close()
