@@ -66,7 +66,7 @@ def syslog_trace(trace):
 
 def do_work():
   # 5 datapoints gathered here
-  upsc = subprocess.check_output(["upsc", "ups@localhost", "2>&1"]).splitlines()
+  upsc = subprocess.check_output(["upsc","ups@localhost"]).splitlines()
   for element in range(0, len(upsc) - 1):
     var = upsc[element].split(': ')
     if (var[0] == 'input.voltage'):
