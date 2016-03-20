@@ -66,7 +66,22 @@ def syslog_trace(trace):
 
 def do_work():
   # 5 datapoints gathered here
-  upsc = subprocess.check_output(["upsc","ups@localhost"]).splitlines()
+  try:
+    upsc = subprocess.check_output(["upsc", "ups@localhost"]).splitlines()
+  except Exception as e:
+    if DEBUG:
+      print "Unexpected error:"
+      print e.message
+    syslog.syslog(syslog.LOG_ALERT, e.message)
+    syslog_trace(traceback.format_exc())
+    r = subprocess.check_output(["sudo", "systemctl", "restart",  "nut-driver.service"]).splitlines()
+    if DEBUG:
+      print r
+    syslog.syslog(syslog.LOG_INFO, r)
+    time.sleep(10)
+    upsc = subprocess.check_output(["upsc", "ups@localhost"]).splitlines()
+    pass
+
   for element in range(0, len(upsc) - 1):
     var = upsc[element].split(': ')
     if (var[0] == 'input.voltage'):
@@ -79,6 +94,8 @@ def do_work():
       ups3 = float(var[1])
     if (var[0] == 'battery.runtime'):
       ups4 = float(var[1])
+
+
 
   return '{0}, {1}, {2}, {3} ,{4}'.format(ups0, ups1, ups2, ups3, ups4)
 
