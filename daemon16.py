@@ -77,7 +77,7 @@ def do_work():
     r = subprocess.check_output(["sudo", "systemctl", "restart",  "nut-driver.service"]).splitlines()
     if DEBUG:
       print r
-    syslog.syslog(syslog.LOG_INFO, r)
+    # syslog.syslog(syslog.LOG_INFO, r)
     time.sleep(10)
     upsc = subprocess.check_output(["upsc", "ups@localhost"]).splitlines()
     pass
