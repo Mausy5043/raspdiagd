@@ -73,7 +73,7 @@ def syslog_trace(trace):
     if line:
       syslog.syslog(syslog.LOG_ALERT,line)
 
-def do_work():
+def do_work(stat1):
   # 6 datapoints gathered here
   fi   = "/proc/loadavg"
   with open(fi,'r') as f:
