@@ -20,8 +20,8 @@ IS_SYSTEMD = os.path.isfile('/bin/journalctl')
 class MyDaemon(Daemon):
   def run(self):
     reportTime = 60                                 # time [s] between reports
-    cycles = 3                                      # number of cycles to aggregate
-    samplesperCycle = 5                             # total number of samples in each cycle
+    cycles = 1                                      # number of cycles to aggregate
+    samplesperCycle = 1                             # total number of samples in each cycle
     samples = samplesperCycle * cycles              # total number of samples averaged
     sampleTime = reportTime/samplesperCycle         # time [s] between samples
     cycleTime = samples * sampleTime                # time [s] per cycle
