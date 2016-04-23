@@ -74,10 +74,10 @@ def do_work():
       print e.message
     syslog.syslog(syslog.LOG_ALERT, e.message)
     syslog_trace(traceback.format_exc())
+    time.sleep(60)    # wait 60s to let the driver properly crash
     r = subprocess.check_output(["sudo", "systemctl", "restart",  "nut-driver.service"]).splitlines()
     if DEBUG:
       print r
-    # syslog.syslog(syslog.LOG_INFO, r)
     time.sleep(10)
     upsc = subprocess.check_output(["upsc", "ups@localhost"]).splitlines()
     pass
