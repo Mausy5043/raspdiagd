@@ -13,6 +13,11 @@ ME=$(whoami)
 # 2. Add various start-stop scripts to `/etc/init.d/` to start the daemons
 #    automagically at re-boot. (currently using a cronjob)
 
+if [ "$(hostname)" == 'rbagain' ]; then
+  echo "Not installing on $(hostname)"
+  exit 0
+fi
+
 echo -n "Started installing raspdiagd on "
 date
 # To suppress git detecting changes by chmod:
