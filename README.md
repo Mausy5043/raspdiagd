@@ -1,6 +1,10 @@
 # raspdiagd
 **Raspberry Pi Diagnostics Gatherer**
 
+
+# LEGACY
+This repository is superseded by the [lnxdiagd](https://github.com/Mausy5043/lnxdiagd) repository
+
 This repository provides a number of python-based daemons that gather various system diagnostics. Although specifically targeted at Raspberry Pi flavours of Debian, most will probably work (with minor modifications) on any Debian-based Linux distro.
 The result of each deamon is a file containing comma-separated-values created in `/tmp/raspdiagd/`
 
