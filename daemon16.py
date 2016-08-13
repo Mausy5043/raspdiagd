@@ -72,8 +72,8 @@ def do_work():
     if DEBUG:
       print "Unexpected error:"
       print e.message
-    syslog.syslog(syslog.LOG_ALERT, e.message)
-    syslog_trace(traceback.format_exc())
+    syslog.syslog(syslog.LOG_ALERT, e.__str__)
+    # syslog_trace(traceback.format_exc())
     syslog.syslog(syslog.LOG_CRIT, "Waiting 10s ...")
     time.sleep(10)    # wait to let the driver crash properly
     syslog.syslog(syslog.LOG_CRIT, "*** RESTARTING nut-driver.service ***")
