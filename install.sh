@@ -21,19 +21,19 @@ fi
 echo -n "Started installing raspdiagd on "
 date
 
-# See if packages are installed and install them.
-python=$(dpkg-query -W -f='${Status} ${Version}\n' python 2>/dev/null | wc -l)
-git=$(dpkg-query -W -f='${Status} ${Version}\n' git 2>/dev/null | wc -l)
-nfs=$(dpkg-query -W -f='${Status} ${Version}\n' nfs-common 2>/dev/null | wc -l)
-if [ $python -eq 0 ]; then
-  sudo apt-get -yuV install python
-fi
-if [ $git -eq 0 ]; then
-  sudo apt-get -yuV install git
-fi
-if [ $nfs -eq 0 ]; then
-  sudo apt-get -yuV install nfs-common
-fi
+install_package()
+{
+  # See if packages are installed and install them.
+  package=$1
+  status=$(dpkg-query -W -f='${Status} ${Version}\n' $package 2>/dev/null | wc -l)
+  if [ "$status" -eq 0 ]; then
+    sudo apt-get -yuV install $package
+  fi
+}
+
+install_package "python"
+install_package "git"
+install_package "nfs-common"
 
 # To suppress git detecting changes by chmod:
 git config core.fileMode false
