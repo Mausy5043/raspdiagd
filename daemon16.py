@@ -72,11 +72,11 @@ def do_work():
     if DEBUG:
       print "Unexpected error:"
       print e.message
-    syslog.syslog(syslog.LOG_ALERT, e.__str__)
-    # syslog_trace(traceback.format_exc())
-    syslog.syslog(syslog.LOG_CRIT, "Waiting 10s ...")
+    # syslog.syslog(syslog.LOG_ALERT, e.__str__)
+    syslog_trace(traceback.format_exc())
+    syslog.syslog(syslog.LOG_ALERT, "Waiting 10s ...")
     time.sleep(10)    # wait to let the driver crash properly
-    syslog.syslog(syslog.LOG_CRIT, "*** RESTARTING nut-driver.service ***")
+    syslog.syslog(syslog.LOG_ALERT, "*** RESTARTING nut-driver.service ***")
     r = subprocess.check_output(["sudo", "systemctl", "restart",  "nut-driver.service"]).splitlines()
     if DEBUG:
       print r
