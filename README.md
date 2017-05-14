@@ -2,7 +2,7 @@
 **Raspberry Pi Diagnostics Gatherer**
 
 
-# LEGACY
+# UNMAINTAINED
 This repository is superseded by the [lnxdiagd](https://github.com/Mausy5043/lnxdiagd) repository
 
 This repository provides a number of python-based daemons that gather various system diagnostics. Although specifically targeted at Raspberry Pi flavours of Debian, most will probably work (with minor modifications) on any Debian-based Linux distro.
